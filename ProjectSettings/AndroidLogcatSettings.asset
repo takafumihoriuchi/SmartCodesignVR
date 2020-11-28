@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHH8173V0386",
         "name": "com.DefaultCompany.SmartCodesignVR",
-        "processId": 25175,
+        "processId": 30319,
         "exited": true
     },
     "m_SelectedPriority": 0,
@@ -102,6 +102,12 @@
             "deviceId": "1WMHH8173V0386",
             "name": "com.DefaultCompany.SmartCodesignVR",
             "processId": 25175,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 30319,
             "exited": true
         }
     ],
