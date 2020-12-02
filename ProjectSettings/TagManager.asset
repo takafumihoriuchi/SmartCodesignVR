@@ -6,6 +6,7 @@ TagManager:
   tags:
   - ButtonActivator
   - IdeaText
+  - SmartObjectTrashcan
   layers:
   - Default
   - TransparentFX

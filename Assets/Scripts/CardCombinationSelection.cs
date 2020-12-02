@@ -11,12 +11,22 @@ public class CardCombinationSelection : MonoBehaviour
     private bool select_motion;
     private bool select_makesound;
 
-    void Start() {}
+    private GameObject[] SmartObjectsTrashcanRelated;
+
+    void Start() {
+		SmartObjectsTrashcanRelated = GameObject.FindGameObjectsWithTag("SmartObjectTrashcan");
+		foreach (GameObject SmartObject in SmartObjectsTrashcanRelated) {
+			SmartObject.SetActive(false);
+		}
+    }
+
 	void Update() {}
 
     public void OnClickMake() {
     	if (select_trashcan && select_motion && select_makesound) {
-    		
+    		foreach (GameObject SmartObject in SmartObjectsTrashcanRelated) {
+				SmartObject.SetActive(true);
+			}
     	}
     }
 
