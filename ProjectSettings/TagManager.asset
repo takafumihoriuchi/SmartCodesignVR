@@ -7,6 +7,7 @@ TagManager:
   - ButtonActivator
   - IdeaText
   - SmartObjectTrashcan
+  - GroundLevel
   layers:
   - Default
   - TransparentFX

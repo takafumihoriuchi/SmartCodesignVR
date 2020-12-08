@@ -22,7 +22,7 @@ public class TrashcanEffects : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision col) {
-		if (col.gameObject.name.Equals("ground-plane")) {
+		if (col.gameObject.name.Equals("GroundPlane")) {
 			if (!alert_sound.isPlaying) {
 				alert_sound.Play();
 				// rend.shareMaterial = material;
