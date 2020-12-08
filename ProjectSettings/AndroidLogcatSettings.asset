@@ -3,8 +3,8 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHH8173V0386",
         "name": "com.DefaultCompany.SmartCodesignVR",
-        "processId": 18245,
-        "exited": false
+        "processId": 20373,
+        "exited": true
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
@@ -151,6 +151,12 @@
             "name": "com.DefaultCompany.SmartCodesignVR",
             "processId": 18245,
             "exited": false
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 20373,
+            "exited": true
         }
     ],
     "m_Tags": {
