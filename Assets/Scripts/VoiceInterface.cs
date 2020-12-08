@@ -1,4 +1,29 @@
-﻿using System;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using FantomLib;
+
+public class VoiceInterface : MonoBehaviour
+{
+	#if UNITY_ANDROID && !UNITY_EDITOR
+		AndroidPlugin.StartSpeechRecognizer(callbackGameObject, resultCallbackMethod, errorCallbackMethod, readyCallbackMethod, beginCallbackMethod);
+	#endif
+
+    void Start() {}
+    void Update() {}
+
+    private void onReadyForSpeech() {
+    	Debug.Log("this is inside onReadyForSpeech\n");
+    }
+    private void onBeginningOfSpeech() {}
+    private void onResults() {}
+    private void onError() {}
+
+}
+
+
+/*
+using System;
 using System.Text;
 using System.Collections;
 using System.Collections.Generic;
@@ -40,3 +65,4 @@ public class VoiceInterface : MonoBehaviour
     private void SoundAction() {}
 
 }
+*/
