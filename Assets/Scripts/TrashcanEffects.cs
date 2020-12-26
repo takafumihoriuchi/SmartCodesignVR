@@ -9,16 +9,18 @@ public class TrashcanEffects : MonoBehaviour
 
     void Start() {
     	TrashBin = GameObject.Find("trashBin");
-    	alert_sound = TrashBin.GetComponent<AudioSource>();
+    	// get sound
+    	// alert_sound = TrashBin.GetComponent<AudioSource>();
     }
 
     void Update() {    	
     }
 
     void OnCollisionEnter(Collision col) {
-		if (col.gameObject.name.Equals("GroundPlane")) {
-			if (!alert_sound.isPlaying) alert_sound.Play();
-		}
+		// play alert sound when trash-ball collides with the gound-plane
+		// if (col.gameObject.name.Equals("GroundPlane")) {
+		// 	if (!alert_sound.isPlaying) alert_sound.Play();
+		// }
 	}
 
 }

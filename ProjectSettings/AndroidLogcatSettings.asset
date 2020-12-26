@@ -1,61 +1,13 @@
 {
     "m_SelectedDeviceId": "1WMHH8173V0386",
     "m_SelectedPackage": {
-        "deviceId": "1WMHH8173V0386",
-        "name": "com.DefaultCompany.SmartCodesignVR",
-        "processId": 9519,
-        "exited": true
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
+        "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 5443,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 6925,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 9005,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 12171,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 15049,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.oculus.vrshell",
-            "processId": 1880,
-            "exited": false
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 30369,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 32564,
-            "exited": true
-        },
         {
             "deviceId": "1WMHH8173V0386",
             "name": "com.DefaultCompany.SmartCodesignVR",
@@ -73,6 +25,24 @@
             "name": "com.DefaultCompany.SmartCodesignVR",
             "processId": 9519,
             "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 25087,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 27467,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.oculus.vrshell",
+            "processId": 2950,
+            "exited": false
         }
     ],
     "m_Tags": {
