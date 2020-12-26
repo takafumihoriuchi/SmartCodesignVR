@@ -32,8 +32,12 @@ public class CardCombinationSelection : MonoBehaviour
 
     private void CheckCombination() {
     	if (select_trashcan && select_motion && select_makesound) {
-    		textObject.text = "A trash-can encourages people to try again when someone misses their throw. (Mission: playful / respect)";
+    		textObject.text = "A trash can that encourages people to try again when someone misses their throw.\n(Mission: playful / respect)";
     	}
+    	if (select_trashcan && select_motion && select_lightup) {
+    		textObject.text = "A trash can that lights up when it detects people passing by, in order to prompt people to put trash in trash can.\n(Mission: respect)";
+    	}
+    	// "change material" detect by distance between trashcan and this.position
     }
 
     // environment
