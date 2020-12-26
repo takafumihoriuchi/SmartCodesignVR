@@ -8,6 +8,7 @@ TagManager:
   - IdeaText
   - SmartObjectTrashcan
   - GroundLevel
+  - ball
   layers:
   - Default
   - TransparentFX
