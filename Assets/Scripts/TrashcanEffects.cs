@@ -17,8 +17,7 @@ public class TrashcanEffects : MonoBehaviour
     	// rend.shareMaterial = mat[0];
     }
 
-    void Update() {
-    	
+    void Update() {    	
     }
 
     void OnCollisionEnter(Collision col) {
