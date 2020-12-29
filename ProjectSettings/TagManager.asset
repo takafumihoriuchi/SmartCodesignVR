@@ -9,6 +9,7 @@ TagManager:
   - SmartObjectTrashcan
   - GroundLevel
   - ball
+  - trajectory
   layers:
   - Default
   - TransparentFX

@@ -2199,6 +2199,32 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 720514498}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &801142505
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801142504}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 133.88818, y: 249.16652, z: 20.914822}
+  m_Center: {x: 42.41315, y: 18.390215, z: 80.450516}
+--- !u!65 &801142506
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 801142504}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 133.88818, y: 246.89705, z: 16.945524}
+  m_Center: {x: 42.41315, y: 17.255924, z: -63.979347}
 --- !u!65 &801142509
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2210,8 +2236,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 7.146738, y: 242.24886, z: 157.53072}
-  m_Center: {x: -19.390291, y: 20.704462, z: 10.217398}
+  m_Size: {x: 14.920279, y: 242.24886, z: 157.53072}
+  m_Center: {x: -15.503521, y: 20.704462, z: 10.217398}
 --- !u!65 &801142510
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2223,8 +2249,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 3.861643, y: 249.2003, z: 164.68576}
-  m_Center: {x: 102.489365, y: 18.406792, z: 9.89069}
+  m_Size: {x: 12.237458, y: 249.2003, z: 164.68576}
+  m_Center: {x: 98.30142, y: 18.406792, z: 9.89069}
 --- !u!65 &801142511
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2726,7 +2752,7 @@ GameObject:
   - component: {fileID: 1184714031}
   m_Layer: 0
   m_Name: Trail
-  m_TagString: Untagged
+  m_TagString: trajectory
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2806,8 +2832,8 @@ TrailRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0, a: 0.6862745}
-      key1: {r: 1, g: 0, b: 0, a: 0.6862745}
+      key0: {r: 1, g: 0, b: 0, a: 0.47058824}
+      key1: {r: 1, g: 0, b: 0, a: 0.47058824}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -2841,7 +2867,7 @@ TrailRenderer:
     generateLightingData: 0
   m_MinVertexDistance: 0.05
   m_Autodestruct: 0
-  m_Emitting: 1
+  m_Emitting: 0
 --- !u!4 &1187090177 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 462066, guid: ce816f2e6abb0504092c23ed9b970dfd,
@@ -4036,6 +4062,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a22ea3a2e02d2473ea8af856a85f8ca7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parentOfTrail: {fileID: 1166834317}
+  originalTrail: {fileID: 1184714031}
 --- !u!1 &1901210789
 GameObject:
   m_ObjectHideFlags: 0
