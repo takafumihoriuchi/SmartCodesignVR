@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class TrashcanEffects : MonoBehaviour
 {
-	private GameObject TrashBin;
-	private AudioSource alert_sound;
+	// private GameObject TrashBin;
+	// private AudioSource alert_sound;
 
     void Start() {
-    	TrashBin = GameObject.Find("trashBin");
-    	// get sound
+    	// TrashBin = GameObject.Find("trashBin");
     	// alert_sound = TrashBin.GetComponent<AudioSource>();
     }
 

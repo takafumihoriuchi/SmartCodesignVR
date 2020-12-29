@@ -13,8 +13,8 @@ public class ChangeMaterial : MonoBehaviour
         rend.sharedMaterial = material[0];
     }
 
-    void OnCollisionEnter (Collision col) {
-    	Debug.Log("Entered OnCollisionEnter, " + col.gameObject.name);
+    void OnCollisionEnter(Collision col) {
+    	// Debug.Log("trashBin collided with " + col.gameObject.name);
     	if (col.gameObject.name.Equals("RedPaint"))
     		rend.sharedMaterial = material[1];
     	else if (col.gameObject.name.Equals("GreenPaint"))

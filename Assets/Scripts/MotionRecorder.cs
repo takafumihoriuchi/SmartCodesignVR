@@ -32,6 +32,7 @@ public class MotionRecorder : MonoBehaviour
 				Debug.Log("RECORDING IN PROGRESS...");
 				trailArr[trailIndex] = Instantiate(originalTrail, parentOfTrail.transform.position, Quaternion.identity, parentOfTrail.transform) as TrailRenderer;
 				trailArr[trailIndex].emitting = true;
+				// TODO: change color of each trajectory
 			} else if (recording == true && (OVRInput.GetUp(OVRInput.RawButton.B) || OVRInput.GetUp(OVRInput.RawButton.Y))) {
 				recording = false;
 				Debug.Log("RECORDING END");
@@ -45,13 +46,13 @@ public class MotionRecorder : MonoBehaviour
 
 }
 
-/*
-B|Yボタンを押しているときは、新しい線を描画できるようにしたい。
-話している時は、描画できなくしたい。
-
-*/
 
 // boolean of button pressed / release
 // GetDown => true when pressed
 // Get => true while pressed
 // GetUp => true when released
+
+/*
+TODO
+- bring objects back to initial position when thrown outside of the platform
+*/
