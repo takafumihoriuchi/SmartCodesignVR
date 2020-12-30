@@ -1,10 +1,10 @@
 {
     "m_SelectedDeviceId": "1WMHH8173V0386",
     "m_SelectedPackage": {
-        "deviceId": "",
-        "name": "",
-        "processId": 0,
-        "exited": false
+        "deviceId": "1WMHH8173V0386",
+        "name": "com.DefaultCompany.SmartCodesignVR",
+        "processId": 21730,
+        "exited": true
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
@@ -43,6 +43,12 @@
             "name": "com.oculus.vrshell",
             "processId": 3002,
             "exited": false
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 21730,
+            "exited": true
         }
     ],
     "m_Tags": {
