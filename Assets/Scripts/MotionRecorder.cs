@@ -47,12 +47,23 @@ public class MotionRecorder : MonoBehaviour
 }
 
 
-// boolean of button pressed / release
-// GetDown => true when pressed
-// Get => true while pressed
-// GetUp => true when released
-
 /*
 TODO
 - bring objects back to initial position when thrown outside of the platform
+
+Notes:
+
+- to make skybox clearFlags (similar to changing skybox material):
+public Camera camera;
+camera.clearFlags = CameraClearFlags.Skybox;
+
+- boolean of button pressed / release on touch-controller
+GetDown => true when pressed
+Get => true while pressed
+GetUp => true when released
+
+- consider the use of the "mission card"
+
+-
+
 */
