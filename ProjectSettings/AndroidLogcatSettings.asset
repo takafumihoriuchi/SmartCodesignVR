@@ -3,8 +3,8 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHH8173V0386",
         "name": "com.DefaultCompany.SmartCodesignVR",
-        "processId": 21730,
-        "exited": true
+        "processId": 8364,
+        "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
@@ -49,6 +49,24 @@
             "name": "com.DefaultCompany.SmartCodesignVR",
             "processId": 21730,
             "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 3783,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 6127,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 8364,
+            "exited": false
         }
     ],
     "m_Tags": {
