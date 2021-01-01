@@ -47,6 +47,3 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: CardsCanvas
-    uniqueID: 3551845419
-    locked: 0
