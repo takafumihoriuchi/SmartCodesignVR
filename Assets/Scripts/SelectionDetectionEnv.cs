@@ -34,14 +34,31 @@ public class SelectionDetectionEnv : MonoBehaviour
     	return false;
     }
 
+    // void IncreaseDrag(GameObject obj) {
+    // 	envSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
+	   //  envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
+    // }
+
     void OnTriggerEnter(Collider other) {
-    	if (envSelected == false && IsElementOf(other.gameObject, envObjectsArr)) {
-    		Debug.Log("Environment Card choice: " + other.name);
-    		envSelectedObject = other.gameObject;
-    		envSelected = true;
-    		envSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
-    		envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
+    	if (IsElementOf(other.gameObject, envObjectsArr)) {
+    		if (!envSelected) {
+	    		// Debug.Log("Environment Card choice: " + other.name);
+	    		envSelectedObject = other.gameObject;
+	    		envSelected = true;
+	    		envSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
+	    		envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
+	    	} else {
+	    		// Debug.Log("Environment Card is replaced: " + other.name + " (cancelled)");
+	    		envSelectedObject.transform.GetComponent<Rigidbody>().drag = 1;
+    			envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 0.5F;
+    			// replace envSelectedObject
+    			envSelectedObject = other.gameObject;
+    			// Debug.Log("Environment Card choice: " + other.name + " (new)");
+    			envSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
+	    		envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
+	    	}
     	}
+    	
     }
 
     void OnTriggerExit(Collider other) {
