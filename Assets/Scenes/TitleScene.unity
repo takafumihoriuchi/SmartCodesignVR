@@ -136,8 +136,9 @@ GameObject:
   - component: {fileID: 36852624}
   - component: {fileID: 36852629}
   - component: {fileID: 36852628}
+  - component: {fileID: 36852630}
   m_Layer: 5
-  m_Name: tmpObject (1)
+  m_Name: tmpSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,13 +262,36 @@ Rigidbody:
   m_GameObject: {fileID: 36852622}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &36852630
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36852622}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.49999815, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: -0.22500001, y: 1.2251765, z: 1.345198}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &41073800
 GameObject:
   m_ObjectHideFlags: 0
@@ -623,6 +647,8 @@ GameObject:
   - component: {fileID: 170551978}
   - component: {fileID: 170551977}
   - component: {fileID: 170551980}
+  - component: {fileID: 170551981}
+  - component: {fileID: 170551982}
   m_Layer: 0
   m_Name: outCube
   m_TagString: Untagged
@@ -722,6 +748,34 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!54 &170551981
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170551975}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!114 &170551982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 170551975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce0958f1633b34e0e8fe28b9649d5070, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &184986702
 GameObject:
   m_ObjectHideFlags: 0
@@ -818,8 +872,9 @@ GameObject:
   - component: {fileID: 196354966}
   - component: {fileID: 196354971}
   - component: {fileID: 196354970}
+  - component: {fileID: 196354972}
   m_Layer: 5
-  m_Name: tmpObject
+  m_Name: tmpLightUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -943,13 +998,36 @@ Rigidbody:
   m_GameObject: {fileID: 196354964}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &196354972
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 196354964}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.50000006, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: -0.45000002, y: 0.95522904, z: 1.2927256}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &225921731
 GameObject:
   m_ObjectHideFlags: 0
@@ -1079,8 +1157,9 @@ GameObject:
   - component: {fileID: 252597039}
   - component: {fileID: 252597044}
   - component: {fileID: 252597043}
+  - component: {fileID: 252597045}
   m_Layer: 5
-  m_Name: tmpObject (4)
+  m_Name: tmpInput5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1204,13 +1283,36 @@ Rigidbody:
   m_GameObject: {fileID: 252597037}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &252597045
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252597037}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.49999815, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0.45000002, y: 1.2251765, z: 1.345198}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &282616558
 GameObject:
   m_ObjectHideFlags: 0
@@ -1520,6 +1622,71 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &393170582
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 393170583}
+  - component: {fileID: 393170584}
+  m_Layer: 0
+  m_Name: ProcessManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &393170583
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393170582}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.10689067, y: -0.4005338, z: 10.1369295}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &393170584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393170582}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9836e06d979548ffbbe6751469f6860, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  envBox: {fileID: 435865813}
+  inBox: {fileID: 1530719321}
+  outBox: {fileID: 170551975}
+  envObjects:
+  - {fileID: 944326525}
+  - {fileID: 1745354412}
+  - {fileID: 1113653843}
+  - {fileID: 653150956}
+  - {fileID: 677948324}
+  inObjects:
+  - {fileID: 718546303}
+  - {fileID: 36852622}
+  - {fileID: 962001678}
+  - {fileID: 804182929}
+  - {fileID: 252597037}
+  outObjects:
+  - {fileID: 196354964}
+  - {fileID: 494165982}
+  - {fileID: 2001168606}
+  - {fileID: 535112893}
+  - {fileID: 2018949129}
+  speed: 1
 --- !u!1 &435865813
 GameObject:
   m_ObjectHideFlags: 0
@@ -1533,6 +1700,8 @@ GameObject:
   - component: {fileID: 435865816}
   - component: {fileID: 435865815}
   - component: {fileID: 435865818}
+  - component: {fileID: 435865819}
+  - component: {fileID: 435865820}
   m_Layer: 0
   m_Name: envCube
   m_TagString: Untagged
@@ -1552,7 +1721,7 @@ Transform:
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 1698874292}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &435865815
 BoxCollider:
@@ -1632,6 +1801,40 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!54 &435865819
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435865813}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!114 &435865820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435865813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd173673df8264e6eaea2e95aa1c6199, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  envObjectsArr:
+  - {fileID: 944326525}
+  - {fileID: 1745354412}
+  - {fileID: 1113653843}
+  - {fileID: 653150956}
+  - {fileID: 677948324}
 --- !u!1 &444048015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1768,8 +1971,9 @@ GameObject:
   - component: {fileID: 494165984}
   - component: {fileID: 494165989}
   - component: {fileID: 494165988}
+  - component: {fileID: 494165990}
   m_Layer: 5
-  m_Name: tmpObject (1)
+  m_Name: tmpMakeSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1893,13 +2097,36 @@ Rigidbody:
   m_GameObject: {fileID: 494165982}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &494165990
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494165982}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.50000006, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: -0.22500001, y: 0.95522904, z: 1.2927256}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &522371707
 GameObject:
   m_ObjectHideFlags: 0
@@ -1989,8 +2216,9 @@ GameObject:
   - component: {fileID: 535112895}
   - component: {fileID: 535112900}
   - component: {fileID: 535112899}
+  - component: {fileID: 535112901}
   m_Layer: 5
-  m_Name: tmpObject (3)
+  m_Name: tmpOutput4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2114,13 +2342,36 @@ Rigidbody:
   m_GameObject: {fileID: 535112893}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &535112901
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 535112893}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.50000006, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0.22500001, y: 0.95522904, z: 1.2927256}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &618262913
 GameObject:
   m_ObjectHideFlags: 0
@@ -2271,8 +2522,9 @@ GameObject:
   - component: {fileID: 653150958}
   - component: {fileID: 653150962}
   - component: {fileID: 653150963}
+  - component: {fileID: 653150964}
   m_Layer: 5
-  m_Name: tmpObject (2)
+  m_Name: tmpStreetSign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2396,13 +2648,36 @@ Rigidbody:
   m_GameObject: {fileID: 653150956}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &653150964
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 653150956}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.50000006, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0.22500001, y: 1.4951241, z: 1.3976705}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!20 &658816837 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 2015248, guid: ce816f2e6abb0504092c23ed9b970dfd,
@@ -2424,8 +2699,9 @@ GameObject:
   - component: {fileID: 677948326}
   - component: {fileID: 677948330}
   - component: {fileID: 677948331}
+  - component: {fileID: 677948332}
   m_Layer: 5
-  m_Name: tmpObject (3)
+  m_Name: tmpBridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2549,13 +2825,36 @@ Rigidbody:
   m_GameObject: {fileID: 677948324}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &677948332
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 677948324}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.50000006, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0.45000002, y: 1.4951241, z: 1.3976705}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &702700538
 GameObject:
   m_ObjectHideFlags: 0
@@ -2703,8 +3002,9 @@ GameObject:
   - component: {fileID: 718546305}
   - component: {fileID: 718546310}
   - component: {fileID: 718546309}
+  - component: {fileID: 718546311}
   m_Layer: 5
-  m_Name: tmpObject
+  m_Name: tmpButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2828,13 +3128,36 @@ Rigidbody:
   m_GameObject: {fileID: 718546303}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &718546311
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 718546303}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.49999815, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: -0.45000002, y: 1.2251765, z: 1.345198}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &744364181
 GameObject:
   m_ObjectHideFlags: 0
@@ -2916,8 +3239,9 @@ GameObject:
   - component: {fileID: 804182931}
   - component: {fileID: 804182936}
   - component: {fileID: 804182935}
+  - component: {fileID: 804182937}
   m_Layer: 5
-  m_Name: tmpObject (3)
+  m_Name: tmpInput4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3041,13 +3365,36 @@ Rigidbody:
   m_GameObject: {fileID: 804182929}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &804182937
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 804182929}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.49999815, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0.22500001, y: 1.2251765, z: 1.345198}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &808875341
 GameObject:
   m_ObjectHideFlags: 0
@@ -3627,8 +3974,8 @@ Rigidbody:
   m_GameObject: {fileID: 944326525}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
@@ -3735,6 +4082,29 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!145 &944326550
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944326525}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: -0.46550003, y: 1.4729685, z: 1.3806299}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &960109103
 GameObject:
   m_ObjectHideFlags: 0
@@ -3831,8 +4201,9 @@ GameObject:
   - component: {fileID: 962001680}
   - component: {fileID: 962001685}
   - component: {fileID: 962001684}
+  - component: {fileID: 962001686}
   m_Layer: 5
-  m_Name: tmpObject (2)
+  m_Name: tmpMotion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3956,13 +4327,36 @@ Rigidbody:
   m_GameObject: {fileID: 962001678}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &962001686
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 962001678}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.49999815, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 1.2251765, z: 1.345198}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1001 &964303740
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4490,8 +4884,9 @@ GameObject:
   - component: {fileID: 1113653845}
   - component: {fileID: 1113653849}
   - component: {fileID: 1113653850}
+  - component: {fileID: 1113653851}
   m_Layer: 5
-  m_Name: tmpObject (1)
+  m_Name: tmpStreetLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4615,13 +5010,36 @@ Rigidbody:
   m_GameObject: {fileID: 1113653843}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &1113653851
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1113653843}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.50000006, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 1.4951241, z: 1.3976705}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1001 &1129770077
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5085,6 +5503,8 @@ GameObject:
   - component: {fileID: 1530719324}
   - component: {fileID: 1530719323}
   - component: {fileID: 1530719326}
+  - component: {fileID: 1530719327}
+  - component: {fileID: 1530719328}
   m_Layer: 0
   m_Name: inCube
   m_TagString: Untagged
@@ -5104,7 +5524,7 @@ Transform:
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 1698874292}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1530719323
 BoxCollider:
@@ -5184,6 +5604,34 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!54 &1530719327
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530719321}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
+--- !u!114 &1530719328
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1530719321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ab604c211aff498e9c7f80b912fd839, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1543973374
 GameObject:
   m_ObjectHideFlags: 0
@@ -5463,8 +5911,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.7, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1530719322}
   - {fileID: 435865814}
+  - {fileID: 1530719322}
   - {fileID: 170551976}
   - {fileID: 162390181}
   - {fileID: 1221446706}
@@ -5701,8 +6149,9 @@ GameObject:
   - component: {fileID: 1745354414}
   - component: {fileID: 1745354418}
   - component: {fileID: 1745354419}
+  - component: {fileID: 1745354420}
   m_Layer: 5
-  m_Name: tmpObject
+  m_Name: tmpTree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5826,13 +6275,36 @@ Rigidbody:
   m_GameObject: {fileID: 1745354412}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &1745354420
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745354412}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: -0.22500001, y: 1.4705833, z: 1.3929002}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &1745959747
 GameObject:
   m_ObjectHideFlags: 0
@@ -6045,7 +6517,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1857631429}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0.2}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0.4}
   m_LocalScale: {x: 4, y: 0.05, z: 4}
   m_Children: []
   m_Father: {fileID: 0}
@@ -6166,8 +6638,9 @@ GameObject:
   - component: {fileID: 2001168608}
   - component: {fileID: 2001168613}
   - component: {fileID: 2001168612}
+  - component: {fileID: 2001168614}
   m_Layer: 5
-  m_Name: tmpObject (2)
+  m_Name: tmpOutput3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6291,13 +6764,36 @@ Rigidbody:
   m_GameObject: {fileID: 2001168606}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &2001168614
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001168606}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.50000006, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0, y: 0.95522904, z: 1.2927256}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &2018949129
 GameObject:
   m_ObjectHideFlags: 0
@@ -6313,8 +6809,9 @@ GameObject:
   - component: {fileID: 2018949131}
   - component: {fileID: 2018949136}
   - component: {fileID: 2018949135}
+  - component: {fileID: 2018949137}
   m_Layer: 5
-  m_Name: tmpObject (4)
+  m_Name: tmpOutput5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6438,13 +6935,36 @@ Rigidbody:
   m_GameObject: {fileID: 2018949129}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Drag: 1
+  m_AngularDrag: 0.2
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!145 &2018949137
+SpringJoint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018949129}
+  m_ConnectedBody: {fileID: 0}
+  m_Anchor: {x: 0, y: 0.50000006, z: 0}
+  m_AutoConfigureConnectedAnchor: 1
+  m_ConnectedAnchor: {x: 0.45000002, y: 0.95522904, z: 1.2927256}
+  serializedVersion: 2
+  m_Spring: 1.5
+  m_Damper: 1
+  m_MinDistance: 0
+  m_MaxDistance: 0
+  m_Tolerance: 0.025
+  m_BreakForce: Infinity
+  m_BreakTorque: Infinity
+  m_EnableCollision: 0
+  m_EnablePreprocessing: 1
+  m_MassScale: 1
+  m_ConnectedMassScale: 1
 --- !u!1 &2022459794
 GameObject:
   m_ObjectHideFlags: 0
