@@ -5,34 +5,25 @@ using UnityEngine;
 public class SelectionDetectionEnv : MonoBehaviour
 {
 	public GameObject[] envObjectsArr;
-	private GameObject envSelectedObject;
-	private bool envSelected;
+	public static GameObject envSelectedObject;
+	public static bool envSelected;
 
-	public float speed = 0.2f; // speed to clip to selection-box
-	private Vector3 currentPos;
+	public float clipSpeed = 1.0f; // speed to clip to selection-box
 	private Vector3 targetPos;
-	// private bool atBoxCenter;
 
     void Start() {
         envSelected = false;
-        // atBoxCenter = false;
         targetPos = transform.position;
     }
 
     void Update() {
         if (envSelected) {
-        	// bool isGrabbed = OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger)
-        	// 				 || OVRInput.GetDown(OVRInput.RawButton.RHandTrigger)
-        	// 				 || OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger)
-        	// 				 || OVRInput.GetDown(OVRInput.RawButton.LHandTrigger);
         	bool isGrabbed = envSelectedObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
         	if (!isGrabbed) {
-        		float step = speed * Time.deltaTime;
+        		float step = clipSpeed * Time.deltaTime;
 		        Vector3 currentPos = envSelectedObject.transform.position;
 		        Vector3 newPos = Vector3.MoveTowards(currentPos, targetPos, step);
 		        envSelectedObject.transform.position = newPos;
-		        // if (Vector3.Distance(newPos, targetPos) < 0.001f) atBoxCenter = true;
-		        // else atBoxCenter = false;
         	}
         }
     }
@@ -48,11 +39,16 @@ public class SelectionDetectionEnv : MonoBehaviour
     		Debug.Log("Environment Card choice: " + other.name);
     		envSelectedObject = other.gameObject;
     		envSelected = true;
+    		envSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
+    		envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
     	}
     }
 
     void OnTriggerExit(Collider other) {
     	if (other.gameObject == envSelectedObject) {
+    		Debug.Log("Environment Card is cancelled:" + other.name);
+    		envSelectedObject.transform.GetComponent<Rigidbody>().drag = 1;
+    		envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 0.5F;
     		envSelectedObject = null;
     		envSelected = false;
     	}
@@ -61,6 +57,8 @@ public class SelectionDetectionEnv : MonoBehaviour
 }
 
 /*
-example usage of Distance():
-if (Vector3.Distance(envSelectedObject.transform.position, targetPos) < 0.001f) { ... }
+- example usage of Distance():
+if (Vector3.Distance(newPos, targetPos) < 0.001f) atBoxCenter = true;
+- isKinematic = true is similart to disableing a rigidbody object
+envSelectedObject.transform.GetComponent<Rigidbody>().isKinematic = true;
 */
