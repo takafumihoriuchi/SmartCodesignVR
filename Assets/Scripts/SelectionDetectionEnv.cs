@@ -34,38 +34,33 @@ public class SelectionDetectionEnv : MonoBehaviour
     	return false;
     }
 
-    // void IncreaseDrag(GameObject obj) {
-    // 	envSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
-	   //  envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
-    // }
+    void IncreaseDrag(GameObject obj) {
+    	obj.transform.GetComponent<Rigidbody>().drag = 20;
+	    obj.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
+    }
+
+    void DecreaseDrag(GameObject obj) {
+    	obj.transform.GetComponent<Rigidbody>().drag = 1;
+    	obj.transform.GetComponent<Rigidbody>().angularDrag = 0.5F;
+    }
 
     void OnTriggerEnter(Collider other) {
     	if (IsElementOf(other.gameObject, envObjectsArr)) {
     		if (!envSelected) {
-	    		// Debug.Log("Environment Card choice: " + other.name);
 	    		envSelectedObject = other.gameObject;
 	    		envSelected = true;
-	    		envSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
-	    		envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
-	    	} else {
-	    		// Debug.Log("Environment Card is replaced: " + other.name + " (cancelled)");
-	    		envSelectedObject.transform.GetComponent<Rigidbody>().drag = 1;
-    			envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 0.5F;
-    			// replace envSelectedObject
+	    		IncreaseDrag(envSelectedObject);
+	    	} else { // replace card choice
+	    		DecreaseDrag(envSelectedObject);
     			envSelectedObject = other.gameObject;
-    			// Debug.Log("Environment Card choice: " + other.name + " (new)");
-    			envSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
-	    		envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
+    			IncreaseDrag(envSelectedObject);
 	    	}
     	}
-    	
     }
 
     void OnTriggerExit(Collider other) {
     	if (other.gameObject == envSelectedObject) {
-    		Debug.Log("Environment Card is cancelled:" + other.name);
-    		envSelectedObject.transform.GetComponent<Rigidbody>().drag = 1;
-    		envSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 0.5F;
+    		DecreaseDrag(envSelectedObject);
     		envSelectedObject = null;
     		envSelected = false;
     	}

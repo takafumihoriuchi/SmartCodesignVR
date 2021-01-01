@@ -34,21 +34,33 @@ public class SelectionDetectionOut : MonoBehaviour
     	return false;
     }
 
+    void IncreaseDrag(GameObject obj) {
+    	obj.transform.GetComponent<Rigidbody>().drag = 20;
+	    obj.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
+    }
+
+    void DecreaseDrag(GameObject obj) {
+    	obj.transform.GetComponent<Rigidbody>().drag = 1;
+    	obj.transform.GetComponent<Rigidbody>().angularDrag = 0.5F;
+    }
+
     void OnTriggerEnter(Collider other) {
-    	if (outSelected == false && IsElementOf(other.gameObject, outObjectsArr)) {
-    		Debug.Log("Output Card choice: " + other.name);
-    		outSelectedObject = other.gameObject;
-    		outSelected = true;
-    		outSelectedObject.transform.GetComponent<Rigidbody>().drag = 20;
-    		outSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
+    	if (IsElementOf(other.gameObject, outObjectsArr)) {
+    		if (!outSelected) {
+	    		outSelectedObject = other.gameObject;
+	    		outSelected = true;
+	    		IncreaseDrag(outSelectedObject);
+	    	} else { // replace card choice
+	    		DecreaseDrag(outSelectedObject);
+    			outSelectedObject = other.gameObject;
+    			IncreaseDrag(outSelectedObject);
+	    	}
     	}
     }
 
     void OnTriggerExit(Collider other) {
     	if (other.gameObject == outSelectedObject) {
-    		Debug.Log("Output Card is cancelled:" + other.name);
-    		outSelectedObject.transform.GetComponent<Rigidbody>().drag = 1;
-    		outSelectedObject.transform.GetComponent<Rigidbody>().angularDrag = 0.5F;
+    		DecreaseDrag(outSelectedObject);
     		outSelectedObject = null;
     		outSelected = false;
     	}
