@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHH8173V0386",
         "name": "com.DefaultCompany.SmartCodesignVR",
-        "processId": 14567,
+        "processId": 16579,
         "exited": true
     },
     "m_SelectedPriority": 0,
@@ -13,12 +13,6 @@
             "name": "com.oculus.vrshell",
             "processId": 2818,
             "exited": false
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 27451,
-            "exited": true
         },
         {
             "deviceId": "1WMHH8173V0386",
@@ -48,6 +42,12 @@
             "deviceId": "1WMHH8173V0386",
             "name": "com.DefaultCompany.SmartCodesignVR",
             "processId": 14567,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 16579,
             "exited": true
         }
     ],
