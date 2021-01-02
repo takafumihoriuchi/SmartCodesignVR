@@ -11,6 +11,8 @@ public class CardCombinationManagement : MonoBehaviour
 	private bool comboComp;
     private bool playedDiveVoice;
 
+    public GameObject OVRCamera;
+
     void Start() {
     	comboComp = false;
     	playedDiveVoice = false;
@@ -26,11 +28,11 @@ public class CardCombinationManagement : MonoBehaviour
         if (comboComp) {
         	if (!diveVoice.isPlaying && !playedDiveVoice) { // hasn't played voice yet
         		if (introVoice.isPlaying) introVoice.Stop();
-        		diveVoice.Play(0);
+        		diveVoice.PlayDelayed(1);
         		playedDiveVoice = true;
 			}
 			if (!diveVoice.isPlaying && playedDiveVoice) { // has already finished playing voice
-				// FadeManager.FadeOut(1); // SceneManager.LoadScene("PrototypingScene") is included in this function
+				OVRCamera.GetComponent<OVRScreenFade>().FadeOut();
 				Debug.Log("Moving on to the next scene.");
 				Debug.Log("[env, in, out] = [" + SelectionDetectionEnv.envSelectedObject.name + ", " + SelectionDetectionIn.inSelectedObject.name + ", " + SelectionDetectionOut.outSelectedObject.name + "]");
 				SceneManager.LoadScene(1);
