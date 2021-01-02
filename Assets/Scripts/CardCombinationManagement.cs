@@ -30,9 +30,10 @@ public class CardCombinationManagement : MonoBehaviour
         		playedDiveVoice = true;
 			}
 			if (!diveVoice.isPlaying && playedDiveVoice) { // has already finished playing voice
+				// FadeManager.FadeOut(1); // SceneManager.LoadScene("PrototypingScene") is included in this function
 				Debug.Log("Moving on to the next scene.");
 				Debug.Log("[env, in, out] = [" + SelectionDetectionEnv.envSelectedObject.name + ", " + SelectionDetectionIn.inSelectedObject.name + ", " + SelectionDetectionOut.outSelectedObject.name + "]");
-				SceneManager.LoadScene("PrototypingScene");
+				SceneManager.LoadScene(1);
 			}
         } else {
         	if (diveVoice.isPlaying) {
