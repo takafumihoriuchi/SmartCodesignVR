@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHH8173V0386",
         "name": "com.DefaultCompany.SmartCodesignVR",
-        "processId": 16579,
+        "processId": 30684,
         "exited": true
     },
     "m_SelectedPriority": 0,
@@ -17,30 +17,6 @@
         {
             "deviceId": "1WMHH8173V0386",
             "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 29328,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 32119,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 2562,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
-            "processId": 12841,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.DefaultCompany.SmartCodesignVR",
             "processId": 14567,
             "exited": true
         },
@@ -48,6 +24,36 @@
             "deviceId": "1WMHH8173V0386",
             "name": "com.DefaultCompany.SmartCodesignVR",
             "processId": 16579,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 18076,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 25078,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 27285,
+            "exited": true
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 28689,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.DefaultCompany.SmartCodesignVR",
+            "processId": 30684,
             "exited": true
         }
     ],

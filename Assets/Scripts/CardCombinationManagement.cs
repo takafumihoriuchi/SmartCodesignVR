@@ -30,11 +30,11 @@ public class CardCombinationManagement : MonoBehaviour
         		if (introVoice.isPlaying) introVoice.Stop();
         		diveVoice.PlayDelayed(1);
         		playedDiveVoice = true;
+        		Debug.Log("[env, in, out] = [" + SelectionDetectionEnv.envSelectedObject.name + ", " + SelectionDetectionIn.inSelectedObject.name + ", " + SelectionDetectionOut.outSelectedObject.name + "]");
 			}
 			if (!diveVoice.isPlaying && playedDiveVoice) { // has already finished playing voice
 				OVRCamera.GetComponent<OVRScreenFade>().FadeOut();
 				Debug.Log("Moving on to the next scene.");
-				Debug.Log("[env, in, out] = [" + SelectionDetectionEnv.envSelectedObject.name + ", " + SelectionDetectionIn.inSelectedObject.name + ", " + SelectionDetectionOut.outSelectedObject.name + "]");
 				SceneManager.LoadScene(1);
 			}
         } else {

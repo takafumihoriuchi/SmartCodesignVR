@@ -11,18 +11,20 @@ public class PaperBallCollisionDetection : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision col) {
-    	Debug.Log("Trash-bin collided with: " + col.gameObject.name + " at " + col.contacts[0].thisCollider.name);
+    	// Debug.Log("Trash-bin collided with: " + col.gameObject.name + " at " + col.contacts[0].thisCollider.name);
     	Collider collidedFace = col.contacts[0].thisCollider;
-    	if (collidedFace.name.Equals("BaseFace")) {
-    		Debug.Log("paper-ball collided with BASE-FACE");
-    	} else if (collidedFace.name.Equals("FrontFace")) {
-    		Debug.Log("paper-ball collided with FRONT-FACE");
-    	} else if (collidedFace.name.Equals("BackFace")) {
-    		Debug.Log("paper-ball collided with BACK-FACE");
-    	} else if (collidedFace.name.Equals("RightFace")) {
-    		Debug.Log("paper-ball collided with RIGHT-FACE");
-    	} else if (collidedFace.name.Equals("LeftFace")) {
-    		Debug.Log("paper-ball collided with LEFT-FACE");
+    	if (col.gameObject.name == "paperBallModel") {
+    		if (collidedFace.name.Equals("BaseFace")) {
+	    		Debug.Log("paper-ball touched BASE-FACE");
+	    	} else if (collidedFace.name.Equals("FrontFace")) {
+	    		Debug.Log("paper-ball touched FRONT-FACE");
+	    	} else if (collidedFace.name.Equals("BackFace")) {
+	    		Debug.Log("paper-ball touched BACK-FACE");
+	    	} else if (collidedFace.name.Equals("RightFace")) {
+	    		Debug.Log("paper-ball touched RIGHT-FACE");
+	    	} else if (collidedFace.name.Equals("LeftFace")) {
+	    		Debug.Log("paper-ball touched LEFT-FACE");
+	    	}
     	}
     }
 
