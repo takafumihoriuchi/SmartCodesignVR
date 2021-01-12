@@ -16,7 +16,7 @@ public class CardCombinationManagement : MonoBehaviour
     void Start() {
     	comboComp = false;
     	playedDiveVoice = false;
-    	introVoice.PlayDelayed(3);
+    	introVoice.PlayDelayed(3.5f);
     	// TODO: better to wait for the user to wear the HMD (e.g. play when user comes near the boxes)
     }
 
@@ -35,7 +35,7 @@ public class CardCombinationManagement : MonoBehaviour
 			if (!diveVoice.isPlaying && playedDiveVoice) { // has already finished playing voice
 				OVRCamera.GetComponent<OVRScreenFade>().FadeOut();
 				Debug.Log("Moving on to the next scene.");
-				SceneManager.LoadScene(1);
+				SceneManager.LoadScene(2);
 			}
         } else {
         	if (diveVoice.isPlaying) {
