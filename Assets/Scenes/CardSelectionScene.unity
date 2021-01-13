@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 41073801}
   - component: {fileID: 41073802}
   m_Layer: 5
-  m_Name: CardInButton
+  m_Name: TmpCardInButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -538,7 +538,7 @@ GameObject:
   - component: {fileID: 128158562}
   - component: {fileID: 128158563}
   m_Layer: 5
-  m_Name: CardEnvTrashCan
+  m_Name: TmpCardEnvTrashCan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -742,7 +742,7 @@ GameObject:
   - component: {fileID: 150940410}
   - component: {fileID: 150940411}
   m_Layer: 5
-  m_Name: CardInTmp4
+  m_Name: TmpCardInTmp4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1273,7 +1273,7 @@ GameObject:
   - component: {fileID: 184986703}
   - component: {fileID: 184986704}
   m_Layer: 5
-  m_Name: CardInSound
+  m_Name: TmpCardInSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1466,7 +1466,7 @@ GameObject:
   - component: {fileID: 230629339}
   - component: {fileID: 230629340}
   m_Layer: 5
-  m_Name: CardEnvStreetSign
+  m_Name: TmpCardEnvStreetSign
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2148,7 +2148,7 @@ GameObject:
   - component: {fileID: 326619291}
   - component: {fileID: 326619292}
   m_Layer: 5
-  m_Name: CardOutTmp5
+  m_Name: TmpCardOutTmp5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2832,7 +2832,7 @@ GameObject:
   - component: {fileID: 469282671}
   - component: {fileID: 469282672}
   m_Layer: 5
-  m_Name: CardOutSound
+  m_Name: TmpCardOutSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3812,7 +3812,7 @@ GameObject:
   - component: {fileID: 833421987}
   - component: {fileID: 833421988}
   m_Layer: 5
-  m_Name: CardOutTmp3
+  m_Name: TmpCardOutTmp3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4083,7 +4083,7 @@ GameObject:
   - component: {fileID: 881203758}
   - component: {fileID: 881203759}
   m_Layer: 5
-  m_Name: CardOutTmp4
+  m_Name: TmpCardOutTmp4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4199,7 +4199,7 @@ GameObject:
   - component: {fileID: 960109104}
   - component: {fileID: 960109105}
   m_Layer: 5
-  m_Name: CardEnvBridge
+  m_Name: TmpCardEnvBridge
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4828,7 +4828,7 @@ GameObject:
   - component: {fileID: 1022461500}
   - component: {fileID: 1022461501}
   m_Layer: 5
-  m_Name: CardInMotion
+  m_Name: TmpCardInTmp3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4888,7 +4888,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 502a5891b85bf4700a59faa57d8b33e4, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -5128,7 +5128,7 @@ GameObject:
   - component: {fileID: 1039645310}
   - component: {fileID: 1039645309}
   m_Layer: 5
-  m_Name: Motion
+  m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5247,7 +5247,7 @@ GameObject:
   - component: {fileID: 1098690887}
   - component: {fileID: 1098690888}
   m_Layer: 5
-  m_Name: CardOutLightUp
+  m_Name: TmpCardOutLightUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6556,7 +6556,7 @@ GameObject:
   - component: {fileID: 1543973375}
   - component: {fileID: 1543973376}
   m_Layer: 5
-  m_Name: CardInTmp5
+  m_Name: TmpCardInTmp5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7059,7 +7059,7 @@ GameObject:
   - component: {fileID: 1669464720}
   - component: {fileID: 1669464719}
   m_Layer: 5
-  m_Name: Vibration
+  m_Name: Vibrate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7469,7 +7469,7 @@ GameObject:
   - component: {fileID: 1724763811}
   - component: {fileID: 1724763812}
   m_Layer: 5
-  m_Name: CardEnvStreetLight
+  m_Name: TmpCardEnvStreetLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8302,7 +8302,7 @@ GameObject:
   - component: {fileID: 2048518733}
   - component: {fileID: 2048518734}
   m_Layer: 5
-  m_Name: CardEnvTree
+  m_Name: TmpCardEnvTree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
