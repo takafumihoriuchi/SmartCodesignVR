@@ -5,25 +5,22 @@ using UnityEngine;
 public class SelectionDetectionEnv : MonoBehaviour
 {
 	public GameObject[] envObjectsArr;
-	public static GameObject envSelectedObject;
-	public static bool envSelected;
 
 	public float clipSpeed = 1.0f; // speed to clip to selection-box
 	private Vector3 targetPos;
 
     void Start() {
-        envSelected = false;
         targetPos = transform.position;
     }
 
     void Update() {
-        if (envSelected) {
-        	bool isGrabbed = envSelectedObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
+        if (CardCombinationManagement.selectionDict["environment"] != null) {
+        	bool isGrabbed = CardCombinationManagement.selectionDict["environment"].transform.GetComponent<OVRGrabbable>().isGrabbed;
         	if (!isGrabbed) {
         		float step = clipSpeed * Time.deltaTime;
-		        Vector3 currentPos = envSelectedObject.transform.position;
+		        Vector3 currentPos = CardCombinationManagement.selectionDict["environment"].transform.position;
 		        Vector3 newPos = Vector3.MoveTowards(currentPos, targetPos, step);
-		        envSelectedObject.transform.position = newPos;
+		        CardCombinationManagement.selectionDict["environment"].transform.position = newPos;
         	}
         }
     }
@@ -46,23 +43,21 @@ public class SelectionDetectionEnv : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
     	if (IsElementOf(other.gameObject, envObjectsArr)) {
-    		if (!envSelected) {
-	    		envSelectedObject = other.gameObject;
-	    		envSelected = true;
-	    		IncreaseDrag(envSelectedObject);
+    		if (CardCombinationManagement.selectionDict["environment"] == null) {
+	    		CardCombinationManagement.selectionDict["environment"] = other.gameObject;
+	    		IncreaseDrag(CardCombinationManagement.selectionDict["environment"]);
 	    	} else { // replace card choice
-	    		DecreaseDrag(envSelectedObject);
-    			envSelectedObject = other.gameObject;
-    			IncreaseDrag(envSelectedObject);
+	    		DecreaseDrag(CardCombinationManagement.selectionDict["environment"]);
+    			CardCombinationManagement.selectionDict["environment"] = other.gameObject;
+    			IncreaseDrag(CardCombinationManagement.selectionDict["environment"]);
 	    	}
     	}
     }
 
     void OnTriggerExit(Collider other) {
-    	if (other.gameObject == envSelectedObject) {
-    		DecreaseDrag(envSelectedObject);
-    		envSelectedObject = null;
-    		envSelected = false;
+    	if (other.gameObject == CardCombinationManagement.selectionDict["environment"]) {
+    		DecreaseDrag(CardCombinationManagement.selectionDict["environment"]);
+    		CardCombinationManagement.selectionDict["environment"] = null;
     	}
     }
 
