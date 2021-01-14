@@ -49,7 +49,6 @@ public class PrototypingSceneManager : MonoBehaviour
     	switch (CardSelectionTracker.selectionDict["environment"]) {
         	case "TrashBin":
         		EnvGroupTrashBin.SetActive(true);
-        		// call subroutines or functions depending on the value of the selection
         		break;
         	case "Tree":
         		EnvGroupTree.SetActive(true);
