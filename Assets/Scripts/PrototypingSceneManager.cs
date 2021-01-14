@@ -27,7 +27,7 @@ public class PrototypingSceneManager : MonoBehaviour
 
     	// for development use only:
     	CardSelectionTracker.selectionDict["environment"] = "TrashBin";
-    	CardSelectionTracker.selectionDict["input"] = "Button";
+    	CardSelectionTracker.selectionDict["input"] = "Fire";
     	CardSelectionTracker.selectionDict["output"] = "MakeSound";
         Debug.Log("[env, in, out] = [" 
         	+ CardSelectionTracker.selectionDict["environment"] + ", "
@@ -42,9 +42,6 @@ public class PrototypingSceneManager : MonoBehaviour
     {
 
     }
-
-
-
 
 
     // TODO: improve the way of implementation
@@ -72,39 +69,39 @@ public class PrototypingSceneManager : MonoBehaviour
         }
         switch (CardSelectionTracker.selectionDict["input"]) {
         	case "Button":
-        		EnvGroupButton.SetActive(true);
+        		InGroupButton.SetActive(true);
         		break;
         	case "Sound":
-        		EnvGroupSound.SetActive(true);
+        		InGroupSound.SetActive(true);
         		break;
         	case "Fire":
-        		EnvGroupFire.SetActive(true);
+        		InGroupFire.SetActive(true);
         		break;
         	case "Speed":
-        		EnvGroupSpeed.SetActive(true);
+        		InGroupSpeed.SetActive(true);
         		break;
         	case "Weather":
-        		EnvGroupWeather.SetActive(true);
+        		InGroupWeather.SetActive(true);
         		break;
         	default:
         		Debug.Log("Input card: invalid selection");
         		break;
         }
-        switch (CardSelectionTracker.selectionDict["input"]) {
+        switch (CardSelectionTracker.selectionDict["output"]) {
         	case "LightUp":
-        		EnvGroupLightUp.SetActive(true);
+        		OutGroupLightUp.SetActive(true);
         		break;
         	case "MakeSound":
-        		EnvGroupMakeSound.SetActive(true);
+        		OutGroupMakeSound.SetActive(true);
         		break;
         	case "Vibrate":
-        		EnvGroupVibrate.SetActive(true);
+        		OutGroupVibrate.SetActive(true);
         		break;
         	case "Move":
-        		EnvGroupMove.SetActive(true);
+        		OutGroupMove.SetActive(true);
         		break;
         	case "Send":
-        		EnvGroupSend.SetActive(true);
+        		OutGroupSend.SetActive(true);
         		break;
         	default:
         		Debug.Log("Output card: invalid selection");

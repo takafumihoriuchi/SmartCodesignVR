@@ -1,7 +1,31 @@
 This project uses the following items from Poly (http://poly.google.com):
 
-Title: Slime&Kirby
+Title: environmentTree
 Author: Takafumi Horiuchi
-URL: https://poly.google.com/view/7-Z5k9Rh8jl
+URL: https://poly.google.com/view/9orutOZzfL7
+License: Creative Commons CC-BY
+https://creativecommons.org/licenses/by/3.0/legalcode
+
+Title: inputFire
+Author: Takafumi Horiuchi
+URL: https://poly.google.com/view/eMqP9JwBrhm
+License: Creative Commons CC-BY
+https://creativecommons.org/licenses/by/3.0/legalcode
+
+Title: inputSpeed
+Author: Takafumi Horiuchi
+URL: https://poly.google.com/view/69eWvDGVoxi
+License: Creative Commons CC-BY
+https://creativecommons.org/licenses/by/3.0/legalcode
+
+Title: outputLightUp
+Author: Takafumi Horiuchi
+URL: https://poly.google.com/view/1bpJCPbYbWJ
+License: Creative Commons CC-BY
+https://creativecommons.org/licenses/by/3.0/legalcode
+
+Title: outputMakeSound
+Author: Takafumi Horiuchi
+URL: https://poly.google.com/view/1mAhAj_Adoh
 License: Creative Commons CC-BY
 https://creativecommons.org/licenses/by/3.0/legalcode
