@@ -7,56 +7,39 @@ using TMPro;
 public class OutputMakeSound : MonoBehaviour
 {
     private AudioSource soundRecorder;
-    //[SerializeField] private Button recordButton;
-    [SerializeField] private TextMeshProUGUI whenDescription;
-    [SerializeField] private GameObject micPropModel;
-    private bool isRecording;
-    private bool tmpRecordingSaved;
-    private int tmpRecordNum;
+    public TextMeshProUGUI thenDescription;
+    public GameObject micPropModel;
 
     void Start() {
-        isRecording = false;
-        tmpRecordingSaved = false;
-        //recordButton.onClick.AddListener(RecordOutputSound);
-        tmpRecordNum = 0;
+        thenDescription.text = "Play <color=red>[(empty)] (grab microphone and press and hold \"A\" to record)</color>";
     }
 
     void Update() {
-        //bool micIsGrabbed = micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed;
+        bool micIsGrabbed = micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed;
         bool aGetDown = OVRInput.GetDown(OVRInput.RawButton.A);
-        bool aGet = OVRInput.Get(OVRInput.RawButton.A);
         bool aGetUp = OVRInput.GetUp(OVRInput.RawButton.A);
-        if (aGetDown) Debug.Log("aGetDown == " + aGetDown);
-        if (aGet) Debug.Log("aGet == " + aGet);
-        if (aGetUp) Debug.Log("aGetUp == " + aGetUp);
-        //if (micIsGrabbed) {
-        //    if (aIsPressed)
-        //    {
-
-        //    }
-        //}
-    }
-
-    void RecordOutputSound()
-    {
-        if (!isRecording) {
-            if (!tmpRecordingSaved) {
+        bool xGetDown = OVRInput.GetDown(OVRInput.RawButton.X);
+        if (micIsGrabbed)
+        {
+            if (aGetDown) // start recording
+            {
                 soundRecorder = GetComponent<AudioSource>();
                 soundRecorder.clip = Microphone.Start("", false, 60, 16000);
-                isRecording = true;
-                tmpRecordNum++;
-                whenDescription.text = "Play [recording in process...] (click again to stop&finalize)";
-            } else {
-                soundRecorder.Play();
+                thenDescription.text = "Play <color=red>[recording in process...] (release \"A\" to end recording)</color>";
             }
-        } else { // TODO: enable re-recording of sound
-            Microphone.End("");
-            whenDescription.text = "Play Record#" + tmpRecordNum;
-            isRecording = false;
-            tmpRecordingSaved = true;
+            if (aGetUp) // save recording
+            {
+                Microphone.End("");
+                thenDescription.text = "Play <color=red>[recorded] (recorded sound can be checked by un-grabbing mic and pressing \"X\")</color>";
+            }
         }
-
+        if (xGetDown)
+        {
+            soundRecorder.Play();
+            // TODO: currently for development; design an official way of checking the recorded.
+        }
     }
+
 
 }
 

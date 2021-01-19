@@ -5,8 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class TitleSceneManager : MonoBehaviour
 {
-	[SerializeField] OVRScreenFade fade;
-
+	public OVRScreenFade fade;
 	public SpriteRenderer redHighlightImage;
 	private WaitForSeconds _oneSec = new WaitForSeconds(1f);
 	private Color _spriteColor;
