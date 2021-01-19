@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CardSelectionTracker {
 
-	// access this dictionary from PrototypingScene
+	// parameters are set in CardSelectionScene
 	public static Dictionary<string, string> selectionDict = new Dictionary<string, string>() {
 		{"environment", null},
     	{"input", null},

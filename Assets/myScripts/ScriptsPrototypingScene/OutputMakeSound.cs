@@ -6,21 +6,35 @@ using TMPro;
 
 public class OutputMakeSound : MonoBehaviour
 {
-    private bool isRecording;
     private AudioSource soundRecorder;
-    [SerializeField] private Button recordButton;
+    //[SerializeField] private Button recordButton;
     [SerializeField] private TextMeshProUGUI whenDescription;
-    private int tmpRecordNum;
+    [SerializeField] private GameObject micPropModel;
+    private bool isRecording;
     private bool tmpRecordingSaved;
+    private int tmpRecordNum;
 
     void Start() {
         isRecording = false;
         tmpRecordingSaved = false;
-        recordButton.onClick.AddListener(RecordOutputSound);
+        //recordButton.onClick.AddListener(RecordOutputSound);
         tmpRecordNum = 0;
     }
 
     void Update() {
+        //bool micIsGrabbed = micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed;
+        bool aGetDown = OVRInput.GetDown(OVRInput.RawButton.A);
+        bool aGet = OVRInput.Get(OVRInput.RawButton.A);
+        bool aGetUp = OVRInput.GetUp(OVRInput.RawButton.A);
+        if (aGetDown) Debug.Log("aGetDown == " + aGetDown);
+        if (aGet) Debug.Log("aGet == " + aGet);
+        if (aGetUp) Debug.Log("aGetUp == " + aGetUp);
+        //if (micIsGrabbed) {
+        //    if (aIsPressed)
+        //    {
+
+        //    }
+        //}
     }
 
     void RecordOutputSound()
