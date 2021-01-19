@@ -10,10 +10,7 @@ public class OutputMakeSound : MonoBehaviour
     public TextMeshProUGUI thenDescription;
     public GameObject micPropModel;
 
-    private IEnumerator coroutineExpShrink;
     private bool isRecording;
-    //private bool isRunningCoroutine;
-
     private float speed;
     private float progress;
     private Vector3 startScale;
@@ -22,15 +19,12 @@ public class OutputMakeSound : MonoBehaviour
     private bool isExpanding;
 
     void Start() {
-        speed = 2.0f;
+        speed = 7.0f;
         progress = 0.0f;
         startScale = new Vector3(1.0f, 1.0f, 1.0f);
-        targetScale = new Vector3(1.25f, 1.25f, 1.25f);
+        targetScale = new Vector3(1.1f, 1.1f, 1.1f);
         isExpanding = true;
-
         isRecording = false;
-        //isRunningCoroutine = false;
-        //coroutineExpShrink = MicExpandShrink();
         thenDescription.text = "Play <color=red>[(empty)] (grab microphone and press and hold \"A\" to record)</color>";
     }
 
@@ -50,12 +44,6 @@ public class OutputMakeSound : MonoBehaviour
                 soundRecorder.clip = Microphone.Start("", false, 60, 16000);
                 thenDescription.text = "Play <color=red>[recording in process...] (release \"A\" to end recording)</color>";
                 isRecording = true;
-                //StartCoroutine(coroutineExpShrink);
-                //if (!isRunningCoroutine)
-                //{
-                //    isRunningCoroutine = true;
-                //    StartCoroutine(coroutineExpShrink);
-                //}
             }
             if (aGetUp || Input.GetKeyUp(KeyCode.A))
             //if (aGetUp) // save recording
@@ -63,9 +51,6 @@ public class OutputMakeSound : MonoBehaviour
                 Microphone.End("");
                 thenDescription.text = "Play <color=red>[recorded] (recorded sound can be checked by pressing \"X\")</color>";
                 isRecording = false;
-                //isRunningCoroutine = false;
-                //StopCoroutine(coroutineExpShrink);
-                //micPropModel.transform.localScale = new Vector3(1f, 1f, 1f);
             }
         }
         if (xGetDown || Input.GetKeyDown(KeyCode.X))
@@ -75,7 +60,7 @@ public class OutputMakeSound : MonoBehaviour
         }
 
 
-        if (isRecording) {
+        if (isRecording) { // TODO: needs refactoring (e.g. coroutine)
             if (isExpanding)
                 progress = progress + speed * Time.deltaTime;
             else
