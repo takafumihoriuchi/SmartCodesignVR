@@ -21,12 +21,13 @@ public class InputFire : MonoBehaviour
     {
         markerIsGrabbed = false;
         ifDescription.text = "If fire is <color=red>[(distance)] (grab fire and place at disired distance)</color>";
+        SetRangeOpacity(0.2f, 0.2f, 0.2f);
     }
 
     // Update is called once per frame
     void Update()
     {
-        bool markerIsGrabbed = fireMarker.transform.GetComponent<OVRGrabbable>().isGrabbed;
+        markerIsGrabbed = fireMarker.transform.GetComponent<OVRGrabbable>().isGrabbed;
         if (markerIsGrabbed || Input.GetKey(KeyCode.Z)) {
             markerDistance = Vector3.Distance(environmentObject.transform.position, fireMarker.transform.position);
             if (markerDistance < 1.0f) {
@@ -60,3 +61,5 @@ public class InputFire : MonoBehaviour
     }
 
 }
+
+// TODO: increase distance range (about 5?) (e.g. very close, close, mid, far, very far)

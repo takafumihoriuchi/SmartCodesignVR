@@ -260,7 +260,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5dd73b921e6b04a639a7e12f88ca551e, type: 2}
+  - {fileID: 2100000, guid: 7599a78edecb14fbc8c436567a35b44d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1612,7 +1612,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 1
   outlineColor: {r: 0.30980393, g: 0.2509804, b: 0.11764706, a: 1}
-  outlineWidth: 7
+  outlineWidth: 4
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -7412,7 +7412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   outlineMode: 1
   outlineColor: {r: 0.30980393, g: 0.2509804, b: 0.11764706, a: 1}
-  outlineWidth: 7
+  outlineWidth: 4
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
@@ -8870,7 +8870,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b618534149c7442baa432f5c9baf096f, type: 2}
+      objectReference: {fileID: 2100000, guid: 7599a78edecb14fbc8c436567a35b44d, type: 2}
     - target: {fileID: 919132149155446097, guid: 58d5de216f3044415a42e2a6e258862f,
         type: 3}
       propertyPath: m_Name
@@ -8880,7 +8880,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: b618534149c7442baa432f5c9baf096f, type: 2}
+      objectReference: {fileID: 2100000, guid: 7599a78edecb14fbc8c436567a35b44d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 58d5de216f3044415a42e2a6e258862f, type: 3}
 --- !u!4 &1890110031 stripped
