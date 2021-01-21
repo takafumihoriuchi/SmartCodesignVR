@@ -2,7 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PrototypingSceneManager : MonoBehaviour
+public class CardSelectionMediator
+{   // parameters are set in CardSelectionScene
+    public static Dictionary<string, string> selectionDict = new Dictionary<string, string>() {
+        {"environment", null},
+        {"input", null},
+        {"output", null}
+    };
+}
+
+public class PrototypingSceneCore : MonoBehaviour
 {
 	// TODO: better way to implement this?
     // => use array of GameObjects
@@ -26,14 +35,14 @@ public class PrototypingSceneManager : MonoBehaviour
     {
     	DisableAll();
 
-    	// for development use only:
-    	CardSelectionTracker.selectionDict["environment"] = "TrashBin";
-    	CardSelectionTracker.selectionDict["input"] = "Fire";
-    	CardSelectionTracker.selectionDict["output"] = "MakeSound";
+        // for development use only:
+        CardSelectionMediator.selectionDict["environment"] = "TrashBin";
+        CardSelectionMediator.selectionDict["input"] = "Fire";
+        CardSelectionMediator.selectionDict["output"] = "MakeSound";
         Debug.Log("[env, in, out] = [" 
-        	+ CardSelectionTracker.selectionDict["environment"] + ", "
-        	+ CardSelectionTracker.selectionDict["input"] + ", "
-        	+ CardSelectionTracker.selectionDict["output"] + "]");
+        	+ CardSelectionMediator.selectionDict["environment"] + ", "
+        	+ CardSelectionMediator.selectionDict["input"] + ", "
+        	+ CardSelectionMediator.selectionDict["output"] + "]");
         
         ActivateSelected();
 
@@ -52,7 +61,7 @@ public class PrototypingSceneManager : MonoBehaviour
 
     // TODO: improve the way of implementation
     void ActivateSelected() {
-    	switch (CardSelectionTracker.selectionDict["environment"]) {
+    	switch (CardSelectionMediator.selectionDict["environment"]) {
         	case "TrashBin":
         		EnvGroupTrashBin.SetActive(true);
         		break;
@@ -72,7 +81,7 @@ public class PrototypingSceneManager : MonoBehaviour
         		Debug.Log("Environment card: invalid selection");
         		break;
         }
-        switch (CardSelectionTracker.selectionDict["input"]) {
+        switch (CardSelectionMediator.selectionDict["input"]) {
         	case "Button":
         		InGroupButton.SetActive(true);
         		break;
@@ -92,7 +101,7 @@ public class PrototypingSceneManager : MonoBehaviour
         		Debug.Log("Input card: invalid selection");
         		break;
         }
-        switch (CardSelectionTracker.selectionDict["output"]) {
+        switch (CardSelectionMediator.selectionDict["output"]) {
         	case "LightUp":
         		OutGroupLightUp.SetActive(true);
         		break;

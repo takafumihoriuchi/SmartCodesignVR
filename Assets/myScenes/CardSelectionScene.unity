@@ -2408,7 +2408,7 @@ GameObject:
   - component: {fileID: 393170583}
   - component: {fileID: 393170584}
   m_Layer: 0
-  m_Name: ProcessManager
+  m_Name: SceneCore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2442,6 +2442,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   introVoice: {fileID: 1610387242}
   diveVoice: {fileID: 275412674}
+  comboComp: 0
+  playedDiveVoice: 0
   OVRCamera: {fileID: 1129770082}
 --- !u!1 &397870713
 GameObject:

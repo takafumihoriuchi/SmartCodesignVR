@@ -14,13 +14,13 @@ public class SelectionDetectionOut : MonoBehaviour
     }
 
     void Update() {
-        if (CardCombinationManagement.selectionDict["output"] != null) {
-        	bool isGrabbed = CardCombinationManagement.selectionDict["output"].transform.GetComponent<OVRGrabbable>().isGrabbed;
+        if (CardSelectionSceneCore.selectionDict["output"] != null) {
+        	bool isGrabbed = CardSelectionSceneCore.selectionDict["output"].transform.GetComponent<OVRGrabbable>().isGrabbed;
         	if (!isGrabbed) {
         		float step = clipSpeed * Time.deltaTime;
-		        Vector3 currentPos = CardCombinationManagement.selectionDict["output"].transform.position;
+		        Vector3 currentPos = CardSelectionSceneCore.selectionDict["output"].transform.position;
 		        Vector3 newPos = Vector3.MoveTowards(currentPos, targetPos, step);
-		        CardCombinationManagement.selectionDict["output"].transform.position = newPos;
+                CardSelectionSceneCore.selectionDict["output"].transform.position = newPos;
         	}
         }
     }
@@ -43,21 +43,21 @@ public class SelectionDetectionOut : MonoBehaviour
 
     void OnTriggerEnter(Collider other) {
     	if (IsElementOf(other.gameObject, outObjectsArr)) {
-    		if (CardCombinationManagement.selectionDict["output"] == null) {
-	    		CardCombinationManagement.selectionDict["output"] = other.gameObject;
-	    		IncreaseDrag(CardCombinationManagement.selectionDict["output"]);
+    		if (CardSelectionSceneCore.selectionDict["output"] == null) {
+                CardSelectionSceneCore.selectionDict["output"] = other.gameObject;
+	    		IncreaseDrag(CardSelectionSceneCore.selectionDict["output"]);
 	    	} else { // replace card choice
-	    		DecreaseDrag(CardCombinationManagement.selectionDict["output"]);
-    			CardCombinationManagement.selectionDict["output"] = other.gameObject;
-    			IncreaseDrag(CardCombinationManagement.selectionDict["output"]);
+	    		DecreaseDrag(CardSelectionSceneCore.selectionDict["output"]);
+                CardSelectionSceneCore.selectionDict["output"] = other.gameObject;
+    			IncreaseDrag(CardSelectionSceneCore.selectionDict["output"]);
 	    	}
     	}
     }
 
     void OnTriggerExit(Collider other) {
-    	if (other.gameObject == CardCombinationManagement.selectionDict["output"]) {
-    		DecreaseDrag(CardCombinationManagement.selectionDict["output"]);
-    		CardCombinationManagement.selectionDict["output"] = null;
+    	if (other.gameObject == CardSelectionSceneCore.selectionDict["output"]) {
+    		DecreaseDrag(CardSelectionSceneCore.selectionDict["output"]);
+            CardSelectionSceneCore.selectionDict["output"] = null;
     	}
     }
 
