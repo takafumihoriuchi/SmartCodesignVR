@@ -5,6 +5,7 @@ using UnityEngine;
 public class PrototypingSceneManager : MonoBehaviour
 {
 	// TODO: better way to implement this?
+    // => use array of GameObjects
 	public GameObject EnvGroupTrashBin;
 	public GameObject EnvGroupTree;
 	public GameObject EnvGroupStreetLight;
@@ -36,13 +37,16 @@ public class PrototypingSceneManager : MonoBehaviour
         
         ActivateSelected();
 
-        // 
+        // var inputSelected = new xxx <= ここに来るクラスが何が選択されたかのswitchによって変わる
+        // var outputSelected = new yyy
+        
     }
 
 
     void Update()
     {
-
+        // ここで if (inputSelected.inputCondition) outputSelected.outputBehavior();
+        // トリガーなどでできるのか？その方が効率が良い？
     }
 
 

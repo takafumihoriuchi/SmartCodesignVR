@@ -9642,7 +9642,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8286943634e9545108951c90ccbe1060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  environmentObject: {fileID: 2141391132}
+  environmentObject: {fileID: 1681282368}
   fireMarker: {fileID: 1050708360}
   rangeImageRed: {fileID: 561677248}
   rangeImageBlue: {fileID: 995566916}
