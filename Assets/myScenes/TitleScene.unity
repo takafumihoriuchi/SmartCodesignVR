@@ -1152,7 +1152,7 @@ GameObject:
   - component: {fileID: 2093612936}
   - component: {fileID: 2093612938}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: SceneCore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1170,8 +1170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 013b7c37684c64a1f9e964a2881f788f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fade: {fileID: 1586302402}
-  redHighlightImage: {fileID: 1178564168}
+  screenFade: {fileID: 1586302402}
+  buttonRedHighlightImage: {fileID: 1178564168}
 --- !u!4 &2093612937
 Transform:
   m_ObjectHideFlags: 0
