@@ -5,9 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class CardSelectionSceneCore : MonoBehaviour
 {
-    public GameObject OVRCamera;
-    public AudioSource introVoice;
-	public AudioSource diveVoice;
+    [SerializeField] private GameObject OVRCamera = null;
+    [SerializeField] private AudioSource introVoice = null;
+    [SerializeField] private AudioSource diveVoice = null;
+    // initializing with 'null' to avoid comile warnings
     private bool playedDiveVoice;
     // default value of type:bool is 'false'
 
