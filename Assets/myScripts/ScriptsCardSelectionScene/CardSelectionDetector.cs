@@ -1,86 +1,99 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EventBridge;
 
-// 3つに分かれているものをひとつに集約する；インスタンスを...SceneCore.csの方で操作するようにする
 public class CardSelectionDetector : MonoBehaviour
 {
-    public GameObject[] ObjectsArr;
+    const float DRAG_L = 20f;
+    const float DRAG_S = 1f;
+    const float ANGDRAG_L = 10.0f;
+    const float ANGDRAG_S = 0.5f;
 
-    private float clipSpeed; // speed to clip to selection-box
+    private GameObject selectionContainer;
+    private GameObject[] candidateObjArr;
+    private IComponentEventHandler eventBridgeHandler;
     private Vector3 targetPos;
+    private string cardType;
 
-    //public Collider envBox;
+    [SerializeField] private float attachmentSpeed = 1.0f;
 
-
-
-    void Start()
+    public CardSelectionDetector(GameObject obj, GameObject[] objArr, string typStr)
     {
-        clipSpeed = 1.0f;
-        targetPos = transform.position;
+        selectionContainer = obj;
+        candidateObjArr = objArr;
+        targetPos = obj.transform.position;
+        eventBridgeHandler = selectionContainer.RequestEventHandlers();
+        eventBridgeHandler.TriggerEnter += OnTriggerEnterEB;
+        eventBridgeHandler.TriggerExit += OnTriggerExitEB;
+        cardType = typStr;
     }
 
-    void Update()
+    private void OnTriggerEnterEB(Collider other)
     {
-        if (CardSelectionSceneCore.selectionDict["environment"] != null)
-        {
-            bool isGrabbed = CardSelectionSceneCore.selectionDict["environment"].transform.GetComponent<OVRGrabbable>().isGrabbed;
-            if (!isGrabbed)
-            {
-                float step = clipSpeed * Time.deltaTime;
-                Vector3 currentPos = CardSelectionSceneCore.selectionDict["environment"].transform.position;
-                Vector3 newPos = Vector3.MoveTowards(currentPos, targetPos, step);
-                CardSelectionSceneCore.selectionDict["environment"].transform.position = newPos;
-            }
+        if (!IsElementOf(other.gameObject, candidateObjArr)) return;
+        if (CardSelectionSceneCore.selectionDict[cardType] == null)
+        { // put object in empty container
+            CardSelectionSceneCore.selectionDict[cardType] = other.gameObject;
+            IncreaseDrag(CardSelectionSceneCore.selectionDict[cardType]);
+        }
+        else
+        { // kickout current object and replace object in container
+            DecreaseDrag(CardSelectionSceneCore.selectionDict[cardType]);
+            CardSelectionSceneCore.selectionDict[cardType] = other.gameObject;
+            IncreaseDrag(CardSelectionSceneCore.selectionDict[cardType]);
         }
     }
 
-    bool IsElementOf(GameObject obj, GameObject[] arr)
+    private void OnTriggerExitEB(Collider other)
+    {
+        if (other.gameObject == CardSelectionSceneCore.selectionDict[cardType])
+        { // release object from container
+            DecreaseDrag(CardSelectionSceneCore.selectionDict[cardType]);
+            CardSelectionSceneCore.selectionDict[cardType] = null;
+        }
+    }
+
+    private void IncreaseDrag(GameObject obj)
+    {
+        obj.transform.GetComponent<Rigidbody>().drag = DRAG_L;
+        obj.transform.GetComponent<Rigidbody>().angularDrag = ANGDRAG_L;
+    }
+
+    private void DecreaseDrag(GameObject obj)
+    {
+        obj.transform.GetComponent<Rigidbody>().drag = DRAG_S;
+        obj.transform.GetComponent<Rigidbody>().angularDrag = ANGDRAG_S;
+    }
+
+    private bool IsElementOf(GameObject obj, GameObject[] arr)
     {
         foreach (GameObject elm in arr)
             if (elm == obj) return true;
         return false;
     }
 
-    void IncreaseDrag(GameObject obj)
+    public void CenterGravityMotion()
     {
-        obj.transform.GetComponent<Rigidbody>().drag = 20;
-        obj.transform.GetComponent<Rigidbody>().angularDrag = 10.0F;
-    }
-
-    void DecreaseDrag(GameObject obj)
-    {
-        obj.transform.GetComponent<Rigidbody>().drag = 1;
-        obj.transform.GetComponent<Rigidbody>().angularDrag = 0.5F;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (IsElementOf(other.gameObject, ObjectsArr))
+        if (CardSelectionSceneCore.selectionDict[cardType] == null) return;
+        bool isGrabbed = CardSelectionSceneCore.selectionDict[cardType].
+            transform.GetComponent<OVRGrabbable>().isGrabbed;
+        if (!isGrabbed)
         {
-            if (CardSelectionSceneCore.selectionDict["environment"] == null)
-            {
-                CardSelectionSceneCore.selectionDict["environment"] = other.gameObject;
-                IncreaseDrag(CardSelectionSceneCore.selectionDict["environment"]);
-            }
-            else
-            { // replace card choice
-                DecreaseDrag(CardSelectionSceneCore.selectionDict["environment"]);
-                CardSelectionSceneCore.selectionDict["environment"] = other.gameObject;
-                IncreaseDrag(CardSelectionSceneCore.selectionDict["environment"]);
-            }
+            float step = attachmentSpeed * Time.deltaTime;
+            Vector3 currentPos
+                = CardSelectionSceneCore.selectionDict[cardType].transform.position;
+            Vector3 newPos
+                = Vector3.MoveTowards(currentPos, targetPos, step);
+            CardSelectionSceneCore.selectionDict[cardType].transform.position
+                = newPos;
         }
     }
 
-    void OnTriggerExit(Collider other)
+    private void OnDestroy()
     {
-        if (other.gameObject == CardSelectionSceneCore.selectionDict["environment"])
-        {
-            DecreaseDrag(CardSelectionSceneCore.selectionDict["environment"]);
-            CardSelectionSceneCore.selectionDict["environment"] = null;
-        }
+        eventBridgeHandler.TriggerEnter -= OnTriggerEnterEB;
+        eventBridgeHandler.TriggerExit -= OnTriggerExitEB;
     }
-
-
 
 }

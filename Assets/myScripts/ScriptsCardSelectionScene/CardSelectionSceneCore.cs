@@ -5,14 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class CardSelectionSceneCore : MonoBehaviour
 {
+    // default value of type:bool is 'false'
+    private bool playedDiveVoice;
+    // initializing with 'null' to avoid comile warnings
     [SerializeField] private GameObject OVRCamera = null;
     [SerializeField] private AudioSource introVoice = null;
     [SerializeField] private AudioSource diveVoice = null;
-    // initializing with 'null' to avoid comile warnings
-    private bool playedDiveVoice;
-    // default value of type:bool is 'false'
+    [SerializeField] private GameObject envBoxObj = null;
+    [SerializeField] private GameObject inBoxObj = null;
+    [SerializeField] private GameObject outBoxObj = null;
+    [SerializeField] private GameObject[] envObjArr = null;
+    [SerializeField] private GameObject[] inObjArr = null;
+    [SerializeField] private GameObject[] outObjArr = null;
+    CardSelectionDetector EnvSelectionDetector;
+    CardSelectionDetector InSelectionDetector;
+    CardSelectionDetector OutSelectionDetector;
 
-    // for storing type:GameObject
+    // dictionary for storing type:GameObject
     // c.f. CardSelectionMediator.selectionDict stores type:string
     public static Dictionary<string, GameObject> selectionDict
         = new Dictionary<string, GameObject>() {
@@ -23,7 +32,14 @@ public class CardSelectionSceneCore : MonoBehaviour
 
     void Start()
     {
-    	introVoice.PlayDelayed(3.5f);
+        introVoice.PlayDelayed(3.5f);
+
+        EnvSelectionDetector
+            = new CardSelectionDetector(envBoxObj, envObjArr, "environment");
+        InSelectionDetector
+            = new CardSelectionDetector(inBoxObj, inObjArr, "input");
+        OutSelectionDetector
+            = new CardSelectionDetector(outBoxObj, outObjArr, "output");
     }
 
     void Update()
@@ -50,6 +66,9 @@ public class CardSelectionSceneCore : MonoBehaviour
             MoveToNextScene();
         }
 
+        EnvSelectionDetector.CenterGravityMotion();
+        InSelectionDetector.CenterGravityMotion();
+        OutSelectionDetector.CenterGravityMotion();
     }
 
     private void MoveToNextScene()
@@ -60,6 +79,7 @@ public class CardSelectionSceneCore : MonoBehaviour
         SceneManager.LoadScene(2);
     }
 
+    // for passing selection-infromation to next scene
     private void RecordSelectedCardsAsString()
     {
         CardSelectionMediator.selectionDict["environment"]
