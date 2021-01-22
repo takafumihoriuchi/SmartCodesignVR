@@ -17,7 +17,14 @@ public class FireCard : InputCard
     private bool markerIsGrabbed;
     private float markerDistance;
 
-    public FireCard()
+    //public FireCard()
+    //{
+    //    markerIsGrabbed = false;
+    //    SetRangeOpacity(0.2f, 0.2f, 0.2f);
+    //    ifDescription.text = "If fire is <color=red>[(distance)] (grab fire and place at disired distance)</color>";
+    //}
+
+    void Start()
     {
         markerIsGrabbed = false;
         SetRangeOpacity(0.2f, 0.2f, 0.2f);

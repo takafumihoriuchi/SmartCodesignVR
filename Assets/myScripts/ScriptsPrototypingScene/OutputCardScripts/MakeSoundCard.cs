@@ -11,7 +11,7 @@ public class MakeSoundCard : OutputCard
     // コンストラクタ
     public MakeSoundCard() { }
 
-    public override void OutputBehavior()
+    public override void OutputBehaviour()
     {
 
     }
@@ -29,8 +29,6 @@ public class MakeSoundCard : OutputCard
     private Vector3 targetScale;
     private Vector3 updatedScale;
     private bool isExpanding;
-
-    // TODO contructorに変更
 
     void Start()
     {
@@ -103,4 +101,77 @@ public class MakeSoundCard : OutputCard
 
     }
 
+
+
 }
+
+
+
+
+
+/*
+int minFreq, maxFreq;
+foreach (var device in Microphone.devices) {
+    Debug.Log("Name: " + device);
+    Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
+    Debug.Log("minFreq: " + minFreq + ", maxFreq: " + maxFreq);
+}
+Name: Android audio input
+minFreq: 16000, maxFreq:16000
+Name: Android camcorder input
+minFreq: 16000, maxFreq:16000
+Name: Android voice recognition input
+minFreq: 16000, maxFreq:16000
+ */
+
+
+/*
+// attempt to use subroutine
+
+private bool isRunningCoroutine;
+...
+Start() {
+    StartCoroutine(coroutineExpShrink);
+}
+...
+Update() {
+    if (...) {
+        StartCoroutine(coroutineExpShrink);
+    } else {
+        StopCoroutine(coroutineExpShrink);
+    }
+}
+
+private IEnumerator MicExpandShrink()
+{
+    float speed = 2.0f;
+    float progress = 0.0f;
+    Vector3 startScale = new Vector3(1.0f, 1.0f, 1.0f);
+    Vector3 targetScale = new Vector3(1.25f, 1.25f, 1.25f);
+    Vector3 updatedScale;
+    bool isExpanding = true;
+    while (isRecording)
+    {
+        Debug.Log("recording now... (and changing scales)");
+        yield return new WaitForSeconds(1.0f);
+        if (isExpanding) progress = progress + speed * Time.deltaTime;
+        else progress = progress - speed * Time.deltaTime;
+        if (progress >= 1.0f)
+        {
+            progress = 1.0f;
+            isExpanding = false;
+        }
+        else if (progress <= 0.0f)
+        {
+            progress = 0.0f;
+            isExpanding = true;
+        }
+        updatedScale = Vector3.Lerp(startScale, targetScale, progress);
+        micPropModel.transform.localScale = updatedScale;
+    }
+    micPropModel.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+    Debug.Log("isRecording is false now");
+    yield break;
+}
+
+ */

@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 2650446}
   m_Layer: 0
   m_Name: MakeSound
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,7 +171,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4194334}
   m_Layer: 0
-  m_Name: EnvironmentReleated
+  m_Name: EnvironmentRepresentation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -194,7 +194,7 @@ Transform:
   - {fileID: 811961872}
   - {fileID: 793344284}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &55296720
 GameObject:
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 83582460}
   m_Layer: 0
   m_Name: Move
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1657,7 +1657,7 @@ GameObject:
   - component: {fileID: 319377405}
   m_Layer: 0
   m_Name: Weather
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1889,7 +1889,7 @@ GameObject:
   - component: {fileID: 380078436}
   m_Layer: 0
   m_Name: Send
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2366,7 +2366,7 @@ GameObject:
   - component: {fileID: 429708267}
   m_Layer: 0
   m_Name: LightUp
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3064,7 +3064,7 @@ GameObject:
   m_Component:
   - component: {fileID: 581157426}
   m_Layer: 0
-  m_Name: InputReleated
+  m_Name: InputRepresentation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3087,7 +3087,7 @@ Transform:
   - {fileID: 767232969}
   - {fileID: 319377405}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &632390530
 GameObject:
@@ -3755,7 +3755,7 @@ GameObject:
   - component: {fileID: 767232969}
   m_Layer: 0
   m_Name: Speed
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3785,7 +3785,7 @@ GameObject:
   - component: {fileID: 775730993}
   m_Layer: 0
   m_Name: Vibrate
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4028,7 +4028,7 @@ GameObject:
   - component: {fileID: 793344284}
   m_Layer: 0
   m_Name: Bridge
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4167,7 +4167,7 @@ GameObject:
   - component: {fileID: 811961872}
   m_Layer: 0
   m_Name: StreetSign
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4684,7 +4684,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 946664706}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96fdade7ab15d4dbb89acd26e679a9f1, type: 3}
+  m_Script: {fileID: 11500000, guid: c7311f401024d497886d25784395f8b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   thenDescription: {fileID: 1847515027}
@@ -6185,7 +6185,7 @@ GameObject:
   - component: {fileID: 1457424151}
   - component: {fileID: 1457424152}
   m_Layer: 0
-  m_Name: SceneManager
+  m_Name: SceneCore
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6203,7 +6203,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1457424152
 MonoBehaviour:
@@ -6352,7 +6352,7 @@ GameObject:
   - component: {fileID: 1477444345}
   m_Layer: 0
   m_Name: StreetLight
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7139,7 +7139,7 @@ GameObject:
   - component: {fileID: 1599079961}
   m_Layer: 0
   m_Name: Button
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7341,7 +7341,7 @@ GameObject:
   - component: {fileID: 1671338778}
   m_Layer: 0
   m_Name: Fire
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9072,7 +9072,7 @@ GameObject:
   - component: {fileID: 1920663905}
   m_Layer: 0
   m_Name: TrashBin
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9421,7 +9421,7 @@ GameObject:
   - component: {fileID: 2024290671}
   m_Layer: 0
   m_Name: Sound
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9450,7 +9450,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2031974177}
   m_Layer: 0
-  m_Name: OutputReleated
+  m_Name: OutputRepresentation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9473,7 +9473,7 @@ Transform:
   - {fileID: 83582460}
   - {fileID: 380078436}
   m_Father: {fileID: 0}
-  m_RootOrder: 16
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2051920048
 GameObject:
@@ -9579,7 +9579,7 @@ GameObject:
   - component: {fileID: 2060742808}
   m_Layer: 0
   m_Name: Tree
-  m_TagString: Untagged
+  m_TagString: CardRepresentation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9639,15 +9639,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2110773846}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8286943634e9545108951c90ccbe1060, type: 3}
+  m_Script: {fileID: 11500000, guid: ce9cafd2eb8624cd79d5bccee4aa7a20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  inputCondition: 0
   environmentObject: {fileID: 1681282368}
-  fireMarker: {fileID: 1050708360}
+  markerObject: {fileID: 1050708360}
+  ifDescription: {fileID: 1884021956}
   rangeImageRed: {fileID: 561677248}
   rangeImageBlue: {fileID: 995566916}
   rangeImageGreen: {fileID: 522824374}
-  ifDescription: {fileID: 1884021956}
 --- !u!1 &2128721141
 GameObject:
   m_ObjectHideFlags: 0

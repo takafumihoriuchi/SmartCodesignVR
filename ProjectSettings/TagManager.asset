@@ -4,12 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - ButtonActivator
-  - IdeaText
-  - SmartObjectTrashcan
   - GroundLevel
-  - ball
-  - trajectory
+  - CardRepresentation
   layers:
   - Default
   - TransparentFX
