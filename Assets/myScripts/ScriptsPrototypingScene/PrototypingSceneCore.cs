@@ -13,12 +13,9 @@ public class CardSelectionMediator
     };
 }
 
-/*
- Prerequisites of Class:ProtoyptingSceneCore (in editor):
+/* Prerequisites of Class:ProtoyptingSceneCore (in editor):
 - Name all parent object of each object group to match values of selectionDict.
-- Set tag of all parent object of each object group to "CardRepresentation".
- */
-
+- Set tag of all parent object of each object group to "CardRepresentation". */
 public class PrototypingSceneCore : MonoBehaviour
 {
     private GameObject[] cardRepresentationArr;
@@ -26,26 +23,61 @@ public class PrototypingSceneCore : MonoBehaviour
     private GameObject selectedInputObjGroup;
     private GameObject selectedOutputObjGroup;
 
+    private InputCard[] inputInstance = null;
+    private OutputCard[] outputInstance = null;
+    private int inInsIdx, outInsIdx;
+
     void Start()
     {
         DevelopmentPurposeAssign();
         // todo delete the line above after development
         cardRepresentationArr
             = GameObject.FindGameObjectsWithTag("CardRepresentation");
-        DeactivateAll();
-        ExtractSelected();
-        ActivateSelected();
 
-        // var inputSelected = new xxx (make instance??)
-        // var outputSelected = new yyy
-        
+        // TODO これらが必要かどうかを検討する；インスタンスの方でinstantiateか何かできる？
+        // DeactivateAll();
+        // ExtractSelected();
+        // ActivateSelected();
+
+        inInsIdx = 0;
+        outInsIdx = 0;
+        inputInstance[inInsIdx]
+            = GetInputInstance(CardSelectionMediator.selectionDict["input"]);
+        outputInstance[outInsIdx]
+            = GetOutputInstance(CardSelectionMediator.selectionDict["output"]);
+
     }
-
 
     void Update()
     {
         // ここで if (inputSelected.inputCondition) outputSelected.outputBehavior();
         // トリガーなどでできるのか？その方が効率が良い？
+    }
+
+    private InputCard GetInputInstance(string inputString)
+    {
+        switch (inputString)
+        {
+            case "Button": return new ButtonCard();
+            case "Sound": return new SoundCard();
+            case "Fire": return new FireCard();
+            case "Speed": return new SpeedCard();
+            case "Weather": return new WeatherCard();
+            default: return null;
+        }
+    }
+
+    private OutputCard GetOutputInstance(string outputString)
+    {
+        switch (outputString)
+        {
+            case "LightUp": return new LightUpCard();
+            case "MakeSound": return new MakeSoundCard();
+            case "Vibrate": return new VibrateCard();
+            case "Move": return new MoveCard();
+            case "Send": return new SendCard();
+            default: return null;
+        }
     }
 
     private void ExtractSelected()

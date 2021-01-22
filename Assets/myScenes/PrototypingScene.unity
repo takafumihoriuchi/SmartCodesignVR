@@ -729,7 +729,7 @@ GameObject:
   - component: {fileID: 131143127}
   m_Layer: 0
   m_Name: button-activator
-  m_TagString: ButtonActivator
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3473,7 +3473,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e297d4c1fbe3f4175812af5993453fcb,
         type: 3}
       propertyPath: m_TagString
-      value: SmartObjectTrashcan
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 3725444877511294618, guid: e297d4c1fbe3f4175812af5993453fcb,
         type: 3}
@@ -3926,7 +3926,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: e1c64496f22ef45cb8041a49e9ba6f15,
         type: 3}
       propertyPath: m_TagString
-      value: ball
+      value: Untagged
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e1c64496f22ef45cb8041a49e9ba6f15,
         type: 3}
@@ -5585,7 +5585,7 @@ GameObject:
   - component: {fileID: 1184714031}
   m_Layer: 0
   m_Name: Trail
-  m_TagString: trajectory
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6217,21 +6217,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d361041528b844e5bcc447fcffff246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EnvGroupTrashBin: {fileID: 1920663904}
-  EnvGroupTree: {fileID: 2060742807}
-  EnvGroupStreetLight: {fileID: 1477444344}
-  EnvGroupStreetSign: {fileID: 811961871}
-  EnvGroupBridge: {fileID: 793344283}
-  InGroupButton: {fileID: 1599079960}
-  InGroupSound: {fileID: 2024290670}
-  InGroupFire: {fileID: 1671338777}
-  InGroupSpeed: {fileID: 767232968}
-  InGroupWeather: {fileID: 319377404}
-  OutGroupLightUp: {fileID: 429708266}
-  OutGroupMakeSound: {fileID: 2650445}
-  OutGroupVibrate: {fileID: 775730992}
-  OutGroupMove: {fileID: 83582459}
-  OutGroupSend: {fileID: 380078435}
 --- !u!1 &1466910305 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3407023168171955527, guid: e297d4c1fbe3f4175812af5993453fcb,
@@ -6969,7 +6954,7 @@ GameObject:
   - component: {fileID: 1588560894}
   m_Layer: 0
   m_Name: GroundPlane
-  m_TagString: GroundLevel
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

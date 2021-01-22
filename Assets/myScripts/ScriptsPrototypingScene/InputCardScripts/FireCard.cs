@@ -7,10 +7,10 @@ using TMPro;
 public class FireCard : InputCard
 {
 
-    public GameObject environmentObject;
-    public GameObject markerObject;
-    public TextMeshProUGUI ifDescription;
-    public Image rangeImageRed;
+    public GameObject environmentObject; // => どの道 動的に取得する必要あり
+    public GameObject markerObject; // => instantiateしたほうがスケーラブル
+    public TextMeshProUGUI ifDescription; // => 動的に生成するようにする
+    public Image rangeImageRed; // 
     public Image rangeImageBlue;
     public Image rangeImageGreen;
 
