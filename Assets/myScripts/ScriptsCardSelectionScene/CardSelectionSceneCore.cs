@@ -7,16 +7,20 @@ public class CardSelectionSceneCore : MonoBehaviour
 {
     // default value of type:bool is 'false'
     private bool playedDiveVoice;
+
     // initializing with 'null' to avoid comile warnings
     [SerializeField] private GameObject OVRCamera = null;
     [SerializeField] private AudioSource introVoice = null;
     [SerializeField] private AudioSource diveVoice = null;
+
     [SerializeField] private GameObject envBoxObj = null;
     [SerializeField] private GameObject inBoxObj = null;
     [SerializeField] private GameObject outBoxObj = null;
+
     [SerializeField] private GameObject[] envObjArr = null;
     [SerializeField] private GameObject[] inObjArr = null;
     [SerializeField] private GameObject[] outObjArr = null;
+
     CardSelectionDetector EnvSelectionDetector;
     CardSelectionDetector InSelectionDetector;
     CardSelectionDetector OutSelectionDetector;
@@ -32,14 +36,14 @@ public class CardSelectionSceneCore : MonoBehaviour
 
     void Start()
     {
-        introVoice.PlayDelayed(3.5f);
-
         EnvSelectionDetector
             = new CardSelectionDetector(envBoxObj, envObjArr, "environment");
         InSelectionDetector
             = new CardSelectionDetector(inBoxObj, inObjArr, "input");
         OutSelectionDetector
             = new CardSelectionDetector(outBoxObj, outObjArr, "output");
+
+        introVoice.PlayDelayed(3.5f);
     }
 
     void Update()

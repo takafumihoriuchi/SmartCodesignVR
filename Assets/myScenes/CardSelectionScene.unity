@@ -1127,7 +1127,6 @@ GameObject:
   - component: {fileID: 170551977}
   - component: {fileID: 170551980}
   - component: {fileID: 170551981}
-  - component: {fileID: 170551982}
   m_Layer: 0
   m_Name: outCube
   m_TagString: Untagged
@@ -1243,25 +1242,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &170551982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 170551975}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce0958f1633b34e0e8fe28b9649d5070, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outObjectsArr:
-  - {fileID: 1707064339}
-  - {fileID: 27582170}
-  - {fileID: 1669464717}
-  - {fileID: 131248109}
-  - {fileID: 1182700956}
-  clipSpeed: 1
 --- !u!1 &184986702
 GameObject:
   m_ObjectHideFlags: 0
@@ -2440,11 +2420,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d9836e06d979548ffbbe6751469f6860, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OVRCamera: {fileID: 1129770082}
   introVoice: {fileID: 1610387242}
   diveVoice: {fileID: 275412674}
-  comboComp: 0
-  playedDiveVoice: 0
-  OVRCamera: {fileID: 1129770082}
+  envBoxObj: {fileID: 435865813}
+  inBoxObj: {fileID: 1530719321}
+  outBoxObj: {fileID: 170551975}
+  envObjArr:
+  - {fileID: 281009685}
+  - {fileID: 152001607}
+  - {fileID: 1382620213}
+  - {fileID: 41823772}
+  - {fileID: 1421656023}
+  inObjArr:
+  - {fileID: 255837682}
+  - {fileID: 1762706922}
+  - {fileID: 1039645307}
+  - {fileID: 1281752760}
+  - {fileID: 1039088388}
+  outObjArr:
+  - {fileID: 1707064339}
+  - {fileID: 27582170}
+  - {fileID: 1669464717}
+  - {fileID: 131248109}
+  - {fileID: 1182700956}
 --- !u!1 &397870713
 GameObject:
   m_ObjectHideFlags: 0
@@ -2648,7 +2647,6 @@ GameObject:
   - component: {fileID: 435865815}
   - component: {fileID: 435865818}
   - component: {fileID: 435865819}
-  - component: {fileID: 435865820}
   m_Layer: 0
   m_Name: envCube
   m_TagString: Untagged
@@ -2764,25 +2762,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &435865820
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 435865813}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd173673df8264e6eaea2e95aa1c6199, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  envObjectsArr:
-  - {fileID: 281009685}
-  - {fileID: 152001607}
-  - {fileID: 1382620213}
-  - {fileID: 41823772}
-  - {fileID: 1421656023}
-  clipSpeed: 1
 --- !u!1 &444048015
 GameObject:
   m_ObjectHideFlags: 0
@@ -6413,7 +6392,6 @@ GameObject:
   - component: {fileID: 1530719323}
   - component: {fileID: 1530719326}
   - component: {fileID: 1530719327}
-  - component: {fileID: 1530719328}
   m_Layer: 0
   m_Name: inCube
   m_TagString: Untagged
@@ -6529,25 +6507,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!114 &1530719328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1530719321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ab604c211aff498e9c7f80b912fd839, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inObjectsArr:
-  - {fileID: 255837682}
-  - {fileID: 1762706922}
-  - {fileID: 1039645307}
-  - {fileID: 1281752760}
-  - {fileID: 1039088388}
-  clipSpeed: 1
 --- !u!1 &1543973374
 GameObject:
   m_ObjectHideFlags: 0
