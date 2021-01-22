@@ -14,7 +14,7 @@ public class CardSelectionMediator
 public class PrototypingSceneCore : MonoBehaviour
 {
 	// TODO: better way to implement this?
-    // => use array of GameObjects
+    // => use array of GameObjects ?? in that case, can't specify name??? (would be indexes?)
 	public GameObject EnvGroupTrashBin;
 	public GameObject EnvGroupTree;
 	public GameObject EnvGroupStreetLight;
