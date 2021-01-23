@@ -23,29 +23,23 @@ public class PrototypingSceneCore : MonoBehaviour
     private GameObject selectedInputObjGroup;
     private GameObject selectedOutputObjGroup;
 
-    private InputCard[] inputInstance = null;
-    private OutputCard[] outputInstance = null;
-    private int inInsIdx, outInsIdx;
+    private List<Card> inputInstances = new List<Card>();
+    private List<Card> outputInstances = new List<Card>();
 
     void Start()
     {
-        DevelopmentPurposeAssign();
-        // todo delete the line above after development
-        cardRepresentationArr
-            = GameObject.FindGameObjectsWithTag("CardRepresentation");
+        DevelopmentPurposeAssign(); // make sure to delete after development!!
 
-        // TODO これらが必要かどうかを検討する；インスタンスの方でinstantiateか何かできる？
+        // TODO: are these needed? can they be instantialted from instances?
+        // cardRepresentationArr = GameObject.FindGameObjectsWithTag("CardRepresentation");
         // DeactivateAll();
         // ExtractSelected();
         // ActivateSelected();
 
-        inInsIdx = 0;
-        outInsIdx = 0;
-        inputInstance[inInsIdx]
-            = GetInputInstance(CardSelectionMediator.selectionDict["input"]);
-        outputInstance[outInsIdx]
-            = GetOutputInstance(CardSelectionMediator.selectionDict["output"]);
-
+        AddInstanceToList(ref inputInstances,
+            GetInstanceByName(CardSelectionMediator.selectionDict["input"]));
+        AddInstanceToList(ref outputInstances,
+            GetInstanceByName(CardSelectionMediator.selectionDict["output"]));
     }
 
     void Update()
@@ -54,29 +48,38 @@ public class PrototypingSceneCore : MonoBehaviour
         // トリガーなどでできるのか？その方が効率が良い？
     }
 
-    private InputCard GetInputInstance(string inputString)
+    private void AddInstanceToList(ref List<Card> cardList, Card cardInstance)
     {
-        switch (inputString)
-        {
-            case "Button": return new ButtonCard();
-            case "Sound": return new SoundCard();
-            case "Fire": return new FireCard();
-            case "Speed": return new SpeedCard();
-            case "Weather": return new WeatherCard();
-            default: return null;
-        }
+        cardList.Add(cardInstance);
+        // TODO: explicitly call function in Card.cs to initialize
+        // e.g. draw the panel, etc. (Constructor is not implicitly called here)
     }
 
-    private OutputCard GetOutputInstance(string outputString)
+    private void RemoveInstanceFromList(ref List<Card> cardList, Card cardInstance)
     {
-        switch (outputString)
+        cardList.Remove(cardInstance);
+        // TODO: explicitly call function in Card.cs to clean-up components
+        // e.g. remove edit panel (Destructor is not implicitly called here)
+    }
+
+    private Card GetInstanceByName(string cardName)
+    {
+        switch (cardName)
         {
-            case "LightUp": return new LightUpCard();
+            // input cards
+            case "Button"   : return new ButtonCard();
+            case "Sound"    : return new SoundCard();
+            case "Fire"     : return new FireCard();
+            case "Speed"    : return new SpeedCard();
+            case "Weather"  : return new WeatherCard();
+            // output cards
+            case "LightUp"  : return new LightUpCard();
             case "MakeSound": return new MakeSoundCard();
-            case "Vibrate": return new VibrateCard();
-            case "Move": return new MoveCard();
-            case "Send": return new SendCard();
-            default: return null;
+            case "Vibrate"  : return new VibrateCard();
+            case "Move"     : return new MoveCard();
+            case "Send"     : return new SendCard();
+            default         : return null;
+            // Constructors are called
         }
     }
 
