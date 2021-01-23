@@ -40,17 +40,17 @@ public class FireCard : InputCard
             markerDistance = Vector3.Distance(environmentObject.transform.position, markerObject.transform.position);
             if (markerDistance < 1.0f)
             {
-                SetRangeOpacity(1.0f, 0.2f, 0.2f);
+                SetRangeOpacity(0.7f, 0.2f, 0.2f);
                 ifDescription.text = "If fire is <color=red>[short-distance]</color>";
             }
             else if (markerDistance > 2.2f)
             {
-                SetRangeOpacity(0.2f, 0.2f, 1.0f);
+                SetRangeOpacity(0.2f, 0.2f, 0.7f);
                 ifDescription.text = "If fire is <color=red>[long-distance]</color>";
             }
             else
             {
-                SetRangeOpacity(0.2f, 1.0f, 0.2f);
+                SetRangeOpacity(0.2f, 0.7f, 0.2f);
                 ifDescription.text = "If fire is <color=red>[mid-distance]</color>";
             }
         }
