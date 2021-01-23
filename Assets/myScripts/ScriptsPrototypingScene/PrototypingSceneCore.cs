@@ -28,52 +28,40 @@ public class PrototypingSceneCore : MonoBehaviour
     // reason 2: environment objects will never be duplicated
 
     [HideInInspector] private GameObject environmentObject;
-    private List<Card> inputInstances = new List<Card>();
-    private List<Card> outputInstances = new List<Card>();
+    private List<InputCard> inputInstances = new List<InputCard>();
+    private List<OutputCard> outputInstances = new List<OutputCard>();
     private int inputIdx , outputIdx = 0;
 
     void Start()
     {
         DevelopmentPurposeAssign(); // make sure to delete after development
 
-        ActivateEnvObject(ref environmentObject,
-            GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]));
+        environmentObject = GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]);
+        environmentObject.SetActive(true);
 
-        AddInstanceToList(ref inputInstances,
-            GetInstanceByName(CardSelectionMediator.selectionDict["input"]));
-        AddInstanceToList(ref outputInstances,
-            GetInstanceByName(CardSelectionMediator.selectionDict["output"]));
+        inputInstances.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
+        //inputIdx = 0; inputInstances[inputIdx].SetInputCondition(ref environmentObject);
+        inputIdx = 0; inputInstances[inputIdx].environmentObject = environmentObject;
 
-        //SetupInputInstance(inputInstances[0], ref );
-        inputIdx = 0;
-        inputInstances[inputIdx].SetInputCondition(ref environmentObject);
+        outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
+        // outputIdx = 0; outputInstances[outputIdx].SetOutputBehaviour(); // この実装で良いのか要検討
     }
 
     void Update()
     {
-        // ここで if (inputSelected.inputCondition) outputSelected.outputBehavior();
-        // トリガーなどでできるのか？その方が効率が良い？
+
+        // この実装で良いのか要検討
+        //for (int i = 0; i < inputIdx; i++)
+        //{
+        //    inputInstances[i].UpdateInputCondition();
+        //    if (inputInstances[i].inputCondition)
+        //    {
+        //        outputInstances[i].OutputBehaviour();
+        //    }
+        //}
+
     }
 
-    private void ActivateEnvObject(ref GameObject envObj, GameObject obj)
-    {
-        envObj = obj;
-        envObj.SetActive(true);
-    }
-
-    private void AddInstanceToList(ref List<Card> cardList, Card cardInstance)
-    {
-        cardList.Add(cardInstance);
-        // TODO: explicitly call function in Card.cs to initialize
-        // e.g. draw the panel, etc. (Constructor is not implicitly called here)
-    }
-
-    private void RemoveInstanceFromList(ref List<Card> cardList, Card cardInstance)
-    {
-        cardList.Remove(cardInstance);
-        // TODO: explicitly call function in Card.cs to clean-up components
-        // e.g. remove edit panel (Destructor is not implicitly called here)
-    }
 
     private GameObject GetEnvObjByName(string cardName)
     {
@@ -88,18 +76,23 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
-    // constructors are called from this method
-    private Card GetInstanceByName(string cardName)
+    private InputCard GetInputInstanceByName(string cardName)
     {
         switch (cardName)
         {
-            // input cards
-            case "Button"   : return new ButtonCard();
-            case "Sound"    : return new SoundCard();
-            case "Fire"     : return new FireCard();
-            case "Speed"    : return new SpeedCard();
-            case "Weather"  : return new WeatherCard();
-            // output cards
+            case "Button": return new ButtonCard();
+            case "Sound": return new SoundCard();
+            case "Fire": return new FireCard();
+            case "Speed": return new SpeedCard();
+            case "Weather": return new WeatherCard();
+            default: return null;
+        }
+    }
+
+    private OutputCard GetOutputInstanceByName(string cardName)
+    {
+        switch (cardName)
+        {
             case "LightUp"  : return new LightUpCard();
             case "MakeSound": return new MakeSoundCard();
             case "Vibrate"  : return new VibrateCard();
@@ -301,5 +294,46 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 }
- 
+
+
+2021.1.23.22.56
+
+//ActivateEnvObject(ref environmentObject,
+//    GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]));
+
+environmentObject = GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]);
+environmentObject.SetActive(true);
+
+//AddInstanceToList(ref inputInstances,
+//    GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
+
+inputInstances.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
+
+//AddInstanceToList(ref outputInstances,
+//    GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
+
+outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
+
+...
+
+    //private void AddInstanceToList(ref List<Card> cardList, Card cardInstance)
+    //{
+    //    cardList.Add(cardInstance);
+    //    // TODO: explicitly call function in Card.cs to initialize
+    //    // e.g. draw the panel, etc. (Constructor is not implicitly called here)
+    //}
+
+    private void ActivateEnvObject(ref GameObject envObj, GameObject obj)
+    {
+        envObj = obj;
+        envObj.SetActive(true);
+    }
+
+    private void RemoveInstanceFromList(ref List<Card> cardList, Card cardInstance)
+    {
+        cardList.Remove(cardInstance);
+        // TODO: explicitly call function in Card.cs to clean-up components
+        // e.g. remove edit panel (Destructor is not implicitly called here)
+    }
+
  */

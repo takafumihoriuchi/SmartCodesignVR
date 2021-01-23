@@ -5,8 +5,8 @@ using UnityEngine;
 public abstract class Card : MonoBehaviour
 {
     protected GameObject environmentObject;
-    // パネルへの表示の仕方はinput・outputに共通か
 
+    // パネルへの表示の仕方はinput・outputに共通か
 }
 
 

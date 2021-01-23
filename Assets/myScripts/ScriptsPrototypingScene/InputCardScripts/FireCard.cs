@@ -29,11 +29,6 @@ public class FireCard : InputCard
 
     public override void UpdateInputCondition()
     {
-
-    }
-
-    void Update()
-    {
         markerIsGrabbed = markerObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
         if (markerIsGrabbed)
         {
