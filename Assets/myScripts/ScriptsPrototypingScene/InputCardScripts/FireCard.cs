@@ -6,8 +6,6 @@ using TMPro;
 
 public class FireCard : InputCard
 {
-
-    public GameObject environmentObject; // => どの道 動的に取得する必要あり
     public GameObject markerObject; // => instantiateしたほうがスケーラブル
     public TextMeshProUGUI ifDescription; // => 動的に生成するようにする
     public Image rangeImageRed; // 
@@ -17,25 +15,27 @@ public class FireCard : InputCard
     private bool markerIsGrabbed;
     private float markerDistance;
 
-    //public FireCard()
-    //{
-    //    markerIsGrabbed = false;
-    //    SetRangeOpacity(0.2f, 0.2f, 0.2f);
-    //    ifDescription.text = "If fire is <color=red>[(distance)] (grab fire and place at disired distance)</color>";
-    //}
-
-    void Start()
+    public FireCard()
     {
         markerIsGrabbed = false;
         SetRangeOpacity(0.2f, 0.2f, 0.2f);
         ifDescription.text = "If fire is <color=red>[(distance)] (grab fire and place at disired distance)</color>";
     }
 
-    // TODO change from update to another method in this class
+    public override void SetInputCondition(ref GameObject envObj)
+    {
+        environmentObject = envObj;
+    }
+
+    public override void UpdateInputCondition()
+    {
+
+    }
+
     void Update()
     {
         markerIsGrabbed = markerObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
-        if (markerIsGrabbed || Input.GetKey(KeyCode.Z))
+        if (markerIsGrabbed)
         {
             markerDistance = Vector3.Distance(environmentObject.transform.position, markerObject.transform.position);
             if (markerDistance < 1.0f)

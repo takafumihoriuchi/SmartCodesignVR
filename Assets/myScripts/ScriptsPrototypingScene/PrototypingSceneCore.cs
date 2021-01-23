@@ -13,8 +13,9 @@ public class CardSelectionMediator
     };
 }
 
-// Prerequisites of Class:ProtoyptingSceneCore (in editor):
-// - make sure to deactivate all envrionment object
+// Prerequisites:
+// - make sure to deactivate all envrionment object;
+//   set deactivated all input and output objects as well
 public class PrototypingSceneCore : MonoBehaviour
 {
     [SerializeField] public GameObject trashBinObject;
@@ -26,10 +27,10 @@ public class PrototypingSceneCore : MonoBehaviour
     // reason 1: allows to edit properties in inspector
     // reason 2: environment objects will never be duplicated
 
-    [HideInInspector] public GameObject environmentObject;
+    [HideInInspector] private GameObject environmentObject;
     private List<Card> inputInstances = new List<Card>();
     private List<Card> outputInstances = new List<Card>();
-    private int inputIdx = 0, outputIdx = 0;
+    private int inputIdx , outputIdx = 0;
 
     void Start()
     {
@@ -37,10 +38,15 @@ public class PrototypingSceneCore : MonoBehaviour
 
         ActivateEnvObject(ref environmentObject,
             GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]));
+
         AddInstanceToList(ref inputInstances,
             GetInstanceByName(CardSelectionMediator.selectionDict["input"]));
         AddInstanceToList(ref outputInstances,
             GetInstanceByName(CardSelectionMediator.selectionDict["output"]));
+
+        //SetupInputInstance(inputInstances[0], ref );
+        inputIdx = 0;
+        inputInstances[inputIdx].SetInputCondition(ref environmentObject);
     }
 
     void Update()
