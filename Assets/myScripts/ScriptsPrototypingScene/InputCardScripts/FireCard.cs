@@ -25,11 +25,30 @@ public class FireCard : InputCard
     public override void SetInputCondition(ref GameObject envObj)
     {
         environmentObject = envObj;
+        // some other operations, such as bringing marker-objects, images, texts, ...
+    }
+
+    public override void ConfirmInputCondition()
+    {
+        if (markerDistance < 1.0f)
+        {
+            inputCondition  = ; // 毎回Updateしなくてはいけない機能
+        }
+        else if (markerDistance > 2.2f)
+        {
+            
+        }
+        else
+        {
+            
+        }
+        inputCondition = ;
     }
 
     public override void UpdateInputCondition()
     {
         markerIsGrabbed = markerObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
+
         if (markerIsGrabbed)
         {
             markerDistance = Vector3.Distance(environmentObject.transform.position, markerObject.transform.position);
@@ -49,6 +68,11 @@ public class FireCard : InputCard
                 ifDescription.text = "If fire is <color=red>[mid-distance]</color>";
             }
         }
+
+        // inputCondition = xxx;
+        // 何かが違う…；ここでは、発火条件が何かをdefineしたい。
+        // ここでは、マーカーがどこに置かれたかで条件が決まる。
+        // 置かれた状態で確定ボタンが押される必要がある。（<= 重要）
     }
 
     private void SetRangeOpacity(float r, float b, float g)

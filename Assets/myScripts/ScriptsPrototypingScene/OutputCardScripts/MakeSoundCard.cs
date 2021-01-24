@@ -11,6 +11,21 @@ public class MakeSoundCard : OutputCard
     // コンストラクタ
     public MakeSoundCard() { }
 
+    public override void SetOutputBehaviour()
+    {
+        
+    }
+
+    public override void ConfirmOutputBehaviour()
+    {
+        
+    }
+
+    public override void UpdateOutputBehaviour()
+    {
+        
+    }
+
     public override void OutputBehaviour()
     {
 

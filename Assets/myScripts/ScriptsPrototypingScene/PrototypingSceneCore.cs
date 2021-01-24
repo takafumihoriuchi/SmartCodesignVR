@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CardSelectionMediator
 {
@@ -18,6 +19,9 @@ public class CardSelectionMediator
 //   set deactivated all input and output objects as well
 public class PrototypingSceneCore : MonoBehaviour
 {
+    [SerializeField] public Button confirmationBtn;
+    // TODO make an UI panel that contains this button
+
     [SerializeField] public GameObject trashBinObject;
     [SerializeField] public GameObject treeObject;
     [SerializeField] public GameObject streetLightObject;
@@ -32,6 +36,7 @@ public class PrototypingSceneCore : MonoBehaviour
     private List<OutputCard> outputInstances = new List<OutputCard>();
     private int inputIdx , outputIdx = 0;
 
+
     void Start()
     {
         DevelopmentPurposeAssign(); // make sure to delete after development
@@ -40,26 +45,41 @@ public class PrototypingSceneCore : MonoBehaviour
         environmentObject.SetActive(true);
 
         inputInstances.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
-        //inputIdx = 0; inputInstances[inputIdx].SetInputCondition(ref environmentObject);
-        inputIdx = 0; inputInstances[inputIdx].environmentObject = environmentObject;
+        inputIdx = 0; inputInstances[inputIdx].SetInputCondition(ref environmentObject);
 
         outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
-        // outputIdx = 0; outputInstances[outputIdx].SetOutputBehaviour(); // この実装で良いのか要検討
+        outputIdx = 0; outputInstances[outputIdx].SetOutputBehaviour(); // この実装で良いのか要検討
+
+        confirmationBtn.onClick.AddListener(ConfirmSmartObject);
     }
+
 
     void Update()
     {
-
-        // この実装で良いのか要検討
+        //この実装で良いのか要検討
+        // こんな単純な話ではない。確定まだinputConditionがなんなのかが確定されていない。
         //for (int i = 0; i < inputIdx; i++)
         //{
         //    inputInstances[i].UpdateInputCondition();
         //    if (inputInstances[i].inputCondition)
         //    {
+        //        outputInstances[i].UpdateOutputBehaviour();
         //        outputInstances[i].OutputBehaviour();
         //    }
         //}
 
+    }
+
+    private void ConfirmSmartObject()
+    {
+        for (int i = 0; i < inputIdx; i++)
+        {
+            inputInstances[i].ConfirmInputCondition();
+        }
+        for (int i = 0; i < inputIdx; i++)
+        {
+            outputInstances[i].ConfirmOutputBehaviour();
+        }
     }
 
 
@@ -76,6 +96,7 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
+
     private InputCard GetInputInstanceByName(string cardName)
     {
         switch (cardName)
@@ -88,6 +109,7 @@ public class PrototypingSceneCore : MonoBehaviour
             default: return null;
         }
     }
+
 
     private OutputCard GetOutputInstanceByName(string cardName)
     {

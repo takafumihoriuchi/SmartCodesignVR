@@ -12,15 +12,19 @@ public abstract class Card : MonoBehaviour
 
 public abstract class InputCard : Card
 {
-    public bool inputCondition;
-    public abstract void SetInputCondition(ref GameObject environmentObject);
+    public abstract void SetInputCondition(ref GameObject envObj); //ここで渡すべきobjectを渡す
+    public abstract void ConfirmInputCondition();
     public abstract void UpdateInputCondition();
+    public bool inputCondition;
 }
 
 
 public abstract class OutputCard : Card
 {
-
+    public abstract void SetOutputBehaviour();
+    public abstract void ConfirmOutputBehaviour();
+    public abstract void UpdateOutputBehaviour();
     public abstract void OutputBehaviour();
+    //なんらかの形で鍵をかける必要があるか(e.g. 録音中に再生が始まらないように)
 
 }
