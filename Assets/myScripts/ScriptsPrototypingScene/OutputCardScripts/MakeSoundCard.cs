@@ -6,15 +6,44 @@ using TMPro;
 
 public class MakeSoundCard : OutputCard
 {
-    // TODO refactor all the scripts below (currently just a copy&paste from old file)
+    private GameObject micPropModel;
+    private AudioSource soundRecorder;
+    private bool isRecording = false;
+    private bool isExpanding = true;
+    private float progress = 0.0f;
+    private Vector3 updatedScale;
+    // todo どの変数がローカルメンバでもいいかを再検討する
 
-    // コンストラクタ
-    public MakeSoundCard() { }
+    readonly Vector3 startScale = new Vector3(1.0f, 1.0f, 1.0f);
+    readonly Vector3 targetScale = new Vector3(1.1f, 1.1f, 1.1f);
+    const float SPEED = 7.0f;
 
-    public override void SetOutputBehaviour(ref GameObject envObj, ref GameObject outCardText, GameObject outBehavBox, GameObject outProps)
+
+    public MakeSoundCard()
+    {
+        // executed before gameobjects are passed to this class instance
+    }
+
+    // todo most of the code in this method can be moved to the parent class
+    public override void SetOutputBehaviour(ref GameObject envObj,
+        ref GameObject outCardText, GameObject outBehavBox, GameObject outProps)
     {
         environmentObject = envObj;
+        environmentObject.SetActive(true);
+
+        outputSelectionText = outCardText;
+        cardNameTMP = outputSelectionText.GetComponent<TextMeshPro>();
+        cardNameTMP.SetText("Make Sound"); // string型の変数を用意すれば対処可能
+        outputSelectionText.SetActive(true);
+
+        outputBehaviourBox = outBehavBox;
+        outputBehaviourTMP = outputBehaviourBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
+        outputBehaviourTMP.SetText("Play <color=red>[(empty)] (grab microphone and press and hold \"A\" to record)</color>");
+        outputBehaviourBox.SetActive(true);
+
         outputProps = outProps;
+        micPropModel = outputProps.transform.Find("microphone").gameObject;
+        outputProps.SetActive(true);
     }
 
     public override void ConfirmOutputBehaviour()
@@ -29,33 +58,10 @@ public class MakeSoundCard : OutputCard
 
     public override void OutputBehaviour()
     {
-
+        soundRecorder.Play();
     }
 
 
-
-    private AudioSource soundRecorder;
-    public TextMeshProUGUI thenDescription;
-    public GameObject micPropModel;
-
-    private bool isRecording;
-    private float speed;
-    private float progress;
-    private Vector3 startScale;
-    private Vector3 targetScale;
-    private Vector3 updatedScale;
-    private bool isExpanding;
-
-    void Start()
-    {
-        speed = 7.0f;
-        progress = 0.0f;
-        startScale = new Vector3(1.0f, 1.0f, 1.0f);
-        targetScale = new Vector3(1.1f, 1.1f, 1.1f);
-        isExpanding = true;
-        isRecording = false;
-        thenDescription.text = "Play <color=red>[(empty)] (grab microphone and press and hold \"A\" to record)</color>";
-    }
 
     void Update()
     {
@@ -70,16 +76,16 @@ public class MakeSoundCard : OutputCard
             if (aGetDown || Input.GetKeyDown(KeyCode.A))
             //if (aGetDown) // start recording
             {
-                soundRecorder = GetComponent<AudioSource>();
+                soundRecorder = micPropModel.GetComponent<AudioSource>();
                 soundRecorder.clip = Microphone.Start("", false, 60, 16000);
-                thenDescription.text = "Play <color=red>[recording in process...] (release \"A\" to end recording)</color>";
+                outputBehaviourTMP.SetText("Play <color=red>[recording in process...] (release \"A\" to end recording)</color>");
                 isRecording = true;
             }
             if (aGetUp || Input.GetKeyUp(KeyCode.A))
             //if (aGetUp) // save recording
             {
                 Microphone.End("");
-                thenDescription.text = "Play <color=red>[recorded] (recorded sound can be checked by pressing \"X\")</color>";
+                outputBehaviourTMP.SetText("Play <color=red>[recorded] (recorded sound can be checked by pressing \"X\")</color>");
                 isRecording = false;
             }
         }
@@ -93,9 +99,9 @@ public class MakeSoundCard : OutputCard
         if (isRecording)
         { // TODO: needs refactoring (e.g. coroutine)
             if (isExpanding)
-                progress = progress + speed * Time.deltaTime;
+                progress += SPEED * Time.deltaTime;
             else
-                progress = progress - speed * Time.deltaTime;
+                progress -= SPEED * Time.deltaTime;
             if (progress >= 1.0f)
             {
                 progress = 1.0f;
