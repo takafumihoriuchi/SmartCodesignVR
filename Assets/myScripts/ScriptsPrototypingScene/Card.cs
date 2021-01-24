@@ -6,9 +6,9 @@ using TMPro;
 public abstract class Card : MonoBehaviour
 {
     protected GameObject environmentObject;
-
     protected TextMeshPro cardNameTMP;
-
+    protected bool isConfirmed;
+    protected abstract void BehaviourDuringPrototyping();
 }
 
 
@@ -21,7 +21,6 @@ public abstract class InputCard : Card
     protected TextMeshPro inputConditionTMP;
 
     [HideInInspector] public bool inputCondition;
-    protected bool isConfirmed; // movable to Card-Class??
     protected delegate bool InputConditionDelegate();
     protected InputConditionDelegate InputConditionDefintion;
 
@@ -40,7 +39,6 @@ public abstract class InputCard : Card
         ref GameObject inCardText, GameObject inCondBox, GameObject inProps);
     protected abstract InputConditionDelegate DetermineInputEvaluationDelegate();
     protected abstract void UpdatesForInputConditionEvaluation();
-    protected abstract void BehaviourDuringPrototyping();
 
 }
 
@@ -59,5 +57,6 @@ public abstract class OutputCard : Card
     public abstract void ConfirmOutputBehaviour();
     public abstract void OutputBehaviour();
     //なんらかの形で鍵をかける必要があるか(e.g. 録音中に再生が始まらないように)
+
 
 }
