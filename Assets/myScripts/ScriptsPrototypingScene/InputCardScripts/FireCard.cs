@@ -15,6 +15,7 @@ public class FireCard : InputCard
     private bool markerIsGrabbed;
     private float markerDistance;
 
+
     public FireCard()
     {
         markerIsGrabbed = false;
@@ -22,36 +23,32 @@ public class FireCard : InputCard
         ifDescription.text = "If fire is <color=red>[(distance)] (grab fire and place at disired distance)</color>";
     }
 
+
     public override void SetInputCondition(ref GameObject envObj)
     {
         environmentObject = envObj;
         // some other operations, such as bringing marker-objects, images, texts, ...
+        // todo ここ、もしくはConstructorの中で、UIの「1コンテント」を作成する
     }
 
-    public override void ConfirmInputCondition()
+
+    protected override InputConditionDelegate SetToDelegate()
     {
-        if (markerDistance < 1.0f)
-        {
-            inputCondition  = ; // 毎回Updateしなくてはいけない機能
-        }
-        else if (markerDistance > 2.2f)
-        {
-            
-        }
-        else
-        {
-            
-        }
-        inputCondition = ;
+        if (markerDistance < 1.0f) return DetectDistanceShort;
+        else if (markerDistance > 2.2f) return DetectDistanceLong;
+        else return DetectDistanceMid;
     }
+
 
     public override void UpdateInputCondition()
     {
-        markerIsGrabbed = markerObject.transform.GetComponent<OVRGrabbable>().isGrabbed;
+        markerDistance = Vector3.Distance(
+                environmentObject.transform.position,
+                markerObject.transform.position);
 
-        if (markerIsGrabbed)
+        if (isConfirmed) inputCondition = InputConditionDefintion();
+        else
         {
-            markerDistance = Vector3.Distance(environmentObject.transform.position, markerObject.transform.position);
             if (markerDistance < 1.0f)
             {
                 SetRangeOpacity(0.7f, 0.2f, 0.2f);
@@ -68,11 +65,25 @@ public class FireCard : InputCard
                 ifDescription.text = "If fire is <color=red>[mid-distance]</color>";
             }
         }
+    }
 
-        // inputCondition = xxx;
-        // 何かが違う…；ここでは、発火条件が何かをdefineしたい。
-        // ここでは、マーカーがどこに置かれたかで条件が決まる。
-        // 置かれた状態で確定ボタンが押される必要がある。（<= 重要）
+
+    private bool DetectDistanceShort()
+    {
+        if (markerDistance < 1.0f) return true;
+        else return false;
+    }
+
+    private bool DetectDistanceLong()
+    {
+        if (markerDistance > 2.2f) return true;
+        else return false;
+    }
+
+    private bool DetectDistanceMid()
+    {
+        if (markerDistance >= 1.0f && markerDistance <= 2.2f) return true;
+        else return false;
     }
 
     private void SetRangeOpacity(float r, float b, float g)

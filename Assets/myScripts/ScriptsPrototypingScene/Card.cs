@@ -12,10 +12,19 @@ public abstract class Card : MonoBehaviour
 
 public abstract class InputCard : Card
 {
-    public abstract void SetInputCondition(ref GameObject envObj); //ここで渡すべきobjectを渡す
-    public abstract void ConfirmInputCondition();
-    public abstract void UpdateInputCondition();
     public bool inputCondition;
+    protected bool isConfirmed; // movable to Card-Class??
+    protected delegate bool InputConditionDelegate();
+    protected InputConditionDelegate InputConditionDefintion;
+
+    public void ConfirmInputCondition() {
+        isConfirmed = true;
+        InputConditionDefintion = SetToDelegate();
+    }
+
+    public abstract void SetInputCondition(ref GameObject envObj); //ここで渡すべきobjectを渡す
+    public abstract void UpdateInputCondition();
+    protected abstract InputConditionDelegate SetToDelegate();
 }
 
 

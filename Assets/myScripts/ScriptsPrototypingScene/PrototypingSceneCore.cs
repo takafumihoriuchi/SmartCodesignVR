@@ -20,7 +20,7 @@ public class CardSelectionMediator
 public class PrototypingSceneCore : MonoBehaviour
 {
     [SerializeField] public Button confirmationBtn;
-    // TODO make an UI panel that contains this button
+    // TODO enable "click" only when the parameters for input/output were adjusted
 
     [SerializeField] public GameObject trashBinObject;
     [SerializeField] public GameObject treeObject;
@@ -58,15 +58,15 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         //この実装で良いのか要検討
         // こんな単純な話ではない。確定まだinputConditionがなんなのかが確定されていない。
-        //for (int i = 0; i < inputIdx; i++)
-        //{
-        //    inputInstances[i].UpdateInputCondition();
-        //    if (inputInstances[i].inputCondition)
-        //    {
-        //        outputInstances[i].UpdateOutputBehaviour();
-        //        outputInstances[i].OutputBehaviour();
-        //    }
-        //}
+        for (int i = 0; i < inputIdx; i++)
+        {
+            inputInstances[i].UpdateInputCondition();
+            if (inputInstances[i].inputCondition)
+            {
+                outputInstances[i].UpdateOutputBehaviour();
+                outputInstances[i].OutputBehaviour();
+            }
+        }
 
     }
 
