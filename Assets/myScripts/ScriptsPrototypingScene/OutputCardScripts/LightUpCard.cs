@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class LightUpCard : OutputCard
 {
+    public override void SetOutputBehaviour()
+    {
+
+    }
+
+    public override void ConfirmOutputBehaviour()
+    {
+
+    }
+
+    public override void UpdateOutputBehaviour()
+    {
+
+    }
+
     public override void OutputBehaviour()
     {
 

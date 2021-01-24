@@ -4,10 +4,26 @@ using UnityEngine;
 
 public class MoveCard : OutputCard
 {
+    public override void SetOutputBehaviour()
+    {
+
+    }
+
+    public override void ConfirmOutputBehaviour()
+    {
+
+    }
+
+    public override void UpdateOutputBehaviour()
+    {
+
+    }
+
     public override void OutputBehaviour()
     {
 
     }
+
     // Start is called before the first frame update
     void Start()
     {

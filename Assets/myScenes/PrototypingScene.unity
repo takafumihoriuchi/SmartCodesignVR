@@ -6512,12 +6512,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d361041528b844e5bcc447fcffff246, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  confirmationBtn: {fileID: 0}
   trashBinObject: {fileID: 1920663904}
   treeObject: {fileID: 2060742807}
   streetLightObject: {fileID: 1477444344}
   streetSignObject: {fileID: 811961871}
   bridgeObject: {fileID: 793344283}
-  environmentObject: {fileID: 0}
 --- !u!1 &1466910305 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -3407023168171955527, guid: e297d4c1fbe3f4175812af5993453fcb,
@@ -9657,7 +9657,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1959347134
 RectTransform:
   m_ObjectHideFlags: 0
@@ -10080,7 +10080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2110773847
 Transform:
   m_ObjectHideFlags: 0
@@ -10108,7 +10108,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputCondition: 0
-  environmentObject: {fileID: 1920663904}
   markerObject: {fileID: 1050708360}
   ifDescription: {fileID: 1884021956}
   rangeImageRed: {fileID: 561677248}

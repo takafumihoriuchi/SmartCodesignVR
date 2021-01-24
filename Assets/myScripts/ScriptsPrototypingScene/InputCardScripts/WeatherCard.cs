@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class WeatherCard : InputCard
 {
+    public override void SetInputCondition(ref GameObject envObj)
+    {
+
+    }
+
+    protected override InputConditionDelegate DetermineInputEvaluationDelegate()
+    {
+        return null;
+    }
+
+    protected override void UpdatesForInputConditionEvaluation()
+    {
+
+    }
+
+    protected override void BehaviourDuringPrototyping()
+    {
+
+    }
+
     // Start is called before the first frame update
     void Start()
     {

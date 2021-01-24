@@ -8,7 +8,7 @@ public class FireCard : InputCard
 {
     public GameObject markerObject; // => instantiateしたほうがスケーラブル
     public TextMeshProUGUI ifDescription; // => 動的に生成するようにする
-    public Image rangeImageRed; // 
+    public Image rangeImageRed;
     public Image rangeImageBlue;
     public Image rangeImageGreen;
 
@@ -32,38 +32,36 @@ public class FireCard : InputCard
     }
 
 
-    protected override InputConditionDelegate SetToDelegate()
+    protected override InputConditionDelegate DetermineInputEvaluationDelegate()
     {
         if (markerDistance < 1.0f) return DetectDistanceShort;
         else if (markerDistance > 2.2f) return DetectDistanceLong;
         else return DetectDistanceMid;
     }
 
-
-    public override void UpdateInputCondition()
+    protected override void UpdatesForInputConditionEvaluation()
     {
         markerDistance = Vector3.Distance(
                 environmentObject.transform.position,
                 markerObject.transform.position);
+    }
 
-        if (isConfirmed) inputCondition = InputConditionDefintion();
+    protected override void BehaviourDuringPrototyping()
+    {
+        if (markerDistance < 1.0f)
+        {
+            SetRangeOpacity(0.7f, 0.2f, 0.2f);
+            ifDescription.text = "If fire is <color=red>[short-distance]</color>";
+        }
+        else if (markerDistance > 2.2f)
+        {
+            SetRangeOpacity(0.2f, 0.2f, 0.7f);
+            ifDescription.text = "If fire is <color=red>[long-distance]</color>";
+        }
         else
         {
-            if (markerDistance < 1.0f)
-            {
-                SetRangeOpacity(0.7f, 0.2f, 0.2f);
-                ifDescription.text = "If fire is <color=red>[short-distance]</color>";
-            }
-            else if (markerDistance > 2.2f)
-            {
-                SetRangeOpacity(0.2f, 0.2f, 0.7f);
-                ifDescription.text = "If fire is <color=red>[long-distance]</color>";
-            }
-            else
-            {
-                SetRangeOpacity(0.2f, 0.7f, 0.2f);
-                ifDescription.text = "If fire is <color=red>[mid-distance]</color>";
-            }
+            SetRangeOpacity(0.2f, 0.7f, 0.2f);
+            ifDescription.text = "If fire is <color=red>[mid-distance]</color>";
         }
     }
 
