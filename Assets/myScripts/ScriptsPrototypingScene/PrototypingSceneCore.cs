@@ -15,26 +15,42 @@ public class CardSelectionMediator
 }
 
 // Prerequisites:
-// - make sure to deactivate all envrionment object;
-//   set deactivated all input and output objects as well
+// - deactivate all envrionment object;
+// - deavtivate the top-level gameobject of input/output props
 public class PrototypingSceneCore : MonoBehaviour
 {
-    [SerializeField] public Button confirmationBtn;
+    [SerializeField] private Button confirmationBtn;
     // TODO enable "click" only when the parameters for input/output were adjusted
 
-    [SerializeField] public GameObject trashBinObject;
-    [SerializeField] public GameObject treeObject;
-    [SerializeField] public GameObject streetLightObject;
-    [SerializeField] public GameObject streetSignObject;
-    [SerializeField] public GameObject bridgeObject;
-    // Attach "in-scene GameObject" instead of "prefabs"
-    // reason 1: allows to edit properties in inspector
-    // reason 2: environment objects will never be duplicated
+    [SerializeField] private GameObject envObjTrashBin;
+    [SerializeField] private GameObject envObjTree;
+    [SerializeField] private GameObject envObjStreetLight;
+    [SerializeField] private GameObject envObjStreetSign;
+    [SerializeField] private GameObject envObjBridge;
 
-    [HideInInspector] private GameObject environmentObject;
+    [SerializeField] private GameObject inPropsButton;
+    [SerializeField] private GameObject inPropsSound;
+    [SerializeField] private GameObject inPropsFire;
+    [SerializeField] private GameObject inPropsSpeed;
+    [SerializeField] private GameObject inPropsWeather;
+
+    [SerializeField] private GameObject outPropsLightUp;
+    [SerializeField] private GameObject outPropsMakeSound;
+    [SerializeField] private GameObject outPropsVibrate;
+    [SerializeField] private GameObject outPropsMove;
+    [SerializeField] private GameObject outPropsSend;
+
+    [SerializeField] private GameObject inputSelectionText;
+    [SerializeField] private GameObject outputSelectionText;
+    [SerializeField] private GameObject inputConditionBox;
+    [SerializeField] private GameObject outputBehaviourBox;
+
+    private GameObject environmentObject;
+    private GameObject inputProps;
+    private GameObject outputProps;
     private List<InputCard> inputInstances = new List<InputCard>();
     private List<OutputCard> outputInstances = new List<OutputCard>();
-    private int inputIdx , outputIdx = 0;
+    private int instIdx = 0;
 
 
     void Start()
@@ -42,13 +58,16 @@ public class PrototypingSceneCore : MonoBehaviour
         DevelopmentPurposeAssign(); // make sure to delete after development
 
         environmentObject = GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]);
-        environmentObject.SetActive(true);
 
+        inputProps = GetInPropsByName(CardSelectionMediator.selectionDict["input"]);
         inputInstances.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
-        inputIdx = 0; inputInstances[inputIdx].SetInputCondition(ref environmentObject);
+        inputInstances[instIdx].SetInputCondition(
+            ref environmentObject, ref inputSelectionText, inputConditionBox, inputProps);
 
+        outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
         outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
-        outputIdx = 0; outputInstances[outputIdx].SetOutputBehaviour(); // この実装で良いのか要検討
+        outputInstances[instIdx].SetOutputBehaviour(
+            ref environmentObject, ref outputSelectionText, outputBehaviourBox, outputProps);
 
         confirmationBtn.onClick.AddListener(ConfirmSmartObject);
     }
@@ -56,29 +75,24 @@ public class PrototypingSceneCore : MonoBehaviour
 
     void Update()
     {
-        //この実装で良いのか要検討
-        // こんな単純な話ではない。確定まだinputConditionがなんなのかが確定されていない。
-        for (int i = 0; i < inputIdx; i++)
-        {
+        for (int i = 0; i < instIdx; i++) {
             inputInstances[i].UpdateInputCondition();
+            outputInstances[i].UpdateOutputBehaviour();
             if (inputInstances[i].inputCondition)
-            {
-                outputInstances[i].UpdateOutputBehaviour();
                 outputInstances[i].OutputBehaviour();
-            }
         }
 
     }
 
     private void ConfirmSmartObject()
     {
-        for (int i = 0; i < inputIdx; i++)
+        foreach (InputCard inInst in inputInstances)
         {
-            inputInstances[i].ConfirmInputCondition();
+            inInst.ConfirmInputCondition();
         }
-        for (int i = 0; i < inputIdx; i++)
+        foreach (OutputCard outInst in outputInstances)
         {
-            outputInstances[i].ConfirmOutputBehaviour();
+            outInst.ConfirmOutputBehaviour();
         }
     }
 
@@ -87,15 +101,40 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         switch (cardName)
         {
-            case "TrashBin"   : return trashBinObject;
-            case "Tree"       : return treeObject;
-            case "StreetLight": return streetLightObject;
-            case "StreetSign" : return streetSignObject;
-            case "Bridge"     : return bridgeObject;
+            case "TrashBin"   : return envObjTrashBin;
+            case "Tree"       : return envObjTree;
+            case "StreetLight": return envObjStreetLight;
+            case "StreetSign" : return envObjStreetSign;
+            case "Bridge"     : return envObjBridge;
             default: return null;
         }
     }
 
+    private GameObject GetInPropsByName(string cardName)
+    {
+        switch (cardName)
+        {
+            case "Button": return inPropsButton;
+            case "Sound": return inPropsSound;
+            case "Fire": return inPropsFire;
+            case "Speed": return inPropsSpeed;
+            case "Weather": return inPropsWeather;
+            default: return null;
+        }
+    }
+
+    private GameObject GetOutPropsByName(string cardName)
+    {
+        switch (cardName)
+        {
+            case "LightUp": return outPropsLightUp;
+            case "MakeSound": return outPropsMakeSound;
+            case "Vibrate": return outPropsVibrate;
+            case "Move": return outPropsMove;
+            case "Send": return outPropsSend;
+            default: return null;
+        }
+    }
 
     private InputCard GetInputInstanceByName(string cardName)
     {

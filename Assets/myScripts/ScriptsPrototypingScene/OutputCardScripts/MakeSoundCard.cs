@@ -11,9 +11,10 @@ public class MakeSoundCard : OutputCard
     // コンストラクタ
     public MakeSoundCard() { }
 
-    public override void SetOutputBehaviour()
+    public override void SetOutputBehaviour(ref GameObject envObj, ref GameObject outCardText, GameObject outBehavBox, GameObject outProps)
     {
-        
+        environmentObject = envObj;
+        outputProps = outProps;
     }
 
     public override void ConfirmOutputBehaviour()
