@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
+
 public abstract class Card : MonoBehaviour
 {
     protected GameObject environmentObject;
@@ -14,11 +15,10 @@ public abstract class Card : MonoBehaviour
 
 public abstract class InputCard : Card
 {
-    protected GameObject inputProps;
     protected GameObject inputSelectionText;
     protected GameObject inputConditionBox;
-
     protected TextMeshPro inputConditionTMP;
+    protected GameObject inputProps;
 
     [HideInInspector] public bool inputCondition;
     protected delegate bool InputConditionDelegate();
@@ -35,21 +35,43 @@ public abstract class InputCard : Card
         else BehaviourDuringPrototyping();
     }
 
-    public abstract void SetInputCondition(ref GameObject envObj,
-        ref GameObject inCardText, GameObject inCondBox, GameObject inProps);
+    public void SetInputCondition(ref GameObject envObj,
+        ref GameObject inCardText, GameObject inCondBox, GameObject inProps)
+    {
+        environmentObject = envObj; // envObj is passed by reference -> no copy is made
+        environmentObject.SetActive(true);
+
+        inputSelectionText = inCardText;
+        cardNameTMP = inputSelectionText.GetComponent<TextMeshPro>();
+        cardNameTMP.SetText(GetCardName());
+        inputSelectionText.SetActive(true);
+
+        inputConditionBox = inCondBox;
+        inputConditionTMP = inputConditionBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
+        inputConditionTMP.SetText(InitDescriptionText());
+        inputConditionBox.SetActive(true);
+        // need to adjust transform.position when PrototypingSceneCore.instIdx >= 1
+
+        inputProps = inProps; // inProps is passed by value -> a copy is already made
+        InitPropFields();
+        inputProps.SetActive(true);
+        // todo SetActivate(true)がないとHiddenのままか；これでコピーが作られているかどうかを確認する
+    }
+
+    protected abstract string GetCardName();
+    protected abstract string InitDescriptionText();
+    protected abstract void InitPropFields();
     protected abstract InputConditionDelegate DetermineInputEvaluationDelegate();
     protected abstract void UpdatesForInputConditionEvaluation();
-
 }
 
 
 public abstract class OutputCard : Card
 {
-    protected GameObject outputProps;
     protected GameObject outputSelectionText;
     protected GameObject outputBehaviourBox;
-
     protected TextMeshPro outputBehaviourTMP;
+    protected GameObject outputProps;
 
     public abstract void SetOutputBehaviour(ref GameObject envObj,
         ref GameObject outCardText, GameObject outBehavBox, GameObject outProps);

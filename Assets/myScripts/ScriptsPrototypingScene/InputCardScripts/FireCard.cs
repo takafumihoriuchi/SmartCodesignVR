@@ -18,31 +18,19 @@ public class FireCard : InputCard
     const float BOUNDARY_SM = 1.0f;
     const float BOUNDARY_ML = 2.2f;
 
-
     public FireCard()
     {
         // executed before gameobjects are passed to this class instance
     }
 
-    // todo most of the code in this method can be moved to the parent class
-    public override void SetInputCondition(ref GameObject envObj,
-        ref GameObject inCardText, GameObject inCondBox, GameObject inProps)
+    protected override string GetCardName() { return "Fire"; }
+
+    protected override string InitDescriptionText() {
+        return "If fire is <color=red>[(distance)] " +
+            "(grab fire and place at disired distance)</color>"; }
+
+    protected override void InitPropFields()
     {
-        environmentObject = envObj; // envObj is passed by reference -> no copy is made
-        environmentObject.SetActive(true);
-
-        inputSelectionText = inCardText;
-        cardNameTMP = inputSelectionText.GetComponent<TextMeshPro>();
-        cardNameTMP.SetText("Fire");
-        inputSelectionText.SetActive(true);
-
-        inputConditionBox = inCondBox;
-        inputConditionTMP = inputConditionBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
-        inputConditionTMP.SetText("If fire is <color=red>[(distance)] (grab fire and place at disired distance)</color>");
-        inputConditionBox.SetActive(true);
-        // need to adjust transform.position when PrototypingSceneCore.instIdx >= 1
-
-        inputProps = inProps; // inProps is passed by value -> a copy is already made
         markerObj = inputProps.transform.Find("marker").gameObject;
         rangeImageRed = inputProps.transform.
             Find("tmpImageRed").gameObject.GetComponent<Image>();
@@ -51,10 +39,7 @@ public class FireCard : InputCard
         rangeImageGreen = inputProps.transform.
             Find("tmpImageGreen").gameObject.GetComponent<Image>();
         SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
-        inputProps.SetActive(true);
-        // todo SetActivate(true)がないとHiddenのままか；これでコピーが作られているかどうかを確認する
     }
-
 
     protected override InputConditionDelegate DetermineInputEvaluationDelegate()
     {
