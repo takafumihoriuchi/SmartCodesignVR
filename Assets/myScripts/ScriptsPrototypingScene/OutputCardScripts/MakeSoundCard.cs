@@ -12,7 +12,6 @@ public class MakeSoundCard : OutputCard
     private bool isExpanding = true;
     private float progress = 0.0f;
     private Vector3 updatedScale;
-    // todo どの変数がローカルメンバでもいいかを再検討する
 
     readonly Vector3 startScale = new Vector3(1.0f, 1.0f, 1.0f);
     readonly Vector3 targetScale = new Vector3(1.1f, 1.1f, 1.1f);
@@ -69,31 +68,33 @@ public class MakeSoundCard : OutputCard
         if (!soundRecorder.isPlaying) soundRecorder.Play();
     }
 
+
     protected override void BehaviourDuringPrototyping()
     {
-        if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed)
-        {
-            if (OVRInput.GetDown(OVRInput.RawButton.A)) // start recording
-            {
-                soundRecorder = micPropModel.GetComponent<AudioSource>();
-                soundRecorder.clip = Microphone.Start("", false, 60, 16000);
-                outputBehaviourTMP.SetText("Play <color=red>[recording in process...] (release \"A\" to end recording)</color>");
-                isRecording = true;
-            }
-            if (OVRInput.GetUp(OVRInput.RawButton.A)) // save recording
-            {
-                Microphone.End("");
-                outputBehaviourTMP.SetText("Play <color=red>[recorded] (recorded sound can be checked by pressing \"X\")</color>");
-                isRecording = false;
-            }
+        if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed) {
+            if (OVRInput.GetDown(OVRInput.RawButton.A)) StartRecording();
+            if (OVRInput.GetUp(OVRInput.RawButton.A)) SaveRecording();
         }
 
-        if (OVRInput.GetDown(OVRInput.RawButton.X)) // play recording
-        {
-            soundRecorder.Play();
-        }
+        if (OVRInput.GetDown(OVRInput.RawButton.X)) soundRecorder.Play();
 
         MicrophoneAnimation();
+    }
+
+
+    private void StartRecording()
+    {
+        soundRecorder = micPropModel.GetComponent<AudioSource>();
+        soundRecorder.clip = Microphone.Start("", false, 60, 16000);
+        outputBehaviourTMP.SetText("Play <color=red>[recording in process...] (release \"A\" to end recording)</color>");
+        isRecording = true;
+    }
+
+    private void SaveRecording()
+    {
+        Microphone.End("");
+        outputBehaviourTMP.SetText("Play <color=red>[recorded] (recorded sound can be checked by pressing \"X\")</color>");
+        isRecording = false;
     }
 
     private void MicrophoneAnimation()
