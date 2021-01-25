@@ -4,13 +4,13 @@ using UnityEngine;
 using TMPro;
 
 
-public abstract class Card : MonoBehaviour
+public abstract class Card
 {
     protected GameObject environmentObject;
     protected GameObject cardNameText;
-    protected TextMeshPro cardNameTMP;
+    protected TextMeshProUGUI cardNameTMP;
     protected GameObject statementBox;
-    protected TextMeshPro statementTMP;
+    protected TextMeshProUGUI statementTMP;
     protected GameObject propObjects;
 
     protected bool isConfirmed;
@@ -29,13 +29,13 @@ public abstract class Card : MonoBehaviour
         // envObj is passed by reference -> no copy is made
 
         this.cardNameText = cardNameText;
-        cardNameTMP = this.cardNameText.GetComponent<TextMeshPro>();
+        cardNameTMP = this.cardNameText.GetComponent<TextMeshProUGUI>();
         cardNameTMP.SetText(GetCardName());
         this.cardNameText.SetActive(true);
 
         this.statementBox = statementBox;
         statementTMP = this.statementBox.transform.Find("DescriptionText")
-            .gameObject.GetComponent<TextMeshPro>();
+            .gameObject.GetComponent<TextMeshProUGUI>();
         statementTMP.SetText(InitDescriptionText());
         this.statementBox.SetActive(true);
         // need to adjust transform.position when PrototypingSceneCore.instIdx >= 1

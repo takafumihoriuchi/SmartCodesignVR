@@ -39,8 +39,8 @@ public class PrototypingSceneCore : MonoBehaviour
     [SerializeField] private GameObject outPropsSend = null;
 
     [SerializeField] private GameObject inputSelectionText = null;
-    [SerializeField] private GameObject outputSelectionText = null;
     [SerializeField] private GameObject inputConditionBox = null;
+    [SerializeField] private GameObject outputSelectionText = null;
     [SerializeField] private GameObject outputBehaviourBox = null;
 
     private GameObject environmentObject;
@@ -85,18 +85,7 @@ public class PrototypingSceneCore : MonoBehaviour
         confirmationBtn.onClick.AddListener(ConfirmSmartObject);
     }
 
-    // for making sure that all card representations are initially deactivated
-    private void DeactivateAllCardRepresentations()
-    {
-        GameObject[] cardRepresentations;
-        cardRepresentations = GameObject.FindGameObjectsWithTag("CardRepresentation");
-        foreach (GameObject prop in cardRepresentations)
-        {
-            prop.SetActive(false);
-        }
-    }
-
-
+  
     private void Update()
     {
         for (int i = 0; i < instIdx; i++) {
@@ -121,11 +110,11 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         switch (cardName)
         {
-            case "TrashBin"   : return envObjTrashBin;
-            case "Tree"       : return envObjTree;
+            case "TrashBin": return envObjTrashBin;
+            case "Tree": return envObjTree;
             case "StreetLight": return envObjStreetLight;
-            case "StreetSign" : return envObjStreetSign;
-            case "Bridge"     : return envObjBridge;
+            case "StreetSign": return envObjStreetSign;
+            case "Bridge": return envObjBridge;
             default: return null;
         }
     }
@@ -169,7 +158,6 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
-
     private OutputCard GetOutputInstanceByName(string cardName)
     {
         switch (cardName)
@@ -181,7 +169,17 @@ public class PrototypingSceneCore : MonoBehaviour
             case "Send": return new SendCard();
             default: return null;
         }
-        // todo apply Visual Studio's function "convert swtich statement to expression" to refactor
+    }
+
+    // for making sure that all card representations are initially deactivated
+    private void DeactivateAllCardRepresentations()
+    {
+        GameObject[] cardRepresentations;
+        cardRepresentations = GameObject.FindGameObjectsWithTag("CardRepresentation");
+        foreach (GameObject prop in cardRepresentations)
+        {
+            prop.SetActive(false);
+        }
     }
 
 }

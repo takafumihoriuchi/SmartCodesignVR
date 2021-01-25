@@ -32,11 +32,12 @@ public class FireCard : InputCard
     protected override void InitPropFields()
     {
         markerObj = propObjects.transform.Find("marker").gameObject;
-        rangeImageRed = propObjects.transform.
+        GameObject tmpCanvasObj = propObjects.transform.Find("floorCanvas").gameObject;
+        rangeImageRed = tmpCanvasObj.transform.
             Find("tmpImageRed").gameObject.GetComponent<Image>();
-        rangeImageBlue = propObjects.transform.
+        rangeImageBlue = tmpCanvasObj.transform.
             Find("tmpImageBlue").gameObject.GetComponent<Image>();
-        rangeImageGreen = propObjects.transform.
+        rangeImageGreen = tmpCanvasObj.transform.
             Find("tmpImageGreen").gameObject.GetComponent<Image>();
         SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
     }
