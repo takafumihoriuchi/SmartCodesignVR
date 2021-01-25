@@ -33,7 +33,7 @@ public class MakeSoundCard : OutputCard
 
     protected override void InitPropFields()
     {
-        micPropModel = outputProps.transform.Find("microphone").gameObject;
+        micPropModel = propObjects.transform.Find("microphone").gameObject;
     }
 
     public override void ConfirmOutputBehaviour()
@@ -78,14 +78,14 @@ public class MakeSoundCard : OutputCard
     {
         soundRecorder = micPropModel.GetComponent<AudioSource>();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
-        outputBehaviourTMP.SetText("Play <color=red>[recording in process...] (release \"A\" to end recording)</color>");
+        statementTMP.SetText("Play <color=red>[recording in process...] (release \"A\" to end recording)</color>");
         isRecording = true;
     }
 
     private void SaveRecording()
     {
         Microphone.End("");
-        outputBehaviourTMP.SetText("Play <color=red>[recorded] (recorded sound can be checked by pressing \"X\")</color>");
+        statementTMP.SetText("Play <color=red>[recorded] (recorded sound can be checked by pressing \"X\")</color>");
         isRecording = false;
     }
 

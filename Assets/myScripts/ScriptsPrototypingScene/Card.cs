@@ -4,11 +4,18 @@ using UnityEngine;
 using TMPro;
 
 
+
 public abstract class Card : MonoBehaviour
 {
     protected GameObject environmentObject;
     protected TextMeshPro cardNameTMP;
     protected bool isConfirmed;
+
+    protected GameObject cardNameText;
+    protected GameObject statementBox;
+    protected TextMeshPro statementTMP;
+    protected GameObject propObjects;
+
     protected abstract void BehaviourDuringPrototyping();
     protected abstract string GetCardName();
     protected abstract string InitDescriptionText();
@@ -16,13 +23,10 @@ public abstract class Card : MonoBehaviour
 }
 
 
+
 public abstract class InputCard : Card
 {
-    protected GameObject inputSelectionText;
-    protected GameObject inputConditionBox;
-    protected TextMeshPro inputConditionTMP;
-    protected GameObject inputProps;
-
+    
     [HideInInspector] public bool inputCondition;
     protected delegate bool InputConditionDelegate();
     protected InputConditionDelegate InputConditionDefintion;
@@ -44,20 +48,20 @@ public abstract class InputCard : Card
         environmentObject = envObj; // envObj is passed by reference -> no copy is made
         environmentObject.SetActive(true);
 
-        inputSelectionText = inCardText;
-        cardNameTMP = inputSelectionText.GetComponent<TextMeshPro>();
+        cardNameText = inCardText;
+        cardNameTMP = cardNameText.GetComponent<TextMeshPro>();
         cardNameTMP.SetText(GetCardName());
-        inputSelectionText.SetActive(true);
+        cardNameText.SetActive(true);
 
-        inputConditionBox = inCondBox;
-        inputConditionTMP = inputConditionBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
-        inputConditionTMP.SetText(InitDescriptionText());
-        inputConditionBox.SetActive(true);
+        statementBox = inCondBox;
+        statementTMP = statementBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
+        statementTMP.SetText(InitDescriptionText());
+        statementBox.SetActive(true);
         // need to adjust transform.position when PrototypingSceneCore.instIdx >= 1
 
-        inputProps = inProps; // inProps is passed by value -> a copy is already made
+        propObjects = inProps; // inProps is passed by value -> a copy is already made
         InitPropFields();
-        inputProps.SetActive(true);
+        propObjects.SetActive(true);
         // todo SetActivate(true)がないとHiddenのままか；これでコピーが作られているかどうかを確認する
     }
 
@@ -66,13 +70,9 @@ public abstract class InputCard : Card
 }
 
 
+
 public abstract class OutputCard : Card
 {
-    protected GameObject outputSelectionText;
-    protected GameObject outputBehaviourBox;
-    protected TextMeshPro outputBehaviourTMP;
-    protected GameObject outputProps;
-
 
     public void SetOutputBehaviour(ref GameObject envObj,
         ref GameObject outCardText, GameObject outBehavBox, GameObject outProps)
@@ -80,19 +80,19 @@ public abstract class OutputCard : Card
         environmentObject = envObj;
         environmentObject.SetActive(true);
 
-        outputSelectionText = outCardText;
-        cardNameTMP = outputSelectionText.GetComponent<TextMeshPro>();
+        cardNameText = outCardText;
+        cardNameTMP = cardNameText.GetComponent<TextMeshPro>();
         cardNameTMP.SetText(GetCardName());
-        outputSelectionText.SetActive(true);
+        cardNameText.SetActive(true);
 
-        outputBehaviourBox = outBehavBox;
-        outputBehaviourTMP = outputBehaviourBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
-        outputBehaviourTMP.SetText(InitDescriptionText());
-        outputBehaviourBox.SetActive(true);
+        statementBox = outBehavBox;
+        statementTMP = statementBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
+        statementTMP.SetText(InitDescriptionText());
+        statementBox.SetActive(true);
 
-        outputProps = outProps;
+        propObjects = outProps;
         InitPropFields();
-        outputProps.SetActive(true);
+        propObjects.SetActive(true);
     }
 
 

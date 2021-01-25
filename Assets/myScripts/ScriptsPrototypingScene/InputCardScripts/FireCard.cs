@@ -31,12 +31,12 @@ public class FireCard : InputCard
 
     protected override void InitPropFields()
     {
-        markerObj = inputProps.transform.Find("marker").gameObject;
-        rangeImageRed = inputProps.transform.
+        markerObj = propObjects.transform.Find("marker").gameObject;
+        rangeImageRed = propObjects.transform.
             Find("tmpImageRed").gameObject.GetComponent<Image>();
-        rangeImageBlue = inputProps.transform.
+        rangeImageBlue = propObjects.transform.
             Find("tmpImageBlue").gameObject.GetComponent<Image>();
-        rangeImageGreen = inputProps.transform.
+        rangeImageGreen = propObjects.transform.
             Find("tmpImageGreen").gameObject.GetComponent<Image>();
         SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
     }
@@ -64,15 +64,15 @@ public class FireCard : InputCard
 
         if (DetectDistanceShort()) {
             SetRangeOpacity(ALPHA_HIGH, ALPHA_LOW, ALPHA_LOW);
-            inputConditionTMP.SetText(
+            statementTMP.SetText(
                 "If fire is <color=red>[short-distance]</color>");
         } else if (DetectDistanceLong()) {
             SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_HIGH);
-            inputConditionTMP.SetText(
+            statementTMP.SetText(
                 "If fire is <color=red>[long-distance]</color>");
         } else if (DetectDistanceMid()) {
             SetRangeOpacity(ALPHA_LOW, ALPHA_HIGH, ALPHA_LOW);
-            inputConditionTMP.SetText(
+            statementTMP.SetText(
                 "If fire is <color=red>[mid-distance]</color>");
         }
     }
