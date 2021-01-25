@@ -53,20 +53,29 @@ public abstract class Card
 
 public abstract class InputCard : Card
 {
-    [HideInInspector] public bool inputCondition;
+    [HideInInspector] public bool inputCondition = false;
 
     protected delegate bool InputConditionDelegate();
-    protected InputConditionDelegate InputConditionDefintion;
+
+    protected InputConditionDelegate InputConditionDefinition;
+
     protected abstract InputConditionDelegate DetermineInputEvaluationDelegate();
+
     public void ConfirmInputCondition() {
         isConfirmed = true;
-        InputConditionDefintion = DetermineInputEvaluationDelegate();
+        InputConditionDefinition = DetermineInputEvaluationDelegate();
+        Debug.Log("InputConditionDefinition was assigned to: " + InputConditionDefinition.Method.Name);
     }
+
     public void UpdateInputCondition() {
         UpdatesForInputConditionEvaluation();
-        if (isConfirmed) inputCondition = InputConditionDefintion();
+        if (isConfirmed) {
+            inputCondition = InputConditionDefinition();
+            //Debug.Log("inside UpdateInputCondition; inputCondition is " + inputCondition);
+        }
         else BehaviourDuringPrototyping();
     }
+
     protected abstract void UpdatesForInputConditionEvaluation();
 }
 

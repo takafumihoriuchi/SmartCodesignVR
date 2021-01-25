@@ -62,7 +62,15 @@ public class MakeSoundCard : OutputCard
 
     public override void OutputBehaviour()
     {
-        if (!soundRecorder.isPlaying) soundRecorder.Play();
+        //soundRecorder.Play(); // locking during previous Play() may not be necessary
+        Debug.Log("soundRecorder.isPlaying is " + soundRecorder.isPlaying);
+        if (!soundRecorder.isPlaying)
+        {
+            soundRecorder.Play();
+            Debug.Log("called soundRecorder.Play()");
+
+        }
+        Debug.Log("leaving OutputBehaviour()");
     }
 
     protected override void BehaviourDuringPrototyping()
@@ -81,7 +89,7 @@ public class MakeSoundCard : OutputCard
 
     private void StartRecording()
     {
-        soundRecorder = micPropModel.GetComponent<AudioSource>();
+        soundRecorder = environmentObject.GetComponent<AudioSource>();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
         statementTMP.SetText("Play <color=red>[recording in process...] (release \"A\" to end recording)</color>");
         isRecording = true;
