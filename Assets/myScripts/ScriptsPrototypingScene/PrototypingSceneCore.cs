@@ -19,31 +19,31 @@ public class CardSelectionMediator
 // - deavtivate the top-level gameobject of input/output props
 public class PrototypingSceneCore : MonoBehaviour
 {
-    [SerializeField] private Button confirmationBtn;
+    [SerializeField] private Button confirmationBtn = null;
     // TODO enable "click" only when the parameters for input/output were adjusted
 
-    [SerializeField] private GameObject envObjTrashBin;
-    [SerializeField] private GameObject envObjTree;
-    [SerializeField] private GameObject envObjStreetLight;
-    [SerializeField] private GameObject envObjStreetSign;
-    [SerializeField] private GameObject envObjBridge;
+    [SerializeField] private GameObject envObjTrashBin = null;
+    [SerializeField] private GameObject envObjTree = null;
+    [SerializeField] private GameObject envObjStreetLight = null;
+    [SerializeField] private GameObject envObjStreetSign = null;
+    [SerializeField] private GameObject envObjBridge = null;
 
-    [SerializeField] private GameObject inPropsButton;
-    [SerializeField] private GameObject inPropsSound;
-    [SerializeField] private GameObject inPropsFire;
-    [SerializeField] private GameObject inPropsSpeed;
-    [SerializeField] private GameObject inPropsWeather;
+    [SerializeField] private GameObject inPropsButton = null;
+    [SerializeField] private GameObject inPropsSound = null;
+    [SerializeField] private GameObject inPropsFire = null;
+    [SerializeField] private GameObject inPropsSpeed = null;
+    [SerializeField] private GameObject inPropsWeather = null;
 
-    [SerializeField] private GameObject outPropsLightUp;
-    [SerializeField] private GameObject outPropsMakeSound;
-    [SerializeField] private GameObject outPropsVibrate;
-    [SerializeField] private GameObject outPropsMove;
-    [SerializeField] private GameObject outPropsSend;
+    [SerializeField] private GameObject outPropsLightUp = null;
+    [SerializeField] private GameObject outPropsMakeSound = null;
+    [SerializeField] private GameObject outPropsVibrate = null;
+    [SerializeField] private GameObject outPropsMove = null;
+    [SerializeField] private GameObject outPropsSend = null;
 
-    [SerializeField] private GameObject inputSelectionText;
-    [SerializeField] private GameObject outputSelectionText;
-    [SerializeField] private GameObject inputConditionBox;
-    [SerializeField] private GameObject outputBehaviourBox;
+    [SerializeField] private GameObject inputSelectionText = null;
+    [SerializeField] private GameObject outputSelectionText = null;
+    [SerializeField] private GameObject inputConditionBox = null;
+    [SerializeField] private GameObject outputBehaviourBox = null;
 
     private GameObject environmentObject;
     private GameObject inputProps;
@@ -52,6 +52,20 @@ public class PrototypingSceneCore : MonoBehaviour
     private List<OutputCard> outputInstances = new List<OutputCard>();
     private int instIdx = 0;
     // using list to make it scalable to handling multiple instances
+
+
+    // for developmental use only
+    private void DevelopmentPurposeAssign()
+    {
+        CardSelectionMediator.selectionDict["environment"] = "TrashBin";
+        CardSelectionMediator.selectionDict["input"] = "Fire";
+        CardSelectionMediator.selectionDict["output"] = "MakeSound";
+
+        Debug.Log("[env, in, out] = ["
+            + CardSelectionMediator.selectionDict["environment"] + ", "
+            + CardSelectionMediator.selectionDict["input"] + ", "
+            + CardSelectionMediator.selectionDict["output"] + "]");
+    }
 
 
     void Start()
@@ -157,19 +171,6 @@ public class PrototypingSceneCore : MonoBehaviour
             default: return null;
         }
         // todo apply Visual Studio's function "convert swtich statement to expression" to refactor
-    }
-
-    // for developmental use only
-    private void DevelopmentPurposeAssign()
-    {
-        CardSelectionMediator.selectionDict["environment"] = "TrashBin";
-        CardSelectionMediator.selectionDict["input"] = "Fire";
-        CardSelectionMediator.selectionDict["output"] = "MakeSound";
-
-        Debug.Log("[env, in, out] = ["
-            + CardSelectionMediator.selectionDict["environment"] + ", "
-            + CardSelectionMediator.selectionDict["input"] + ", "
-            + CardSelectionMediator.selectionDict["output"] + "]");
     }
 
 }

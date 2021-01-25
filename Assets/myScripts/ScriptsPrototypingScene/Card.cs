@@ -16,6 +16,7 @@ public abstract class Card : MonoBehaviour
     protected bool isConfirmed;
 
     protected abstract void BehaviourDuringPrototyping();
+
     protected abstract string GetCardName();
     protected abstract string InitDescriptionText();
     protected abstract void InitPropFields();

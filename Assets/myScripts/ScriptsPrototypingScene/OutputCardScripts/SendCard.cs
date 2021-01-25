@@ -4,35 +4,19 @@ using UnityEngine;
 
 public class SendCard : OutputCard
 {
-    public override void SetOutputBehaviour()
+    // send emails from inside Unity (can be extended to the design of SUI)
+
+    public SendCard()
     {
 
     }
 
-    public override void ConfirmOutputBehaviour()
-    {
+    protected override string GetCardName() { return "Send"; }
+    protected override string InitDescriptionText() { return ""; }
+    protected override void InitPropFields() { }
+    public override void ConfirmOutputBehaviour() { }
+    public override void UpdateOutputBehaviour() { }
+    public override void OutputBehaviour() { }
+    protected override void BehaviourDuringPrototyping() { }
 
-    }
-
-    public override void UpdateOutputBehaviour()
-    {
-
-    }
-
-    public override void OutputBehaviour()
-    {
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

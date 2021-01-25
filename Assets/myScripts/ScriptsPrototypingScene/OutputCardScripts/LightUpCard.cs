@@ -4,35 +4,18 @@ using UnityEngine;
 
 public class LightUpCard : OutputCard
 {
-    public override void SetOutputBehaviour()
+
+    public LightUpCard()
     {
 
     }
 
-    public override void ConfirmOutputBehaviour()
-    {
+    protected override string GetCardName() { return "Light Up"; }
+    protected override string InitDescriptionText() { return ""; }
+    protected override void InitPropFields() { }
+    public override void ConfirmOutputBehaviour() { }
+    public override void UpdateOutputBehaviour() { }
+    public override void OutputBehaviour() { }
+    protected override void BehaviourDuringPrototyping() { }
 
-    }
-
-    public override void UpdateOutputBehaviour()
-    {
-
-    }
-
-    public override void OutputBehaviour()
-    {
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

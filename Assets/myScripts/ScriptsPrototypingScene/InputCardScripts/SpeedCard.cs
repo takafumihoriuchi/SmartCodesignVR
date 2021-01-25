@@ -4,35 +4,13 @@ using UnityEngine;
 
 public class SpeedCard : InputCard
 {
-    public override void SetInputCondition(ref GameObject envObj)
-    {
 
-    }
+    public SpeedCard() { }
+    protected override string GetCardName() { return "Speed"; }
+    protected override string InitDescriptionText() { return ""; }
+    protected override void InitPropFields() { }
+    protected override InputConditionDelegate DetermineInputEvaluationDelegate() { return null; }
+    protected override void UpdatesForInputConditionEvaluation() { }
+    protected override void BehaviourDuringPrototyping() { }
 
-    protected override InputConditionDelegate DetermineInputEvaluationDelegate()
-    {
-        return null;
-    }
-
-    protected override void UpdatesForInputConditionEvaluation()
-    {
-
-    }
-
-    protected override void BehaviourDuringPrototyping()
-    {
-
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
