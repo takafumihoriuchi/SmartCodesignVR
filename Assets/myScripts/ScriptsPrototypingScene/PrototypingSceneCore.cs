@@ -14,9 +14,7 @@ public class CardSelectionMediator
     };
 }
 
-// Prerequisites:
-// - deactivate all envrionment object;
-// - deavtivate the top-level gameobject of input/output props
+
 public class PrototypingSceneCore : MonoBehaviour
 {
     [SerializeField] private Button confirmationBtn = null;
@@ -68,9 +66,11 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    void Start()
+    private void Start()
     {
         DevelopmentPurposeAssign(); // make sure to delete after development
+
+        DeactivateAllCardRepresentations();
 
         environmentObject = GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]);
 
@@ -85,8 +85,19 @@ public class PrototypingSceneCore : MonoBehaviour
         confirmationBtn.onClick.AddListener(ConfirmSmartObject);
     }
 
+    // for making sure that all card representations are initially deactivated
+    private void DeactivateAllCardRepresentations()
+    {
+        GameObject[] cardRepresentations;
+        cardRepresentations = GameObject.FindGameObjectsWithTag("CardRepresentation");
+        foreach (GameObject prop in cardRepresentations)
+        {
+            prop.SetActive(false);
+        }
+    }
 
-    void Update()
+
+    private void Update()
     {
         for (int i = 0; i < instIdx; i++) {
             inputInstances[i].UpdateInputCondition();
