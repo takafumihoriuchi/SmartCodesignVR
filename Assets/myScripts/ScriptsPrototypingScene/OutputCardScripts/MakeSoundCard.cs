@@ -111,10 +111,12 @@ public class MakeSoundCard : OutputCard
 
             updatedScale = Vector3.Lerp(startScale, targetScale, progress);
             micPropModel.transform.localScale = updatedScale;
+            //micPropModel.transform.localScale = updatedScale;
         }
         else
         {
             micPropModel.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            //micPropModel.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
         }
     }
 

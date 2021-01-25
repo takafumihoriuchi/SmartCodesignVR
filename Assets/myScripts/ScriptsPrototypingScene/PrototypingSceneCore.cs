@@ -88,11 +88,13 @@ public class PrototypingSceneCore : MonoBehaviour
   
     private void Update()
     {
-        for (int i = 0; i < instIdx; i++) {
+        for (int i = 0; i <= instIdx; i++) {
             inputInstances[i].UpdateInputCondition();
             outputInstances[i].UpdateOutputBehaviour();
             if (inputInstances[i].inputCondition)
+            {
                 outputInstances[i].OutputBehaviour();
+            }
         }
     }
 

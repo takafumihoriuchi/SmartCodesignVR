@@ -45,6 +45,7 @@ public abstract class Card
         this.propObjects.SetActive(true);
         // inProps is passed by value -> a copy is already made
         // todo SetActivate(true)がないとHiddenのままか；これでコピーが作られているかどうかを確認する
+        // コピーは作られていないような感じ。要詳細調査。
     }
 
 }
