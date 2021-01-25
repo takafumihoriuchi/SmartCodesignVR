@@ -51,7 +51,7 @@ public class PrototypingSceneCore : MonoBehaviour
     private List<InputCard> inputInstances = new List<InputCard>();
     private List<OutputCard> outputInstances = new List<OutputCard>();
     private int instIdx = 0;
-
+    // using list to make it scalable to handling multiple instances
 
     void Start()
     {

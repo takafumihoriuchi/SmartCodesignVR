@@ -10,6 +10,9 @@ public abstract class Card : MonoBehaviour
     protected TextMeshPro cardNameTMP;
     protected bool isConfirmed;
     protected abstract void BehaviourDuringPrototyping();
+    protected abstract string GetCardName();
+    protected abstract string InitDescriptionText();
+    protected abstract void InitPropFields();
 }
 
 
@@ -58,9 +61,6 @@ public abstract class InputCard : Card
         // todo SetActivate(true)がないとHiddenのままか；これでコピーが作られているかどうかを確認する
     }
 
-    protected abstract string GetCardName();
-    protected abstract string InitDescriptionText();
-    protected abstract void InitPropFields();
     protected abstract InputConditionDelegate DetermineInputEvaluationDelegate();
     protected abstract void UpdatesForInputConditionEvaluation();
 }
@@ -73,12 +73,31 @@ public abstract class OutputCard : Card
     protected TextMeshPro outputBehaviourTMP;
     protected GameObject outputProps;
 
-    public abstract void SetOutputBehaviour(ref GameObject envObj,
-        ref GameObject outCardText, GameObject outBehavBox, GameObject outProps);
+
+    public void SetOutputBehaviour(ref GameObject envObj,
+        ref GameObject outCardText, GameObject outBehavBox, GameObject outProps)
+    {
+        environmentObject = envObj;
+        environmentObject.SetActive(true);
+
+        outputSelectionText = outCardText;
+        cardNameTMP = outputSelectionText.GetComponent<TextMeshPro>();
+        cardNameTMP.SetText(GetCardName());
+        outputSelectionText.SetActive(true);
+
+        outputBehaviourBox = outBehavBox;
+        outputBehaviourTMP = outputBehaviourBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
+        outputBehaviourTMP.SetText(InitDescriptionText());
+        outputBehaviourBox.SetActive(true);
+
+        outputProps = outProps;
+        InitPropFields();
+        outputProps.SetActive(true);
+    }
+
+
     public abstract void UpdateOutputBehaviour();
     public abstract void ConfirmOutputBehaviour();
     public abstract void OutputBehaviour();
-    //なんらかの形で鍵をかける必要があるか(e.g. 録音中に再生が始まらないように)
-
 
 }

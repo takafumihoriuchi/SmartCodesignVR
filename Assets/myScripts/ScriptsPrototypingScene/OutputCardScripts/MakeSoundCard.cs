@@ -23,26 +23,17 @@ public class MakeSoundCard : OutputCard
         // executed before gameobjects are passed to this class instance
     }
 
-    // todo most of the code in this method can be moved to the parent class
-    public override void SetOutputBehaviour(ref GameObject envObj,
-        ref GameObject outCardText, GameObject outBehavBox, GameObject outProps)
+    protected override string GetCardName() { return "Make Sound"; }
+
+    protected override string InitDescriptionText()
     {
-        environmentObject = envObj;
-        environmentObject.SetActive(true);
+        return "Play <color=red>[(empty)] " +
+            "(grab microphone and press and hold \"A\" to record)</color>";
+    }
 
-        outputSelectionText = outCardText;
-        cardNameTMP = outputSelectionText.GetComponent<TextMeshPro>();
-        cardNameTMP.SetText("Make Sound"); // string型の変数を用意すれば対処可能
-        outputSelectionText.SetActive(true);
-
-        outputBehaviourBox = outBehavBox;
-        outputBehaviourTMP = outputBehaviourBox.transform.Find("DescriptionText").gameObject.GetComponent<TextMeshPro>();
-        outputBehaviourTMP.SetText("Play <color=red>[(empty)] (grab microphone and press and hold \"A\" to record)</color>");
-        outputBehaviourBox.SetActive(true);
-
-        outputProps = outProps;
+    protected override void InitPropFields()
+    {
         micPropModel = outputProps.transform.Find("microphone").gameObject;
-        outputProps.SetActive(true);
     }
 
     public override void ConfirmOutputBehaviour()
@@ -81,6 +72,7 @@ public class MakeSoundCard : OutputCard
         MicrophoneAnimation();
     }
 
+    
 
     private void StartRecording()
     {

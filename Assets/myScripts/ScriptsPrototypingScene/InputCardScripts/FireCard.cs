@@ -10,8 +10,8 @@ public class FireCard : InputCard
     private Image rangeImageRed;
     private Image rangeImageBlue;
     private Image rangeImageGreen;
-    private bool markerIsGrabbed = false;
     private float markerDistance;
+    private bool markerIsGrabbed = false;
 
     const float ALPHA_LOW = 0.2f;
     const float ALPHA_HIGH = 0.7f;
