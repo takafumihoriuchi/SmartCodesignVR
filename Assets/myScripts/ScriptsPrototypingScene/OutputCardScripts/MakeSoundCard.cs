@@ -11,10 +11,11 @@ public class MakeSoundCard : OutputCard
     private bool isRecording = false;
     private bool isExpanding = true;
     private float progress = 0.0f;
+    private Vector3 originalScale;
+    private Vector3 targetScale;
     private Vector3 updatedScale;
 
-    readonly Vector3 startScale = new Vector3(1.0f, 1.0f, 1.0f);
-    readonly Vector3 targetScale = new Vector3(1.1f, 1.1f, 1.1f);
+    readonly Vector3 expansionScale = new Vector3(1.1f, 1.1f, 1.1f);
     const float SPEED = 7.0f;
 
 
@@ -35,6 +36,8 @@ public class MakeSoundCard : OutputCard
     protected override void InitPropFields()
     {
         micPropModel = propObjects.transform.Find("microphone").gameObject;
+        originalScale = micPropModel.transform.localScale;
+        targetScale = Vector3.Scale(originalScale, expansionScale);
     }
 
 
@@ -109,14 +112,12 @@ public class MakeSoundCard : OutputCard
                 isExpanding = true;
             }
 
-            updatedScale = Vector3.Lerp(startScale, targetScale, progress);
+            updatedScale = Vector3.Lerp(originalScale, targetScale, progress);
             micPropModel.transform.localScale = updatedScale;
-            //micPropModel.transform.localScale = updatedScale;
         }
         else
         {
-            micPropModel.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            //micPropModel.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            micPropModel.transform.localScale = originalScale;
         }
     }
 
