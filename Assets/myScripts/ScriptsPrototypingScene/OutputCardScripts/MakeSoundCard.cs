@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Diagnostics;
 
 public class MakeSoundCard : OutputCard
 {
     private GameObject micPropModel;
     private AudioSource soundRecorder;
+    private Stopwatch stopWatch = new Stopwatch();
+    private float clipDuration;
     private bool isRecording = false;
     private bool isExpanding = true;
     private float progress = 0.0f;
@@ -29,8 +32,8 @@ public class MakeSoundCard : OutputCard
 
     protected override string InitDescriptionText()
     {
-        return "Play <color=red>[(empty)] " +
-            "(grab microphone and press and hold \"A\" to record)</color>";
+        return "Play <color=red>[(empty)]</color> " +
+            "(grab microphone and press and hold \"A\" to record)";
     }
 
     protected override void InitPropFields()
@@ -60,18 +63,22 @@ public class MakeSoundCard : OutputCard
         }
     }
 
+    
+
     public override void OutputBehaviour()
     {
-        //soundRecorder.Play(); // locking during previous Play() may not be necessary
-        Debug.Log("soundRecorder.isPlaying is " + soundRecorder.isPlaying);
+        if ((float)stopWatch.Elapsed.TotalSeconds >= clipDuration)
+        {
+            soundRecorder.Stop();
+            stopWatch.Reset();
+        }
         if (!soundRecorder.isPlaying)
         {
             soundRecorder.Play();
-            Debug.Log("called soundRecorder.Play()");
-
+            stopWatch.Start();
         }
-        Debug.Log("leaving OutputBehaviour()");
     }
+
 
     protected override void BehaviourDuringPrototyping()
     {
@@ -81,6 +88,7 @@ public class MakeSoundCard : OutputCard
         }
 
         if (OVRInput.GetDown(OVRInput.RawButton.X)) soundRecorder.Play();
+        // todo design the UX for this interaction
 
         MicrophoneAnimation();
     }
@@ -90,15 +98,19 @@ public class MakeSoundCard : OutputCard
     private void StartRecording()
     {
         soundRecorder = environmentObject.GetComponent<AudioSource>();
+        stopWatch.Start();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
-        statementTMP.SetText("Play <color=red>[recording in process...] (release \"A\" to end recording)</color>");
+        statementTMP.SetText("Play <color=red>[recording in process]</color>");
         isRecording = true;
     }
 
     private void SaveRecording()
     {
         Microphone.End("");
-        statementTMP.SetText("Play <color=red>[recorded] (recorded sound can be checked by pressing \"X\")</color>");
+        stopWatch.Stop();
+        clipDuration = (float)stopWatch.Elapsed.TotalSeconds;
+        stopWatch.Reset();
+        statementTMP.SetText("Play <color=red>[recorded]</color>");
         isRecording = false;
     }
 
