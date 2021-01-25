@@ -53,6 +53,7 @@ public class PrototypingSceneCore : MonoBehaviour
     private int instIdx = 0;
     // using list to make it scalable to handling multiple instances
 
+
     void Start()
     {
         DevelopmentPurposeAssign(); // make sure to delete after development
@@ -61,13 +62,11 @@ public class PrototypingSceneCore : MonoBehaviour
 
         inputProps = GetInPropsByName(CardSelectionMediator.selectionDict["input"]);
         inputInstances.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
-        inputInstances[instIdx].SetInputCondition(
-            ref environmentObject, ref inputSelectionText, inputConditionBox, inputProps);
+        inputInstances[instIdx].CardSetup(ref environmentObject, ref inputSelectionText, inputConditionBox, inputProps);
 
         outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
         outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
-        outputInstances[instIdx].SetOutputBehaviour(
-            ref environmentObject, ref outputSelectionText, outputBehaviourBox, outputProps);
+        outputInstances[instIdx].CardSetup(ref environmentObject, ref outputSelectionText, outputBehaviourBox, outputProps);
 
         confirmationBtn.onClick.AddListener(ConfirmSmartObject);
     }

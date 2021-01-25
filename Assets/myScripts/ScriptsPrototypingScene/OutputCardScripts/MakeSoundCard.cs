@@ -18,6 +18,7 @@ public class MakeSoundCard : OutputCard
     const float SPEED = 7.0f;
 
 
+
     public MakeSoundCard()
     {
         // executed before gameobjects are passed to this class instance
@@ -35,6 +36,8 @@ public class MakeSoundCard : OutputCard
     {
         micPropModel = propObjects.transform.Find("microphone").gameObject;
     }
+
+
 
     public override void ConfirmOutputBehaviour()
     {
@@ -58,7 +61,6 @@ public class MakeSoundCard : OutputCard
     {
         if (!soundRecorder.isPlaying) soundRecorder.Play();
     }
-
 
     protected override void BehaviourDuringPrototyping()
     {
