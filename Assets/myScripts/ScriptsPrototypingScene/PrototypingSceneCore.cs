@@ -102,7 +102,6 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         for (int i = 0; i <= instIdx; i++)
         {
-            Debug.Log("in ConfirmSmartObject()");
             inputInstances[i].ConfirmInputCondition();
             outputInstances[i].ConfirmOutputBehaviour();
         }

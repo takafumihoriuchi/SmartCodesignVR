@@ -64,14 +64,12 @@ public abstract class InputCard : Card
     public void ConfirmInputCondition() {
         isConfirmed = true;
         InputConditionDefinition = DetermineInputEvaluationDelegate();
-        Debug.Log("InputConditionDefinition was assigned to: " + InputConditionDefinition.Method.Name);
     }
 
     public void UpdateInputCondition() {
         UpdatesForInputConditionEvaluation();
         if (isConfirmed) {
             inputCondition = InputConditionDefinition();
-            //Debug.Log("inside UpdateInputCondition; inputCondition is " + inputCondition);
         }
         else BehaviourDuringPrototyping();
     }
