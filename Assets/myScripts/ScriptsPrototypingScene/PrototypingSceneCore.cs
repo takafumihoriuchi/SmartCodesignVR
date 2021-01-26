@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class CardSelectionMediator
 {
@@ -17,6 +18,11 @@ public class CardSelectionMediator
 
 public class PrototypingSceneCore : MonoBehaviour
 {
+    [SerializeField] private GameObject menuCanvas = null;
+    [SerializeField] private Button backToSceneButton = null;
+    [SerializeField] private Button closeMenuButton = null;
+    private bool menuIsOpened = false;
+
     [SerializeField] private Button confirmationBtn = null;
     // TODO enable "click" only when the parameters for input/output were adjusted
 
@@ -82,21 +88,44 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
         outputInstances[instIdx].CardSetup(ref environmentObject, ref outputSelectionText, outputBehaviourBox, outputProps);
 
+        // UI button settings
         confirmationBtn.onClick.AddListener(ConfirmSmartObject);
+        backToSceneButton.onClick.AddListener(LoadCardSelectionScene);
+        closeMenuButton.onClick.AddListener(CloseMenu);
     }
 
-  
+
     private void Update()
     {
         for (int i = 0; i <= instIdx; i++) {
             inputInstances[i].UpdateInputCondition();
             outputInstances[i].UpdateOutputBehaviour();
-            if (inputInstances[i].inputCondition)
-            {
+            if (inputInstances[i].inputCondition) {
                 outputInstances[i].OutputBehaviour();
             }
         }
+
+        if (OVRInput.GetDown(OVRInput.RawButton.Start)) {
+            if (!menuIsOpened) OpenMenu();
+            else CloseMenu();
+        }
     }
+
+    private void OpenMenu()
+    {
+        menuIsOpened = true;
+        menuCanvas.SetActive(true);
+    }
+    private void CloseMenu()
+    {
+        menuIsOpened = false;
+        menuCanvas.SetActive(false);
+    }
+    private void LoadCardSelectionScene()
+    {
+        SceneManager.LoadScene(1);
+    }
+
 
     private void ConfirmSmartObject()
     {
@@ -177,7 +206,7 @@ public class PrototypingSceneCore : MonoBehaviour
     private void DeactivateAllCardRepresentations()
     {
         GameObject[] cardRepresentations;
-        cardRepresentations = GameObject.FindGameObjectsWithTag("CardRepresentation");
+        cardRepresentations = GameObject.FindGameObjectsWithTag("DeactivateOnLoad");
         foreach (GameObject prop in cardRepresentations)
         {
             prop.SetActive(false);
