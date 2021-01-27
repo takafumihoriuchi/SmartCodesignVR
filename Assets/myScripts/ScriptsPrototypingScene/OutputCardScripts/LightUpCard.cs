@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using EventBridge;
+using System;
 
 public class LightUpCard : OutputCard
 {
@@ -22,8 +23,14 @@ public class LightUpCard : OutputCard
 
     IComponentEventHandler eventBridgeHandler;
 
+    Component[] envPartsComponent;
+    GameObject[] envPartsGameObject;
     Renderer brushTipRend;
-    Renderer envObjRend;
+    Material originalBrushMaterial;
+    Material[] originalEnvObjMaterial;
+    bool brushHasPaint = false;
+    bool brushHasWater = false;
+
 
     public LightUpCard()
     {
@@ -40,7 +47,15 @@ public class LightUpCard : OutputCard
     {
         paintBrush = propObjects.transform.Find("PaintBrush").gameObject;
         brushTip = paintBrush.transform.Find("brushTip").gameObject;
+        brushTipRend = brushTip.GetComponent<Renderer>();
+        originalBrushMaterial = brushTipRend.material;
+        envPartsComponent = environmentObject.GetComponentsInChildren<MeshRenderer>(true);
+        envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
+        originalEnvObjMaterial = GetMaterialArray(envPartsGameObject);
+        // todo store original materials of envObj in a dictionary
+        // make a dictionary
 
+        // not needed??
         paintBucket["red"] = propObjects.transform.Find("PaintBucketRed").gameObject;
         paintBucket["blue"] = propObjects.transform.Find("PaintBucketBlue").gameObject;
         paintBucket["yellow"] = propObjects.transform.Find("PaintBucketYellow").gameObject;
@@ -50,28 +65,78 @@ public class LightUpCard : OutputCard
         paintBucket["pink"] = propObjects.transform.Find("PaintBucketPink").gameObject;
         waterBucket = propObjects.transform.Find("WaterBucket").gameObject;
 
-        brushTipRend = brushTip.GetComponent<Renderer>();
-        envObjRend = environmentObject.GetComponent<Renderer>();
-
-        eventBridgeHandler = brushTip.RequestEventHandlers();
+        eventBridgeHandler = paintBrush.RequestEventHandlers();
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
         eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+
     }
 
+    // refactor later (put functions outside; this is a trigger event)
     void OnTriggerEnterBrushTip(Collider other)
     {
         string colliderName = other.transform.gameObject.name;
-        Debug.Log("(OnTrigger) other: " + other.transform.gameObject.name);
-        if (colliderName == "LEDPaint" || colliderName == "water")
+        if (colliderName == "LEDPaint")
         {
+            brushHasPaint = true;
+            brushHasWater = false;
+            brushTipRend.material = other.GetComponent<Renderer>().material;
+        }
+        if (colliderName == "water")
+        {
+            brushHasWater = true;
+            brushHasPaint = false;
             brushTipRend.material = other.GetComponent<Renderer>().material;
         }
     }
+
+    // refactor later (put functions outside; this is a trigger event)
     void OnCollisionEnterBrushTip(Collision other)
     {
-        Debug.Log("(OnCollision) other: " + other.transform.gameObject.name);
-        //if (other.transform.gameObject.name == )
+        if (!brushHasPaint && !brushHasWater) return; // no paint yet
+
+        int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
+        if (partIdx == -1) return; // not found; "other" is not envObj
+        Renderer envPartRend = envPartsGameObject[partIdx].GetComponent<Renderer>();
+
+        if (brushHasPaint)
+        {
+            envPartRend.material = brushTipRend.material;
+        }
+        else if (brushHasWater)
+        {
+            envPartRend.material = originalEnvObjMaterial[partIdx];
+            brushTipRend.material = originalBrushMaterial;
+            brushHasWater = false;
+        }
+
+
     }
+
+    GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
+    {
+        GameObject[] objArr = new GameObject[compArr.Length];
+        for (int i = 0; i < compArr.Length; i++)
+            objArr[i] = compArr[i].gameObject;
+        return objArr;
+    }
+
+    Material[] GetMaterialArray(GameObject[] objArr)
+    {
+        Material[] matArr = new Material[objArr.Length];
+        for (int i = 0; i < objArr.Length; i++)
+            matArr[i] = objArr[i].GetComponent<Renderer>().material;
+        return matArr;
+    }
+
+    //bool IsElementOfArray(GameObject key, GameObject[] arr)
+    //{
+    //    foreach (GameObject elm in arr)
+    //    {
+    //        if (elm == key) return true;
+    //    }
+    //    return false;
+    //}
+
 
     public override void ConfirmOutputBehaviour() { }
 
@@ -79,17 +144,14 @@ public class LightUpCard : OutputCard
 
     public override void OutputBehaviour() { }
 
-    bool brushHasPaint = false;
+    
 
 
     protected override void BehaviourDuringPrototyping()
     {
-        bool matOnBrushTip = false;
 
         // when tip of brush is triggered by paint, change tip material to paint material
 
-
-        matOnBrushTip = true;
 
         // when "tip" of paintBrush collided with paint in paintBucket
         // どの階層のオブジェクトにrigid-bodyを付ける必要があるのか
