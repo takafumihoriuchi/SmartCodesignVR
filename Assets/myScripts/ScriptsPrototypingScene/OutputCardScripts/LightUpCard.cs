@@ -6,28 +6,18 @@ using System;
 
 public class LightUpCard : OutputCard
 {
-    GameObject paintBrush;
-    GameObject brushTip;
-    Dictionary<string, GameObject> paintBucket
-        = new Dictionary<string, GameObject> {
-            {"red", null}, {"blue", null}, {"yellow", null},
-            {"green", null}, {"violet", null}, {"orange", null}, {"pink", null},
-        };
-    //Dictionary<string, GameObject> ledPaint
-    //    = new Dictionary<string, GameObject> {
-    //        {"red", null}, {"blue", null}, {"yellow", null},
-    //        {"green", null}, {"violet", null}, {"orange", null}, {"pink", null},
-    //    };
-    GameObject waterBucket;
-    GameObject water;
-
     IComponentEventHandler eventBridgeHandler;
 
-    Component[] envPartsComponent;
-    GameObject[] envPartsGameObject;
+    GameObject paintBrush;
+    GameObject brushTip;
     Renderer brushTipRend;
     Material originalBrushMaterial;
+
+    Component[] envPartsComponent;
+    GameObject[] envPartsGameObject; // used for output-behaviour
     Material[] originalEnvObjMaterial;
+    Material[] edittedEnvObjMaterial; // used for output-behaviour
+
     bool brushHasPaint = false;
     bool brushHasWater = false;
 
@@ -37,11 +27,14 @@ public class LightUpCard : OutputCard
         //
     }
 
+
     protected override string GetCardName() { return "Light Up"; }
+
 
     protected override string InitContentText() {
         return "Light up LED in <color=red>[color]</color> " +
             "(paint the " + environmentObject.name + " using the brush)"; }
+
 
     protected override void InitPropFields()
     {
@@ -49,29 +42,19 @@ public class LightUpCard : OutputCard
         brushTip = paintBrush.transform.Find("brushTip").gameObject;
         brushTipRend = brushTip.GetComponent<Renderer>();
         originalBrushMaterial = brushTipRend.material;
+
         envPartsComponent = environmentObject.GetComponentsInChildren<MeshRenderer>(true);
         envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
         originalEnvObjMaterial = GetMaterialArray(envPartsGameObject);
-        // todo store original materials of envObj in a dictionary
-        // make a dictionary
-
-        // not needed??
-        paintBucket["red"] = propObjects.transform.Find("PaintBucketRed").gameObject;
-        paintBucket["blue"] = propObjects.transform.Find("PaintBucketBlue").gameObject;
-        paintBucket["yellow"] = propObjects.transform.Find("PaintBucketYellow").gameObject;
-        paintBucket["green"] = propObjects.transform.Find("PaintBucketGreen").gameObject;
-        paintBucket["violet"] = propObjects.transform.Find("PaintBucketViolet").gameObject;
-        paintBucket["orange"] = propObjects.transform.Find("PaintBucketOrange").gameObject;
-        paintBucket["pink"] = propObjects.transform.Find("PaintBucketPink").gameObject;
-        waterBucket = propObjects.transform.Find("WaterBucket").gameObject;
+        edittedEnvObjMaterial = GetMaterialArray(envPartsGameObject);
 
         eventBridgeHandler = paintBrush.RequestEventHandlers();
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
         eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
-
     }
 
-    // refactor later (put functions outside; this is a trigger event)
+
+    // when brush is dipped in paint-bucket
     void OnTriggerEnterBrushTip(Collider other)
     {
         string colliderName = other.transform.gameObject.name;
@@ -89,33 +72,93 @@ public class LightUpCard : OutputCard
         }
     }
 
-    // refactor later (put functions outside; this is a trigger event)
+
+    // when brush is rubbed on envObj
     void OnCollisionEnterBrushTip(Collision other)
     {
-        if (!brushHasPaint && !brushHasWater) return; // no paint yet
+        // nothing on brush
+        if (!brushHasPaint && !brushHasWater) return;
 
         int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
-        if (partIdx == -1) return; // not found; "other" is not envObj
+        if (partIdx == -1) return; // not found
         Renderer envPartRend = envPartsGameObject[partIdx].GetComponent<Renderer>();
 
-        if (brushHasPaint)
+        if (brushHasPaint) // then put color on envbj
         {
             envPartRend.material = brushTipRend.material;
+            edittedEnvObjMaterial[partIdx] = brushTipRend.material;
         }
-        else if (brushHasWater)
+        else if (brushHasWater) // then erase color on envObj and brush
         {
             envPartRend.material = originalEnvObjMaterial[partIdx];
+            edittedEnvObjMaterial[partIdx] = originalEnvObjMaterial[partIdx];
             brushTipRend.material = originalBrushMaterial;
             brushHasWater = false;
         }
-
-
     }
+
+
+
+    public override void ConfirmOutputBehaviour()
+    {
+        isConfirmed = true;
+        eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
+        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
+        // todo when confirmation is canceled, add listeners again
+    }
+
+
+    public override void UpdateOutputBehaviour()
+    {
+        // all process taken care in trigger-events
+    }
+
+
+    public override void OutputBehaviour()
+    {
+        //int nParts = envPartsGameObject.Length;
+        //for (int i = 0; i < nParts; i++)
+        //{
+        //    envPartsGameObject[i].GetComponent<Renderer>().material
+        //        = edittedEnvObjMaterial[i];
+        //}
+        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+    }
+    
+
+    public override void OutputBehaviourNegative()
+    {
+        //int nParts = envPartsGameObject.Length;
+        //for (int i = 0; i < nParts; i++)
+        //{
+        //    envPartsGameObject[i].GetComponent<Renderer>().material
+        //        = originalEnvObjMaterial[i];
+        //}
+        ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+    }
+
+    // objArr.Length and matArr.Length should be the same
+    void ApplyMaterial(ref GameObject[] objArr, Material[] matArr)
+    {
+        int nParts = objArr.Length;
+        for (int i = 0; i < nParts; i++)
+        {
+            objArr[i].GetComponent<Renderer>().material
+                = matArr[i];
+        }
+    }
+
+    protected override void BehaviourDuringPrototyping()
+    {
+        // all process taken care in trigger-events
+    }
+
 
     GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
     {
         GameObject[] objArr = new GameObject[compArr.Length];
-        for (int i = 0; i < compArr.Length; i++)
+        int len = compArr.Length;
+        for (int i = 0; i < len; i++)
             objArr[i] = compArr[i].gameObject;
         return objArr;
     }
@@ -123,50 +166,11 @@ public class LightUpCard : OutputCard
     Material[] GetMaterialArray(GameObject[] objArr)
     {
         Material[] matArr = new Material[objArr.Length];
-        for (int i = 0; i < objArr.Length; i++)
+        int len = objArr.Length;
+        for (int i = 0; i < len; i++)
             matArr[i] = objArr[i].GetComponent<Renderer>().material;
         return matArr;
     }
-
-    //bool IsElementOfArray(GameObject key, GameObject[] arr)
-    //{
-    //    foreach (GameObject elm in arr)
-    //    {
-    //        if (elm == key) return true;
-    //    }
-    //    return false;
-    //}
-
-
-    public override void ConfirmOutputBehaviour() { }
-
-    public override void UpdateOutputBehaviour() { }
-
-    public override void OutputBehaviour() { }
-
-    
-
-
-    protected override void BehaviourDuringPrototyping()
-    {
-
-        // when tip of brush is triggered by paint, change tip material to paint material
-
-
-        // when "tip" of paintBrush collided with paint in paintBucket
-        // どの階層のオブジェクトにrigid-bodyを付ける必要があるのか
-
-        if (brushHasPaint)
-        {
-            // when collided with environmentObject,
-            // change material to the same as the tip of the brush
-            // mesh-renderer を持っている子オブジェクトまでenvObjを掘っていく必要ある
-            // if has component <Renderer> 風な処理が欲しい
-            // まずはenvObj全体のmaterialを一括で変更する処理にすればいい
-            // water が選択されたら、original material に戻す
-        }
-    }
-
 
 }
 

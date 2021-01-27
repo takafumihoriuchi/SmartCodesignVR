@@ -83,4 +83,5 @@ public abstract class OutputCard : Card
     public abstract void OutputBehaviour();
     public abstract void UpdateOutputBehaviour();
     public abstract void ConfirmOutputBehaviour();
+    public abstract void OutputBehaviourNegative();
 }

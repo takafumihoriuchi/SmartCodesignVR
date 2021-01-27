@@ -80,6 +80,12 @@ public class MakeSoundCard : OutputCard
     }
 
 
+    public override void OutputBehaviourNegative()
+    {
+        // todo Stop() when the inputCondition fails to hold true
+    }
+
+
     protected override void BehaviourDuringPrototyping()
     {
         if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed) {

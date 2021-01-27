@@ -17,6 +17,7 @@ public class SendCard : OutputCard
     public override void ConfirmOutputBehaviour() { }
     public override void UpdateOutputBehaviour() { }
     public override void OutputBehaviour() { }
+    public override void OutputBehaviourNegative() { }
     protected override void BehaviourDuringPrototyping() { }
 
 }

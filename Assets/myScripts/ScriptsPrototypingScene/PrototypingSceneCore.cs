@@ -102,6 +102,9 @@ public class PrototypingSceneCore : MonoBehaviour
             outputInstances[i].UpdateOutputBehaviour();
             if (inputInstances[i].inputCondition) {
                 outputInstances[i].OutputBehaviour();
+            } else
+            {
+                outputInstances[i].OutputBehaviourNegative();
             }
         }
 
