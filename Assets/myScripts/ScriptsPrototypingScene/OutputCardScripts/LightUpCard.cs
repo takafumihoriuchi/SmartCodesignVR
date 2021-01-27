@@ -53,8 +53,6 @@ public class LightUpCard : OutputCard
         brushTipRend = brushTip.GetComponent<Renderer>();
         envObjRend = environmentObject.GetComponent<Renderer>();
 
-        //eventBridgeHandler = paintBrush.RequestEventHandlers();
-        // => todo "paintBrush"にしたら検知された。brushTipをpaintBrushと同じ形式に変換できないか
         eventBridgeHandler = brushTip.RequestEventHandlers();
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
         eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
@@ -66,8 +64,7 @@ public class LightUpCard : OutputCard
         Debug.Log("(OnTrigger) other: " + other.transform.gameObject.name);
         if (colliderName == "LEDPaint" || colliderName == "water")
         {
-            //brushTipRend.material = other.GetComponent<Renderer>().material;
-            //brushTipRend.sharedMaterial = other.GetComponent<Renderer>().sharedMaterial;
+            brushTipRend.material = other.GetComponent<Renderer>().material;
         }
     }
     void OnCollisionEnterBrushTip(Collision other)
