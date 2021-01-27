@@ -63,7 +63,7 @@ public class LightUpCard : OutputCard
     void OnTriggerEnterBrushTip(Collider other)
     {
         string colliderName = other.transform.gameObject.name;
-        Debug.Log("(OnTrigger) other.transform.gameObject.name: " + other.transform.gameObject.name);
+        Debug.Log("(OnTrigger) other: " + other.transform.gameObject.name);
         if (colliderName == "LEDPaint" || colliderName == "water")
         {
             //brushTipRend.material = other.GetComponent<Renderer>().material;
@@ -72,7 +72,7 @@ public class LightUpCard : OutputCard
     }
     void OnCollisionEnterBrushTip(Collision other)
     {
-        Debug.Log("(OnCollision) other.transform.gameObject.name: " + other.transform.gameObject.name);
+        Debug.Log("(OnCollision) other: " + other.transform.gameObject.name);
         //if (other.transform.gameObject.name == )
     }
 
