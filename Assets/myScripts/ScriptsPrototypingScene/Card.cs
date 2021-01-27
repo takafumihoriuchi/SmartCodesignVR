@@ -18,7 +18,7 @@ public abstract class Card
     protected abstract void BehaviourDuringPrototyping();
 
     protected abstract string GetCardName();
-    protected abstract string InitDescriptionText();
+    protected abstract string InitContentText();
     protected abstract void InitPropFields();
 
     public void CardSetup(ref GameObject environmentObject,
@@ -34,9 +34,9 @@ public abstract class Card
         this.cardNameText.SetActive(true);
 
         this.statementBox = statementBox;
-        statementTMP = this.statementBox.transform.Find("DescriptionText")
+        statementTMP = this.statementBox.transform.Find("ContentText")
             .gameObject.GetComponent<TextMeshProUGUI>();
-        statementTMP.SetText(InitDescriptionText());
+        statementTMP.SetText(InitContentText());
         this.statementBox.SetActive(true);
         // need to adjust transform.position when PrototypingSceneCore.instIdx >= 1
 

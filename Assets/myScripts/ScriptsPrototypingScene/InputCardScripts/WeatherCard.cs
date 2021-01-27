@@ -7,7 +7,7 @@ public class WeatherCard : InputCard
 
     public WeatherCard() { }
     protected override string GetCardName() { return "Weather"; }
-    protected override string InitDescriptionText() { return ""; }
+    protected override string InitContentText() { return ""; }
     protected override void InitPropFields() { }
     protected override InputConditionDelegate DetermineInputEvaluationDelegate() { return null; }
     protected override void UpdatesForInputConditionEvaluation() { }

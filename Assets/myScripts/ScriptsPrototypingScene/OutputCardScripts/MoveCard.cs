@@ -11,7 +11,7 @@ public class MoveCard : OutputCard
     }
 
     protected override string GetCardName() { return "Move"; }
-    protected override string InitDescriptionText() { return ""; }
+    protected override string InitContentText() { return ""; }
     protected override void InitPropFields() { }
     public override void ConfirmOutputBehaviour() { }
     public override void UpdateOutputBehaviour() { }

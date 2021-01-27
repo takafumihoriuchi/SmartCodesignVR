@@ -25,7 +25,7 @@ public class FireCard : InputCard
 
     protected override string GetCardName() { return "Fire"; }
 
-    protected override string InitDescriptionText() {
+    protected override string InitContentText() {
         return "If fire is <color=red>[(distance)]</color> " +
             "(grab fire and place at disired distance)"; }
 

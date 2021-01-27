@@ -63,7 +63,7 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         CardSelectionMediator.selectionDict["environment"] = "TrashBin";
         CardSelectionMediator.selectionDict["input"] = "Fire";
-        CardSelectionMediator.selectionDict["output"] = "MakeSound";
+        CardSelectionMediator.selectionDict["output"] = "LightUp";
 
         Debug.Log("[env, in, out] = ["
             + CardSelectionMediator.selectionDict["environment"] + ", "
