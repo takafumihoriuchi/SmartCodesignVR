@@ -50,39 +50,38 @@ public class LightUpCard : OutputCard
 
         eventBridgeHandler = paintBrush.RequestEventHandlers();
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
-        eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+        //eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
     }
 
 
-    // when brush is dipped in paint-bucket
+
     void OnTriggerEnterBrushTip(Collider other)
     {
         string colliderName = other.transform.gameObject.name;
+
+        // check if triggered on paint bucket
         if (colliderName == "LEDPaint")
         {
             brushHasPaint = true;
             brushHasWater = false;
             brushTipRend.material = other.GetComponent<Renderer>().material;
+            return;
         }
+        // check if triggered on water bucket
         if (colliderName == "water")
         {
             brushHasWater = true;
             brushHasPaint = false;
             brushTipRend.material = other.GetComponent<Renderer>().material;
+            return;
         }
-    }
 
-
-    // when brush is rubbed on envObj
-    void OnCollisionEnterBrushTip(Collision other)
-    {
-        // nothing on brush
-        if (!brushHasPaint && !brushHasWater) return;
-
-        int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
+        // check if triggered on envObj
+        if (!brushHasPaint && !brushHasWater) return; // nothing on brush
+        int partIdx = Array.IndexOf(envPartsGameObject, other.transform.gameObject);
         if (partIdx == -1) return; // not found
-        Renderer envPartRend = other.gameObject.GetComponent<Renderer>();
-
+        Debug.Log("Collided with: " + other.transform.gameObject.name);
+        Renderer envPartRend = other.transform.gameObject.GetComponent<Renderer>();
         if (brushHasPaint) // then put color on envbj
         {
             envPartRend.material = brushTipRend.material;
@@ -98,12 +97,37 @@ public class LightUpCard : OutputCard
     }
 
 
+    // when brush is rubbed on envObj
+    //void OnCollisionEnterBrushTip(Collision other)
+    //{
+    //    // nothing on brush
+    //    if (!brushHasPaint && !brushHasWater) return;
+
+    //    int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
+    //    if (partIdx == -1) return; // not found
+    //    Renderer envPartRend = other.gameObject.GetComponent<Renderer>();
+
+    //    if (brushHasPaint) // then put color on envbj
+    //    {
+    //        envPartRend.material = brushTipRend.material;
+    //        edittedEnvObjMaterial[partIdx] = brushTipRend.material;
+    //    }
+    //    else if (brushHasWater) // then erase color on envObj and brush
+    //    {
+    //        envPartRend.material = originalEnvObjMaterial[partIdx];
+    //        edittedEnvObjMaterial[partIdx] = originalEnvObjMaterial[partIdx];
+    //        brushTipRend.material = originalBrushMaterial;
+    //        brushHasWater = false;
+    //    }
+    //}
+
+
 
     public override void ConfirmOutputBehaviour()
     {
         isConfirmed = true;
         eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
-        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
+        //eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
         // todo when confirmation is canceled, add listeners again
     }
 
