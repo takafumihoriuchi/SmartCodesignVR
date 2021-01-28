@@ -24,11 +24,8 @@ public class LightUpCard : OutputCard
 
     public LightUpCard()
     {
-        //
+        cardName = "Light Up";
     }
-
-
-    protected override string GetCardName() { return "Light Up"; }
 
     protected override string SetDescriptionField()
     {

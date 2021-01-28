@@ -16,11 +16,12 @@ public abstract class Card
     protected GameObject statementFieldGroup;
     protected TextMeshProUGUI statementTMP;
 
+    protected string cardName;
     protected bool isConfirmed;
 
     protected abstract void BehaviourDuringPrototyping();
 
-    protected abstract string GetCardName();
+    //protected abstract string GetCardName();
     protected abstract string SetDescriptionField();
 
     protected abstract void InitPropFields();
@@ -32,7 +33,7 @@ public abstract class Card
     {
         this.cardNameField = cardNameField;
         cardNameFieldTMP = this.cardNameField.GetComponent<TextMeshProUGUI>();
-        cardNameFieldTMP.SetText(GetCardName());
+        cardNameFieldTMP.SetText(cardName);
         this.cardNameField.SetActive(true);
 
         this.descriptionField = descriptionField;
@@ -71,6 +72,8 @@ public abstract class Card
 
 public abstract class InputCard : Card
 {
+    protected int maxInstanceNum;
+
     [HideInInspector] public bool inputCondition = false;
 
     protected delegate bool InputConditionDelegate();

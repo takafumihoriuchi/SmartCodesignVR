@@ -122,6 +122,7 @@ public class PrototypingSceneCore : MonoBehaviour
         // todo AddListener to AddInstance and RemoveInstance
     }
 
+    // AddInstance (compare with inputInstances[0].maxInstanceNum if allowed to generate new)
 
     private void Update()
     {

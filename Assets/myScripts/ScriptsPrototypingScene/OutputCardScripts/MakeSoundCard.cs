@@ -26,9 +26,8 @@ public class MakeSoundCard : OutputCard
     public MakeSoundCard()
     {
         // executed before gameobjects are passed to this class instance
+        cardName = "Make Sound";
     }
-
-    protected override string GetCardName() { return "Make Sound"; }
 
     protected override string SetDescriptionField()
     {

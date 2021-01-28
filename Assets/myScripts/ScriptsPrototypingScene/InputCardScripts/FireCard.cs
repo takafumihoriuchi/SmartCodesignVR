@@ -21,9 +21,9 @@ public class FireCard : InputCard
     public FireCard()
     {
         // executed before gameobjects are passed to this class instance
+        maxInstanceNum = 3; // setting unique for InputCards
+        cardName = "Fire";
     }
-
-    protected override string GetCardName() { return "Fire"; }
 
     protected override string SetDescriptionField()
     {
