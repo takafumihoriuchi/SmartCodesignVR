@@ -13,8 +13,8 @@ public class FireCard : InputCard
     private float markerDistance;
     private bool markerIsGrabbed = false;
 
-    const float ALPHA_LOW = 0.2f;
-    const float ALPHA_HIGH = 0.7f;
+    const float ALPHA_LOW = 0.1f;
+    const float ALPHA_HIGH = 0.5f;
     const float BOUNDARY_SM = 1.0f;
     const float BOUNDARY_ML = 2.2f;
 
