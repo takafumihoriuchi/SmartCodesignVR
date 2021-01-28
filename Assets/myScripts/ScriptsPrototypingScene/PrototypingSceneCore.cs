@@ -25,6 +25,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
     [SerializeField] private Button confirmationBtn = null;
     // TODO enable "click" only when the parameters for input/output were adjusted
+    bool confirmed = false;
 
     [SerializeField] private GameObject envObjTrashBin = null;
     [SerializeField] private GameObject envObjTree = null;
@@ -100,11 +101,15 @@ public class PrototypingSceneCore : MonoBehaviour
         for (int i = 0; i <= instIdx; i++) {
             inputInstances[i].UpdateInputCondition();
             outputInstances[i].UpdateOutputBehaviour();
-            if (inputInstances[i].inputCondition) {
-                outputInstances[i].OutputBehaviour();
-            } else
-            {
-                outputInstances[i].OutputBehaviourNegative();
+        }
+
+        if (confirmed) {
+            for (int i = 0; i <= instIdx; i++) {
+                if (inputInstances[i].inputCondition) {
+                    outputInstances[i].OutputBehaviour();
+                } else {
+                    outputInstances[i].OutputBehaviourNegative();
+                }
             }
         }
 
@@ -134,6 +139,7 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         for (int i = 0; i <= instIdx; i++)
         {
+            confirmed = true;
             inputInstances[i].ConfirmInputCondition();
             outputInstances[i].ConfirmOutputBehaviour();
         }

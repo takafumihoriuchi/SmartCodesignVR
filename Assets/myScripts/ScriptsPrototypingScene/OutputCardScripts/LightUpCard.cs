@@ -81,7 +81,7 @@ public class LightUpCard : OutputCard
 
         int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
         if (partIdx == -1) return; // not found
-        Renderer envPartRend = envPartsGameObject[partIdx].GetComponent<Renderer>();
+        Renderer envPartRend = other.gameObject.GetComponent<Renderer>();
 
         if (brushHasPaint) // then put color on envbj
         {
