@@ -46,8 +46,6 @@ public class PrototypingSceneCore : MonoBehaviour
     [SerializeField] private GameObject outputCardNameField = null;
     [SerializeField] private GameObject inputDescriptionField = null;
     [SerializeField] private GameObject outputDescriptionField = null;
-    [SerializeField] private GameObject inputDiagramImage = null;
-    [SerializeField] private GameObject outputDiagramImage = null;
 
     [SerializeField] private GameObject inputStatementFieldGroup = null; // type:Button
     [SerializeField] private GameObject outputStatementFieldGroup = null; // type:Button
@@ -102,7 +100,7 @@ public class PrototypingSceneCore : MonoBehaviour
         inputProps = GetInPropsByName(CardSelectionMediator.selectionDict["input"]);
         inputInstances.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
         inputInstances[instanceIdx].CardDescriptionSetup(
-            ref inputCardNameField, ref inputDescriptionField, ref inputDiagramImage);
+            ref inputCardNameField, ref inputDescriptionField);
         inputInstances[instanceIdx].CardStatementSetup(
             ref environmentObject, ref inputProps, inputStatementFieldGroup);
         // todo "inputStatementFieldGroup"は値渡しになっている？参照になっているような気がしている
@@ -110,7 +108,7 @@ public class PrototypingSceneCore : MonoBehaviour
         outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
         outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
         outputInstances[instanceIdx].CardDescriptionSetup(
-            ref outputCardNameField, ref outputDescriptionField, ref outputDiagramImage);
+            ref outputCardNameField, ref outputDescriptionField);
         outputInstances[instanceIdx].CardStatementSetup(
             ref environmentObject, ref outputProps, outputStatementFieldGroup);
 
@@ -120,6 +118,8 @@ public class PrototypingSceneCore : MonoBehaviour
 
         backToSceneButton.onClick.AddListener(LoadCardSelectionScene);
         closeMenuButton.onClick.AddListener(CloseMenu);
+
+        // todo AddListener to AddInstance and RemoveInstance
     }
 
 
