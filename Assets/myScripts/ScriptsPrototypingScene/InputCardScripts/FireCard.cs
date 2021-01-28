@@ -20,31 +20,30 @@ public class FireCard : InputCard
 
     public FireCard()
     {
-        // executed before gameobjects are passed to this class instance
         maxInstanceNum = 3; // setting unique for InputCards
         cardName = "Fire";
+        descriptionText
+            = "Specifies the distance of fire from the object." +
+            "Steps:" +
+            "1. <indent=15%>Grab the fire by holding the trigger on controller.</indent>" +
+            "2. <indent=15%>Move it near/away to the object.</indent>" +
+            "3. <indent=15%>Release the fire on the ground.</indent>" +
+            "Maximum number of instances: 3";
+        contentText = "When I see fire in distance";
     }
-
-    protected override string SetDescriptionField()
-    {
-        return "(some descriptions)";
-    }
-
-    protected override string InitContentText() {
-        return "If fire is <color=red>[(distance)]</color> " +
-            "(grab fire and place at disired distance)"; }
 
     protected override void InitPropFields()
     {
         markerObj = propObjects.transform.Find("marker").gameObject;
-        GameObject tmpCanvasObj = propObjects.transform.Find("floorCanvas").gameObject;
+        GameObject tmpCanvasObj = propObjects.transform.Find("floorCanvas").gameObject; // *
         rangeImageRed = tmpCanvasObj.transform.
-            Find("tmpImageRed").gameObject.GetComponent<Image>();
+            Find("tmpImageRed").gameObject.GetComponent<Image>(); // *
         rangeImageBlue = tmpCanvasObj.transform.
-            Find("tmpImageBlue").gameObject.GetComponent<Image>();
+            Find("tmpImageBlue").gameObject.GetComponent<Image>(); // *
         rangeImageGreen = tmpCanvasObj.transform.
-            Find("tmpImageGreen").gameObject.GetComponent<Image>();
+            Find("tmpImageGreen").gameObject.GetComponent<Image>(); // *
         SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
+        // todo * can be rewritten as: rangeImageRed = propObjects.transform.Find("floorCanvas/tmpImageRed").gameObject.GetComponent<Image>();
     }
 
     protected override InputConditionDelegate DetermineInputEvaluationDelegate()
@@ -70,16 +69,13 @@ public class FireCard : InputCard
 
         if (DetectDistanceShort()) {
             SetRangeOpacity(ALPHA_HIGH, ALPHA_LOW, ALPHA_LOW);
-            statementTMP.SetText(
-                "If fire is <color=red>[short-distance]</color>");
+            variableTextTMP.SetText("very close");
         } else if (DetectDistanceLong()) {
             SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_HIGH);
-            statementTMP.SetText(
-                "If fire is <color=red>[long-distance]</color>");
+            variableTextTMP.SetText("close by");
         } else if (DetectDistanceMid()) {
             SetRangeOpacity(ALPHA_LOW, ALPHA_HIGH, ALPHA_LOW);
-            statementTMP.SetText(
-                "If fire is <color=red>[mid-distance]</color>");
+            variableTextTMP.SetText("far away");
         }
     }
 

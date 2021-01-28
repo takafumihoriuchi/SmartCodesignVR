@@ -110,7 +110,7 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstances[instanceIdx].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
         outputInstances[instanceIdx].CardStatementSetup(
-            ref environmentObject, ref outputProps, outputStatementFieldGroup);
+            ref environmentObject, ref outputProps, outputStatementFieldGroup, instanceIdx);
 
         // UI button settings
 

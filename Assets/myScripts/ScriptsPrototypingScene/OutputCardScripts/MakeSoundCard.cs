@@ -27,17 +27,15 @@ public class MakeSoundCard : OutputCard
     {
         // executed before gameobjects are passed to this class instance
         cardName = "Make Sound";
-    }
-
-    protected override string SetDescriptionField()
-    {
-        return "(some descriptions)";
-    }
-
-    protected override string InitContentText()
-    {
-        return "Play <color=red>[(empty)]</color> " +
-            "(grab microphone and press and hold \"A\" to record)";
+        descriptionText
+            = "Plays sound that was recorded." +
+            "Steps:" +
+            "1. <indent=15%>Grab the microphone.</indent>" +
+            "2. <indent=15%>Press and hold A-button to start recording.</indent>" +
+            "3. <indent=15%>Release A-button to finish recording.</indent>" +
+            "4. <indent=15%>Check recorded sound by pressing X-button.</indent>" +
+            "Sound can be re-recorded by following the same steps.";
+        contentText = "play the recorded sound.";
     }
 
     protected override void InitPropFields()
@@ -110,7 +108,7 @@ public class MakeSoundCard : OutputCard
         soundRecorder = environmentObject.GetComponent<AudioSource>();
         stopWatch.Start();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
-        statementTMP.SetText("Play <color=red>[recording in process]</color>");
+        variableTextTMP.SetText("[recording...]");
         isRecording = true;
     }
 
@@ -120,7 +118,7 @@ public class MakeSoundCard : OutputCard
         stopWatch.Stop();
         clipDuration = (float)stopWatch.Elapsed.TotalSeconds;
         stopWatch.Reset();
-        statementTMP.SetText("Play <color=red>[recorded]</color>");
+        variableTextTMP.SetText("[recorded]");
         isRecording = false;
     }
 

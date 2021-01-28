@@ -21,20 +21,22 @@ public class LightUpCard : OutputCard
     bool brushHasPaint = false;
     bool brushHasWater = false;
 
+    int paintCount = 0;
+
 
     public LightUpCard()
     {
         cardName = "Light Up";
+        descriptionText
+            = "I can light up LED in different colors." +
+            "Steps:" +
+            "1. <indent=15%>Pickup paint brush with the trigger button.</indent>" +
+            "2. <indent=15%>Dip paint brush in paint bucket.</indent>" +
+            "3. <indent=15%>Rub the paint on the object.</indent>" +
+            "*. <indent=15%>Different parts can be set to different colors.</indent>" +
+            "*. <indent=15%>Paint can be removed by putting \"water\" on the object.</indent>";
+        contentText = "turn on LED lights in the colors of";
     }
-
-    protected override string SetDescriptionField()
-    {
-        return "(some descriptions)";
-    }
-
-    protected override string InitContentText() {
-        return "Light up LED in <color=red>[color]</color> " +
-            "(paint the " + environmentObject.name + " using the brush)"; }
 
 
     protected override void InitPropFields()
@@ -90,6 +92,11 @@ public class LightUpCard : OutputCard
         {
             envPartRend.material = brushTipRend.material;
             edittedEnvObjMaterial[partIdx] = brushTipRend.material;
+
+            if (paintCount == 0) { // todo refactor
+                variableTextTMP.SetText("painted"); // <= only for filling in the box
+            }
+            paintCount++;
         }
         else if (brushHasWater) // then erase color on envObj and brush
         {
@@ -97,6 +104,11 @@ public class LightUpCard : OutputCard
             edittedEnvObjMaterial[partIdx] = originalEnvObjMaterial[partIdx];
             brushTipRend.material = originalBrushMaterial;
             brushHasWater = false;
+            paintCount--;
+            if (paintCount == 0)
+            {
+                variableTextTMP.SetText("");
+            }
         }
     }
 
