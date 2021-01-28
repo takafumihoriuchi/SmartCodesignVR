@@ -14,9 +14,9 @@ public class LightUpCard : OutputCard
     Material originalBrushMaterial;
 
     Component[] envPartsComponent;
-    GameObject[] envPartsGameObject; // used for output-behaviour
+    GameObject[] envPartsGameObject;
     Material[] originalEnvObjMaterial;
-    Material[] edittedEnvObjMaterial; // used for output-behaviour
+    Material[] edittedEnvObjMaterial;
 
     bool brushHasPaint = false;
     bool brushHasWater = false;
@@ -50,38 +50,41 @@ public class LightUpCard : OutputCard
 
         eventBridgeHandler = paintBrush.RequestEventHandlers();
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
-        //eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+        eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
     }
 
 
-
+    // when brush is dipped in the buckets
     void OnTriggerEnterBrushTip(Collider other)
     {
         string colliderName = other.transform.gameObject.name;
-
-        // check if triggered on paint bucket
-        if (colliderName == "LEDPaint")
+        if (colliderName == "LEDPaint") // check if triggered on paint bucket
         {
             brushHasPaint = true;
             brushHasWater = false;
             brushTipRend.material = other.GetComponent<Renderer>().material;
             return;
         }
-        // check if triggered on water bucket
-        if (colliderName == "water")
+        if (colliderName == "water") // check if triggered on water bucket
         {
             brushHasWater = true;
             brushHasPaint = false;
             brushTipRend.material = other.GetComponent<Renderer>().material;
             return;
         }
+    }
 
-        // check if triggered on envObj
-        if (!brushHasPaint && !brushHasWater) return; // nothing on brush
-        int partIdx = Array.IndexOf(envPartsGameObject, other.transform.gameObject);
+
+    // when brush is rubbed on envObj
+    void OnCollisionEnterBrushTip(Collision other)
+    {
+        // nothing on brush
+        if (!brushHasPaint && !brushHasWater) return;
+
+        int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
         if (partIdx == -1) return; // not found
-        Debug.Log("Collided with: " + other.transform.gameObject.name);
-        Renderer envPartRend = other.transform.gameObject.GetComponent<Renderer>();
+        Renderer envPartRend = other.gameObject.GetComponent<Renderer>();
+
         if (brushHasPaint) // then put color on envbj
         {
             envPartRend.material = brushTipRend.material;
@@ -97,37 +100,12 @@ public class LightUpCard : OutputCard
     }
 
 
-    // when brush is rubbed on envObj
-    //void OnCollisionEnterBrushTip(Collision other)
-    //{
-    //    // nothing on brush
-    //    if (!brushHasPaint && !brushHasWater) return;
-
-    //    int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
-    //    if (partIdx == -1) return; // not found
-    //    Renderer envPartRend = other.gameObject.GetComponent<Renderer>();
-
-    //    if (brushHasPaint) // then put color on envbj
-    //    {
-    //        envPartRend.material = brushTipRend.material;
-    //        edittedEnvObjMaterial[partIdx] = brushTipRend.material;
-    //    }
-    //    else if (brushHasWater) // then erase color on envObj and brush
-    //    {
-    //        envPartRend.material = originalEnvObjMaterial[partIdx];
-    //        edittedEnvObjMaterial[partIdx] = originalEnvObjMaterial[partIdx];
-    //        brushTipRend.material = originalBrushMaterial;
-    //        brushHasWater = false;
-    //    }
-    //}
-
-
 
     public override void ConfirmOutputBehaviour()
     {
         isConfirmed = true;
         eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
-        //eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
+        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
         // todo when confirmation is canceled, add listeners again
     }
 
@@ -140,24 +118,12 @@ public class LightUpCard : OutputCard
 
     public override void OutputBehaviour()
     {
-        //int nParts = envPartsGameObject.Length;
-        //for (int i = 0; i < nParts; i++)
-        //{
-        //    envPartsGameObject[i].GetComponent<Renderer>().material
-        //        = edittedEnvObjMaterial[i];
-        //}
         ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
     }
     
 
     public override void OutputBehaviourNegative()
     {
-        //int nParts = envPartsGameObject.Length;
-        //for (int i = 0; i < nParts; i++)
-        //{
-        //    envPartsGameObject[i].GetComponent<Renderer>().material
-        //        = originalEnvObjMaterial[i];
-        //}
         ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
     }
 
@@ -174,7 +140,7 @@ public class LightUpCard : OutputCard
 
     protected override void BehaviourDuringPrototyping()
     {
-        // all process taken care in trigger-events
+        // all processes are taken care in the trigger-events
     }
 
 
@@ -203,3 +169,28 @@ public class LightUpCard : OutputCard
 // todo insert these to disable the trigger events of brushTip
 // eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
 // eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip; 
+
+/*
+
+// ideally, make brush tip "onTrigger" and do everything in OnTriggerBrushTip()
+// check if triggered on envObj
+
+if (!brushHasPaint && !brushHasWater) return; // nothing on brush
+int partIdx = Array.IndexOf(envPartsGameObject, other.transform.gameObject);
+if (partIdx == -1) return; // not found
+Debug.Log("Collided with: " + other.transform.gameObject.name);
+Renderer envPartRend = other.transform.gameObject.GetComponent<Renderer>();
+if (brushHasPaint) // then put color on envbj
+{
+    envPartRend.material = brushTipRend.material;
+    edittedEnvObjMaterial[partIdx] = brushTipRend.material;
+}
+else if (brushHasWater) // then erase color on envObj and brush
+{
+    envPartRend.material = originalEnvObjMaterial[partIdx];
+    edittedEnvObjMaterial[partIdx] = originalEnvObjMaterial[partIdx];
+    brushTipRend.material = originalBrushMaterial;
+    brushHasWater = false;
+}
+ 
+ */
