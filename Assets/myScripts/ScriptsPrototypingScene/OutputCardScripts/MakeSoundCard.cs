@@ -30,6 +30,11 @@ public class MakeSoundCard : OutputCard
 
     protected override string GetCardName() { return "Make Sound"; }
 
+    protected override string SetDescriptionField()
+    {
+        return "(some descriptions)";
+    }
+
     protected override string InitContentText()
     {
         return "Play <color=red>[(empty)]</color> " +

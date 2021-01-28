@@ -30,6 +30,10 @@ public class LightUpCard : OutputCard
 
     protected override string GetCardName() { return "Light Up"; }
 
+    protected override string SetDescriptionField()
+    {
+        return "(some descriptions)";
+    }
 
     protected override string InitContentText() {
         return "Light up LED in <color=red>[color]</color> " +

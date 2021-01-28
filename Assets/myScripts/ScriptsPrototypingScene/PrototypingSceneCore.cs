@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+
 public class CardSelectionMediator
 {
     // parameters are set in CardSelectionScene
@@ -18,14 +19,7 @@ public class CardSelectionMediator
 
 public class PrototypingSceneCore : MonoBehaviour
 {
-    [SerializeField] private GameObject menuCanvas = null;
-    [SerializeField] private Button backToSceneButton = null;
-    [SerializeField] private Button closeMenuButton = null;
-    private bool menuIsOpened = false;
-
-    [SerializeField] private Button confirmationBtn = null;
-    // TODO enable "click" only when the parameters for input/output were adjusted
-    bool confirmed = false;
+    // Environment Objects
 
     [SerializeField] private GameObject envObjTrashBin = null;
     [SerializeField] private GameObject envObjTree = null;
@@ -45,17 +39,41 @@ public class PrototypingSceneCore : MonoBehaviour
     [SerializeField] private GameObject outPropsMove = null;
     [SerializeField] private GameObject outPropsSend = null;
 
-    [SerializeField] private GameObject inputSelectionText = null;
-    [SerializeField] private GameObject inputConditionBox = null;
-    [SerializeField] private GameObject outputSelectionText = null;
-    [SerializeField] private GameObject outputBehaviourBox = null;
+
+    // IO Canvas Fileds
+
+    [SerializeField] private GameObject inputCardNameField = null;
+    [SerializeField] private GameObject outputCardNameField = null;
+    [SerializeField] private GameObject inputDescriptionField = null;
+    [SerializeField] private GameObject outputDescriptionField = null;
+    [SerializeField] private GameObject inputDiagramImage = null;
+    [SerializeField] private GameObject outputDiagramImage = null;
+
+    [SerializeField] private GameObject inputStatementFieldGroup = null; // type:Button
+    [SerializeField] private GameObject outputStatementFieldGroup = null; // type:Button
+
+    [SerializeField] private Button addInstanceButton = null;
+    [SerializeField] private Button removeInstanceButton = null;
+
+
+    // Confirmation Canvas Fields
+
+    // TODO enable "click" only when the parameters for input/output were adjusted
+    // also serialize "back to edit" button, "text-field"
+    [SerializeField] private Button confirmationBtn = null;
+    bool confirmed = false;
+
+    [SerializeField] private GameObject menuCanvas = null;
+    [SerializeField] private Button backToSceneButton = null;
+    [SerializeField] private Button closeMenuButton = null;
+    private bool menuIsOpened = false;
 
     private GameObject environmentObject;
     private GameObject inputProps;
     private GameObject outputProps;
     private List<InputCard> inputInstances = new List<InputCard>();
     private List<OutputCard> outputInstances = new List<OutputCard>();
-    private int instIdx = 0;
+    private int instanceIdx = 0;
     // using list to make it scalable to handling multiple instances
 
 
@@ -83,14 +101,23 @@ public class PrototypingSceneCore : MonoBehaviour
 
         inputProps = GetInPropsByName(CardSelectionMediator.selectionDict["input"]);
         inputInstances.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
-        inputInstances[instIdx].CardSetup(ref environmentObject, ref inputSelectionText, inputConditionBox, inputProps);
+        inputInstances[instanceIdx].CardDescriptionSetup(
+            ref inputCardNameField, ref inputDescriptionField, ref inputDiagramImage);
+        inputInstances[instanceIdx].CardStatementSetup(
+            ref environmentObject, ref inputProps, inputStatementFieldGroup);
+        // todo "inputStatementFieldGroup"は値渡しになっている？参照になっているような気がしている
 
         outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
         outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
-        outputInstances[instIdx].CardSetup(ref environmentObject, ref outputSelectionText, outputBehaviourBox, outputProps);
+        outputInstances[instanceIdx].CardDescriptionSetup(
+            ref outputCardNameField, ref outputDescriptionField, ref outputDiagramImage);
+        outputInstances[instanceIdx].CardStatementSetup(
+            ref environmentObject, ref outputProps, outputStatementFieldGroup);
 
         // UI button settings
+
         confirmationBtn.onClick.AddListener(ConfirmSmartObject);
+
         backToSceneButton.onClick.AddListener(LoadCardSelectionScene);
         closeMenuButton.onClick.AddListener(CloseMenu);
     }
@@ -98,13 +125,13 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private void Update()
     {
-        for (int i = 0; i <= instIdx; i++) {
+        for (int i = 0; i <= instanceIdx; i++) {
             inputInstances[i].UpdateInputCondition();
             outputInstances[i].UpdateOutputBehaviour();
         }
 
         if (confirmed) {
-            for (int i = 0; i <= instIdx; i++) {
+            for (int i = 0; i <= instanceIdx; i++) {
                 if (inputInstances[i].inputCondition) {
                     outputInstances[i].OutputBehaviour();
                 } else {
@@ -137,7 +164,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private void ConfirmSmartObject()
     {
-        for (int i = 0; i <= instIdx; i++)
+        for (int i = 0; i <= instanceIdx; i++)
         {
             confirmed = true;
             inputInstances[i].ConfirmInputCondition();
