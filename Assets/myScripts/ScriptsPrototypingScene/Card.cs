@@ -15,6 +15,7 @@ public abstract class Card
     protected GameObject environmentObject;
     protected GameObject propObjects;
     protected GameObject statementFieldGroup;
+    public GameObject StatementFieldGroup { set { } get { return statementFieldGroup; } } // todo is this a return by reference??
     protected TextMeshProUGUI indexTextTMP;
     protected TextMeshProUGUI contentTextTMP;
     protected TextMeshProUGUI variableTextTMP;
@@ -63,7 +64,7 @@ public abstract class Card
     public void CardStatementSetup(
         ref GameObject environmentObject,
         ref GameObject propObjects,
-        GameObject statementFieldGroup,
+        ref GameObject statementFieldGroup,
         int instanceID)
     {
         this.environmentObject = environmentObject;
@@ -73,8 +74,16 @@ public abstract class Card
         InitPropFields();
         this.propObjects.SetActive(true);
 
-        this.statementFieldGroup = statementFieldGroup;
-        this.instanceID = instanceID;
+
+
+        // TODO 位置の調整；自分だけじゃなくて、他人の位置を操作しないといけない。（というか、自分の位置はオリジナルと同じ）
+        // => 自分は動かないから、addInstanceが押された時に、他の奴らを動かせばいい。
+        //Vector3 uppermostArrowPosition = ioArrowList[n - 1].transform.position;
+        //Vector3 newPosition = uppermostArrowPosition + new Vector3(0, VSHAMT, 0);
+        this.statementFieldGroup = Object.Instantiate(
+            statementFieldGroup, statementFieldGroup.transform.position,
+            Quaternion.identity, statementFieldGroup.transform);
+        // => indicating that the transform is identical to the original
         indexTextTMP = this.statementFieldGroup.transform.Find("IndexText").gameObject.GetComponent<TextMeshProUGUI>();
         indexTextTMP.SetText(getIndexText());
         contentTextTMP = this.statementFieldGroup.transform.Find("ContentText").gameObject.GetComponent<TextMeshProUGUI>();
@@ -87,6 +96,8 @@ public abstract class Card
         // todo need to adjust transform.position when PrototypingSceneCore.instIdx >= 1
         // must instantiate() first
         // something like "transform.position.y += xxx*i" ??
+
+        this.instanceID = instanceID;
     }
 
 

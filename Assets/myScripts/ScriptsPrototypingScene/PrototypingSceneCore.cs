@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 
 public class CardSelectionMediator
@@ -53,6 +54,8 @@ public class PrototypingSceneCore : MonoBehaviour
     [SerializeField] private Button addInstanceButton = null;
     [SerializeField] private Button removeInstanceButton = null;
 
+    [SerializeField] private GameObject ioArrowObject = null; // arrow image object
+    private List<GameObject> ioArrowList = new List<GameObject>();
 
     // Confirmation Canvas Fields
 
@@ -76,6 +79,11 @@ public class PrototypingSceneCore : MonoBehaviour
     private List<InputCard> inputInstanceList = new List<InputCard>();
     private List<OutputCard> outputInstanceList = new List<OutputCard>();
 
+    const float VSHAMT = 0.5f; // vertical shift amount
+    private Color focusedStatementColor;
+    private Color shadedStatementColor;
+    // const Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f);
+    // Color newColor = new Color(0.3f, 0.4f, 0.6f);
 
     // for developmental use only
     private void DevelopmentPurposeAssign()
@@ -106,7 +114,7 @@ public class PrototypingSceneCore : MonoBehaviour
         inputInstanceList[idx].CardDescriptionSetup(
             ref inputCardNameField, ref inputDescriptionField); // todo 参照型だから多分大丈夫だと思うけど、最初に生成したものが後に削除された場合、これらの要素が残るかを確認する
         inputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref inputProps, inputStatementFieldGroup, AvailableMinInstanceID());
+            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, AvailableMinInstanceID());
         // todo "inputStatementFieldGroup"は値渡しになっている？参照になっているような気がしている
 
         outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
@@ -114,16 +122,24 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstanceList[idx].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
         outputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref outputProps, outputStatementFieldGroup, AvailableMinInstanceID());
+            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, AvailableMinInstanceID());
 
         GrantFocusToInstances(idx);
 
-        // UI button settings
+        // ボタンとしてのstatementBoxの追加と、それが押下された時にIsFocusedがtrueになる処理
+        //inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
+        //outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
+        inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(() => { StatementBoxOnClick(idx); });
+        outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(() => { StatementBoxOnClick(idx); });
 
-        // TODO ボタンとしてのstatementBoxの追加と、それが押下された時にIsFocusedがtrueになる処理
-        // statementboxはすでにある。buttonコンポーネントにアクセスする
-        // todo IsFocusedなものとそうでないものとで色の濃淡を変化させる
-        // todo on click でfocusが移り変わる機能の実装
+        ioArrowList.Add(ioArrowObject);
+
+        // color settings (focused and not focused)
+        focusedStatementColor = inputInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color;
+        shadedStatementColor = focusedStatementColor - new Color(0.2f,0.2f,0.2f,1f);
+        // TODO Jan30: new Colorのalphaは1fでいいのか、単純な引き算なら0になってしまうが、
+
+        // UI button settings
 
         addInstanceButton.onClick.AddListener(AddInstanceToList);
         removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
@@ -144,27 +160,61 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private bool CheckInstanceListCapacity()
     {
-        return (inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum);
+        return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
     }
 
-    // todo isFocused; 生まれた時には注目されている。生まれたてのものに注目が集まる。他は関心が薄れる。
+
     private void AddInstanceToList()
     {
         inputInstanceList.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
         outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
-        int idx = inputInstanceList.Count - 1;
+        int idx = inputInstanceList.Count - 1; // tail of updated list
         inputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref inputProps, inputStatementFieldGroup, AvailableMinInstanceID());
+            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, AvailableMinInstanceID());
         outputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref outputProps, outputStatementFieldGroup, AvailableMinInstanceID());
+            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, AvailableMinInstanceID());
 
         GrantFocusToInstances(idx);
         DepriveFocusFromOtherInstances(idx);
 
-        // todo 表示位置の調整（todo 矢印のパネルも追加する）
+        // ボタンの登録　（一番初めのinstanceのボタン登録はStart()で個別にやる）
+        //inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
+        //outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
+        inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(() => { StatementBoxOnClick(idx); });
+        outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(() => { StatementBoxOnClick(idx); });
+        // todo どのインスタンスのボタンが押されたのかの情報が欲しい
+
+        ShiftStatementBoxes(); // 他人を押し上げる
+
+        // 矢印 => インスタンスに付随する必要はない。instance.Countに応じて、個数と位置を調整する
+        AddIOArrow();
 
         if (!CheckInstanceListCapacity()) addInstanceButton.interactable = false;
     }
+
+
+    // TODO 本当にこれで良いのかがわからない。つまり、idxの渡し方が
+    // todo IsFocusedなものとそうでないものとで色の濃淡を変化させる
+    // todo on click でfocusが移り変わる機能の実装
+    private void StatementBoxOnClick(int idx)
+    {
+        GrantFocusToInstances(idx);
+        DepriveFocusFromOtherInstances(idx);
+    }
+
+    private void ShiftStatementBoxes()
+    {
+        Vector3 inputBasePosition = inputStatementFieldGroup.transform.position;
+        Vector3 outputBasePosition = outputStatementFieldGroup.transform.position;
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            Vector3 verticalShiftAmount = new Vector3(0, VSHAMT * (instanceCount-1-i), 0);
+            inputInstanceList[i].StatementFieldGroup.transform.position = inputBasePosition + verticalShiftAmount;
+            outputInstanceList[i].StatementFieldGroup.transform.position = outputBasePosition + verticalShiftAmount;
+        }
+    }
+
 
     // AddInstanceとは異なり、focuseされている要素をremoveする
     private void RemoveInstanceFromList() // removeボタンが押せるということは、removeしていい、ということ
@@ -178,15 +228,33 @@ public class PrototypingSceneCore : MonoBehaviour
                 break;
             }
         }
-        GrantFocusToInstances(inputInstanceList.Count - 1);
+        GrantFocusToInstances(inputInstanceList.Count - 1); // focus on tail instance
+
+        ShiftStatementBoxes();
+        ReduceIOArrow();
 
         if (inputInstanceList.Count <= 1) removeInstanceButton.interactable = false;
     }
-    // isFocused；末尾にあるものに注目するようにする。
 
-    // 汎用的なメソッドにする；これに関しては、focusされたものが末尾にあるとは限らない
-    // indexを受け取るのが最も冗長性が少ないと思われる。
-    // 呼び出す側で xputInstanceList.IndexOf(xxx)
+    // ずらし方がIOinstanceとは異なる。ここでは、新しいのが上に積み上げられる
+    private void AddIOArrow()
+    {
+        int n = ioArrowList.Count;
+        Vector3 uppermostArrowPosition = ioArrowList[n-1].transform.position;
+        Vector3 newArrowPosition = uppermostArrowPosition + new Vector3(0, VSHAMT, 0);
+        GameObject newIOArrow = Instantiate(ioArrowList[0],
+            newArrowPosition, Quaternion.identity, ioArrowList[0].transform);
+        ioArrowList.Add(newIOArrow);
+    }
+
+    // reduceしてはいけない時には、すでに呼び出せないようになっている
+    private void ReduceIOArrow()
+    {
+        ioArrowList.RemoveAt(ioArrowList.Count-1);
+    }
+
+    
+    // 呼び出す側で xputInstanceList.IndexOf(xxx)（特にbuttonがpressされた時）
     private void DepriveFocusFromOtherInstances(int focusedIdx)
     {
         int instanceCount = inputInstanceList.Count;
@@ -197,6 +265,9 @@ public class PrototypingSceneCore : MonoBehaviour
             {
                 inputInstanceList[i].IsFocused = false;
                 outputInstanceList[i].IsFocused = false;
+                // todo statement (is button) の色を変える
+                inputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = ;
+                inputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = ;
             }
         }
     }
@@ -205,6 +276,9 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         inputInstanceList[targetIdx].IsFocused = true;
         outputInstanceList[targetIdx].IsFocused = true;
+        // todo statement (is button) の色を変える
+        inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = ;
+        inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = ;
     }
 
 
@@ -358,7 +432,7 @@ public class PrototypingSceneCore : MonoBehaviour
         int idCandidate = 0;
         for (int i = 0; i < inputInstanceList.Count; i++)
         {
-            if (inputInstanceList[i].InstanceID == -1) continue;
+            if (inputInstanceList[i].InstanceID == -1) continue; // skip itself (set to initial value)
             if (idCandidate == inputInstanceList[i].InstanceID) idCandidate++;
         }
         return idCandidate;
