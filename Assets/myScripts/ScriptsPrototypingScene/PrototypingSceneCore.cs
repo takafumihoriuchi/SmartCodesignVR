@@ -116,13 +116,18 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref outputProps, outputStatementFieldGroup, AvailableMinInstanceID());
 
+        GrantFocusToInstances(idx);
+
         // UI button settings
 
         // TODO ボタンとしてのstatementBoxの追加と、それが押下された時にIsFocusedがtrueになる処理
+        // statementboxはすでにある。buttonコンポーネントにアクセスする
+        // todo IsFocusedなものとそうでないものとで色の濃淡を変化させる
+        // todo on click でfocusが移り変わる機能の実装
 
         addInstanceButton.onClick.AddListener(AddInstanceToList);
         removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
-        addInstanceButton.interactable = CheckInstanceCapacity(inputInstanceList[idx]);
+        addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = false;
 
         confirmationButton.onClick.AddListener(ConfirmSmartObject);
@@ -137,9 +142,9 @@ public class PrototypingSceneCore : MonoBehaviour
 
     }
 
-    private bool CheckInstanceCapacity(InputCard inInstance)
+    private bool CheckInstanceListCapacity()
     {
-        return (inputInstanceList.Count < inInstance.MaxInstanceNum);
+        return (inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum);
     }
 
     // todo isFocused; 生まれた時には注目されている。生まれたてのものに注目が集まる。他は関心が薄れる。
@@ -153,30 +158,37 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref outputProps, outputStatementFieldGroup, AvailableMinInstanceID());
 
+        GrantFocusToInstances(idx);
+        DepriveFocusFromOtherInstances(idx);
+
         // todo 表示位置の調整（todo 矢印のパネルも追加する）
 
-        // todo 他の奴らの IsFocusedを排除する
-        DepriveFocusFromOthers(inputInstanceList[idx], outputInstanceList[idx]);
-
-        if (!CheckInstanceCapacity(inputInstanceList[inputInstanceList.Count - 1]))
-            addInstanceButton.interactable = false;
+        if (!CheckInstanceListCapacity()) addInstanceButton.interactable = false;
     }
-    private void RemoveInstanceFromList()
-    {
 
+    // AddInstanceとは異なり、focuseされている要素をremoveする
+    private void RemoveInstanceFromList() // removeボタンが押せるということは、removeしていい、ということ
+    {
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            if (inputInstanceList[i].IsFocused) // <- 消す対象
+            {
+                inputInstanceList.RemoveAt(i);
+                outputInstanceList.RemoveAt(i);
+                break;
+            }
+        }
+        GrantFocusToInstances(inputInstanceList.Count - 1);
+
+        if (inputInstanceList.Count <= 1) removeInstanceButton.interactable = false;
     }
     // isFocused；末尾にあるものに注目するようにする。
 
     // 汎用的なメソッドにする；これに関しては、focusされたものが末尾にあるとは限らない
-    private void DepriveFocusFromOthers(InputCard inInstance, OutputCard outInstance)
+    // indexを受け取るのが最も冗長性が少ないと思われる。
+    // 呼び出す側で xputInstanceList.IndexOf(xxx)
+    private void DepriveFocusFromOtherInstances(int focusedIdx)
     {
-        int focusedIdx = inputInstanceList.IndexOf(inInstance);
-        // index should be identical for input and output instance list
-        if (focusedIdx != outputInstanceList.IndexOf(outInstance))
-        {
-            Debug.Log("Warning: Indexes of Input and Output instance list are not aligned.");
-            // some error handling here
-        }
         int instanceCount = inputInstanceList.Count;
         for (int i = 0; i < instanceCount; i++)
         {
@@ -189,11 +201,10 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
-    
-
-    private void GrantFocus(Card cardInstance)
+    private void GrantFocusToInstances(int targetIdx)
     {
-
+        inputInstanceList[targetIdx].IsFocused = true;
+        outputInstanceList[targetIdx].IsFocused = true;
     }
 
 
@@ -372,3 +383,28 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 }
+
+/*
+
+private void DepriveFocusFromOthers(InputCard inInstance, OutputCard outInstance)
+{
+    int focusedIdx = inputInstanceList.IndexOf(inInstance);
+    // index should be identical for input and output instance list
+    if (focusedIdx != outputInstanceList.IndexOf(outInstance))
+    {
+        Debug.Log("Warning: Indexes of Input and Output instance list are not aligned.");
+        // some error handling here
+    }
+    int instanceCount = inputInstanceList.Count;
+    for (int i = 0; i < instanceCount; i++)
+    {
+        if (i == focusedIdx) continue;
+        else
+        {
+            inputInstanceList[i].IsFocused = false;
+            outputInstanceList[i].IsFocused = false;
+        }
+    }
+}
+
+*/
