@@ -56,10 +56,14 @@ public class PrototypingSceneCore : MonoBehaviour
 
     // Confirmation Canvas Fields
 
-    // TODO enable "click" only when the parameters for input/output were adjusted
-    // also serialize "back to edit" button, "text-field"
-    [SerializeField] private Button confirmationBtn = null;
-    bool confirmed = false; // 必要?? => 全てのインスタンスがIsConfirmed==trueだ、ということをまとめて保持するなら意義がある
+    [SerializeField] private GameObject confirmationMessageField = null; // todo assign in inspector
+    // todo こういうtext-fieldは、ここで直接 TextMeshProUGUI として読み込んだ方が良いのでは?
+    [SerializeField] private Button confirmationButton = null;
+    [SerializeField] private Button backToEditButton = null; // todo make new and put instance in inspector
+    [SerializeField] private Button finalizationButton = null;
+    // todo make new and add "finalize smart object" button in inspector
+    bool confirmed = false; // after-confirmed か before-confirmed かを知るため（back-to-edit の操作で可逆性あり）
+
 
     [SerializeField] private GameObject menuCanvas = null;
     [SerializeField] private Button backToSceneButton = null;
@@ -71,8 +75,6 @@ public class PrototypingSceneCore : MonoBehaviour
     private GameObject outputProps;
     private List<InputCard> inputInstanceList = new List<InputCard>();
     private List<OutputCard> outputInstanceList = new List<OutputCard>();
-    private int instanceIdx = 0; // 
-    // todo instanceIdx は必要なのか
 
 
     // for developmental use only
@@ -97,43 +99,67 @@ public class PrototypingSceneCore : MonoBehaviour
 
         environmentObject = GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]);
 
+        int idx = 0;
+
         inputProps = GetInPropsByName(CardSelectionMediator.selectionDict["input"]);
         inputInstanceList.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
-        inputInstanceList[instanceIdx].CardDescriptionSetup(
-            ref inputCardNameField, ref inputDescriptionField);
-        inputInstanceList[instanceIdx].CardStatementSetup(
-            ref environmentObject, ref inputProps, inputStatementFieldGroup, GetAvailableMinimumInstanceID());
+        inputInstanceList[idx].CardDescriptionSetup(
+            ref inputCardNameField, ref inputDescriptionField); // todo 参照型だから多分大丈夫だと思うけど、最初に生成したものが後に削除された場合、これらの要素が残るかを確認する
+        inputInstanceList[idx].CardStatementSetup(
+            ref environmentObject, ref inputProps, inputStatementFieldGroup, AvailableMinInstanceID());
         // todo "inputStatementFieldGroup"は値渡しになっている？参照になっているような気がしている
 
         outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
         outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
-        outputInstanceList[instanceIdx].CardDescriptionSetup(
+        outputInstanceList[idx].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
-        outputInstanceList[instanceIdx].CardStatementSetup(
-            ref environmentObject, ref outputProps, outputStatementFieldGroup, GetAvailableMinimumInstanceID());
+        outputInstanceList[idx].CardStatementSetup(
+            ref environmentObject, ref outputProps, outputStatementFieldGroup, AvailableMinInstanceID());
 
         // UI button settings
 
+        // TODO ボタンとしてのstatementBoxの追加と、それが押下された時にIsFocusedがtrueになる処理
+
         addInstanceButton.onClick.AddListener(AddInstanceToList);
         removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
-        addInstanceButton.interactable = true;
+        addInstanceButton.interactable = CheckInstanceCapacity(inputInstanceList[idx]);
         removeInstanceButton.interactable = false;
 
-        confirmationBtn.onClick.AddListener(ConfirmSmartObject);
-        confirmationBtn.interactable = false; // set to true when every-instances.canBeConfirmed is true
+        confirmationButton.onClick.AddListener(ConfirmSmartObject);
+        confirmationButton.interactable = false; // set to true when every-instances.canBeConfirmed is true
+        backToEditButton.onClick.AddListener(GoBackToEditMode);
+        backToEditButton.interactable = false;
+        finalizationButton.onClick.AddListener(FinalizeSmartObject);
+        finalizationButton.interactable = false;
 
         backToSceneButton.onClick.AddListener(LoadCardSelectionScene);
         closeMenuButton.onClick.AddListener(CloseMenu);
 
     }
 
-    // isFocused; 生まれた時には注目されている。生まれたてのものに注目が集まる。他は関心が薄れる。
+    private bool CheckInstanceCapacity(InputCard inInstance)
+    {
+        return (inputInstanceList.Count < inInstance.MaxInstanceNum);
+    }
+
+    // todo isFocused; 生まれた時には注目されている。生まれたてのものに注目が集まる。他は関心が薄れる。
     private void AddInstanceToList()
     {
-        // AddInstance (compare with inputInstances[0].maxInstanceNum if allowed to generate new)
+        inputInstanceList.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
+        outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
+        int idx = inputInstanceList.Count - 1;
+        inputInstanceList[idx].CardStatementSetup(
+            ref environmentObject, ref inputProps, inputStatementFieldGroup, AvailableMinInstanceID());
+        outputInstanceList[idx].CardStatementSetup(
+            ref environmentObject, ref outputProps, outputStatementFieldGroup, AvailableMinInstanceID());
 
+        // todo 表示位置の調整（todo 矢印のパネルも追加する）
 
-        if ()
+        // todo 他の奴らの IsFocusedを排除する
+        DepriveFocusFromOthers(inputInstanceList[idx], outputInstanceList[idx]);
+
+        if (!CheckInstanceCapacity(inputInstanceList[inputInstanceList.Count - 1]))
+            addInstanceButton.interactable = false;
     }
     private void RemoveInstanceFromList()
     {
@@ -141,16 +167,50 @@ public class PrototypingSceneCore : MonoBehaviour
     }
     // isFocused；末尾にあるものに注目するようにする。
 
+    // 汎用的なメソッドにする；これに関しては、focusされたものが末尾にあるとは限らない
+    private void DepriveFocusFromOthers(InputCard inInstance, OutputCard outInstance)
+    {
+        int focusedIdx = inputInstanceList.IndexOf(inInstance);
+        // index should be identical for input and output instance list
+        if (focusedIdx != outputInstanceList.IndexOf(outInstance))
+        {
+            Debug.Log("Warning: Indexes of Input and Output instance list are not aligned.");
+            // some error handling here
+        }
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            if (i == focusedIdx) continue;
+            else
+            {
+                inputInstanceList[i].IsFocused = false;
+                outputInstanceList[i].IsFocused = false;
+            }
+        }
+    }
+
+    
+
+    private void GrantFocus(Card cardInstance)
+    {
+
+    }
+
 
     private void Update()
     {
-        for (int i = 0; i < inputInstanceList.Count; i++) {
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++) {
             inputInstanceList[i].UpdateInputCondition();
             outputInstanceList[i].UpdateOutputBehaviour();
         }
 
+        bool isConfirmable = CheckConfirmability(); // todo CanBeConfirmed プロパティを各カードクラスで更新する
+        if (isConfirmable) confirmationButton.interactable = true;
+        else confirmationButton.interactable = false;
+
         if (confirmed) {
-            for (int i = 0; i < inputInstanceList.Count; i++) {
+            for (int i = 0; i < instanceCount; i++) {
                 if (inputInstanceList[i].inputCondition) {
                     outputInstanceList[i].OutputBehaviour();
                 } else {
@@ -165,21 +225,44 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
-
-    private void ConfirmSmartObject()
+    private bool CheckConfirmability()
     {
+        bool bflag = true;
         for (int i = 0; i < inputInstanceList.Count; i++)
         {
-            if (!(inputInstanceList[i].CanBeConfirmed
-                && outputInstanceList[i].CanBeConfirmed)) return;
+            bflag &= inputInstanceList[i].CanBeConfirmed;
+            bflag &= outputInstanceList[i].CanBeConfirmed;
         }
-        // all instances must be confirmable to confirm the Smart Object
-        confirmed = true;
+        return bflag;
+    }
+
+
+    // confirmationBtn is interactable only when all instances are confirmable (done)
+    private void ConfirmSmartObject()
+    {
+        confirmed = true; // todo what to do with IsConfirmed in each instance??
         for (int i = 0; i < inputInstanceList.Count; i++)
         {
             inputInstanceList[i].ConfirmInputCondition();
             outputInstanceList[i].ConfirmOutputBehaviour();
         }
+        backToEditButton.interactable = true;
+        finalizationButton.interactable = true;
+    }
+
+    private void GoBackToEditMode()
+    {
+        // todo 内容を確認する
+        confirmed = false;
+        backToEditButton.interactable = false;
+        finalizationButton.interactable = false;
+    }
+
+    private void FinalizeSmartObject()
+    {
+        // todo pack smart object information data and pass to next scene
+        // CardSelectionMediator class に新しいフィールドを用意する
+        SceneManager.LoadScene(3); // InteractionScene
     }
 
 
@@ -259,7 +342,7 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
-    private int GetAvailableMinimumInstanceID()
+    private int AvailableMinInstanceID()
     {
         int idCandidate = 0;
         for (int i = 0; i < inputInstanceList.Count; i++)
@@ -276,11 +359,13 @@ public class PrototypingSceneCore : MonoBehaviour
         menuIsOpened = true;
         menuCanvas.SetActive(true);
     }
+
     private void CloseMenu()
     {
         menuIsOpened = false;
         menuCanvas.SetActive(false);
     }
+
     private void LoadCardSelectionScene()
     {
         SceneManager.LoadScene(1); // CardSelectionScene

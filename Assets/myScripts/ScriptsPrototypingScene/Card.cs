@@ -26,10 +26,11 @@ public abstract class Card
     public int InstanceID { set { } get { return instanceID; } }
 
     protected bool isConfirmed = false;
-    public bool IsConfirmed { set { isConfirmed = value; } get { return isConfirmed; } }
+    public bool IsConfirmed { set { isConfirmed = value; } get { return isConfirmed; } } // todo coreでこの変数の対応をする
     // todo "back to edit"のボタンが押された時などにIsConfirmedを全てfalseに戻す (Coreでの処理)
     protected bool isFocused = true; // todo この状態に応じて操作を許可・不許可にする // この状態がfalseのインスタンス（自分）については、反映されないようにする
-    public bool IsFocused { set { } get { return isFocused; } }
+    public bool IsFocused { set { isFocused = value; } get { return isFocused; } }
+    // isFocusedの初期値はtrueになっている。生まれたての時には、自動的に関心を集めている
     protected bool canBeConfirmed = false; // todo Coreの処理として、全てのインスタンスでこれがtrueならConfirmできる
     public bool CanBeConfirmed { set { } get { return canBeConfirmed; } }
 
@@ -93,6 +94,7 @@ public abstract class Card
 public abstract class InputCard : Card
 {
     protected int maxInstanceNum;
+    public int MaxInstanceNum { set { } get { return maxInstanceNum; } }
 
     [HideInInspector] public bool inputCondition = false;
 
