@@ -7955,9 +7955,7 @@ MonoBehaviour:
     1. grab weather object
 
     2. bring object
-    over envObj
-
-    (put diagram image here)'
+    over envObj'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -9732,7 +9730,7 @@ GameObject:
   - component: {fileID: 681084085}
   - component: {fileID: 681084084}
   m_Layer: 0
-  m_Name: OutputBehaviourBox
+  m_Name: StatementBox
   m_TagString: DeactivateOnLoad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10150,7 +10148,7 @@ GameObject:
   - component: {fileID: 735259230}
   - component: {fileID: 735259229}
   m_Layer: 0
-  m_Name: InputConditionBox
+  m_Name: StatementBox
   m_TagString: DeactivateOnLoad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17808,9 +17806,7 @@ MonoBehaviour:
     2. dip
     brush in paint bucket
 
-    3. tap envObj with brush
-
-    (put diagram image here)'
+    3. tap envObj with brush'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

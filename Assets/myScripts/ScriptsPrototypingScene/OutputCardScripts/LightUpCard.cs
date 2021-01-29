@@ -93,7 +93,7 @@ public class LightUpCard : OutputCard
             envPartRend.material = brushTipRend.material;
             edittedEnvObjMaterial[partIdx] = brushTipRend.material;
 
-            if (paintCount == 0) { // todo refactor
+            if (paintCount == 0) { // todo refactor // todo paintCound==0の間はConfirmできないようにする、など
                 variableTextTMP.SetText("painted"); // <= only for filling in the box
             }
             paintCount++;

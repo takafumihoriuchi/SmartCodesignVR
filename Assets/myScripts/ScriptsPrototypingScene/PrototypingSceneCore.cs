@@ -59,7 +59,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // TODO enable "click" only when the parameters for input/output were adjusted
     // also serialize "back to edit" button, "text-field"
     [SerializeField] private Button confirmationBtn = null;
-    bool confirmed = false;
+    bool confirmed = false; // 必要?? => 全てのインスタンスがIsConfirmed==trueだ、ということをまとめて保持するなら意義がある
 
     [SerializeField] private GameObject menuCanvas = null;
     [SerializeField] private Button backToSceneButton = null;
@@ -69,10 +69,10 @@ public class PrototypingSceneCore : MonoBehaviour
     private GameObject environmentObject;
     private GameObject inputProps;
     private GameObject outputProps;
-    private List<InputCard> inputInstances = new List<InputCard>();
-    private List<OutputCard> outputInstances = new List<OutputCard>();
-    private int instanceIdx = 0;
-    // using list to make it scalable to handling multiple instances
+    private List<InputCard> inputInstanceList = new List<InputCard>();
+    private List<OutputCard> outputInstanceList = new List<OutputCard>();
+    private int instanceIdx = 0; // 
+    // todo instanceIdx は必要なのか
 
 
     // for developmental use only
@@ -98,45 +98,63 @@ public class PrototypingSceneCore : MonoBehaviour
         environmentObject = GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]);
 
         inputProps = GetInPropsByName(CardSelectionMediator.selectionDict["input"]);
-        inputInstances.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
-        inputInstances[instanceIdx].CardDescriptionSetup(
+        inputInstanceList.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
+        inputInstanceList[instanceIdx].CardDescriptionSetup(
             ref inputCardNameField, ref inputDescriptionField);
-        inputInstances[instanceIdx].CardStatementSetup(
-            ref environmentObject, ref inputProps, inputStatementFieldGroup);
+        inputInstanceList[instanceIdx].CardStatementSetup(
+            ref environmentObject, ref inputProps, inputStatementFieldGroup, GetAvailableMinimumInstanceID());
         // todo "inputStatementFieldGroup"は値渡しになっている？参照になっているような気がしている
 
         outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
-        outputInstances.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
-        outputInstances[instanceIdx].CardDescriptionSetup(
+        outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
+        outputInstanceList[instanceIdx].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
-        outputInstances[instanceIdx].CardStatementSetup(
-            ref environmentObject, ref outputProps, outputStatementFieldGroup, instanceIdx);
+        outputInstanceList[instanceIdx].CardStatementSetup(
+            ref environmentObject, ref outputProps, outputStatementFieldGroup, GetAvailableMinimumInstanceID());
 
         // UI button settings
 
+        addInstanceButton.onClick.AddListener(AddInstanceToList);
+        removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
+        addInstanceButton.interactable = true;
+        removeInstanceButton.interactable = false;
+
         confirmationBtn.onClick.AddListener(ConfirmSmartObject);
+        confirmationBtn.interactable = false; // set to true when every-instances.canBeConfirmed is true
 
         backToSceneButton.onClick.AddListener(LoadCardSelectionScene);
         closeMenuButton.onClick.AddListener(CloseMenu);
 
-        // todo AddListener to AddInstance and RemoveInstance
     }
 
-    // AddInstance (compare with inputInstances[0].maxInstanceNum if allowed to generate new)
+    // isFocused; 生まれた時には注目されている。生まれたてのものに注目が集まる。他は関心が薄れる。
+    private void AddInstanceToList()
+    {
+        // AddInstance (compare with inputInstances[0].maxInstanceNum if allowed to generate new)
+
+
+        if ()
+    }
+    private void RemoveInstanceFromList()
+    {
+
+    }
+    // isFocused；末尾にあるものに注目するようにする。
+
 
     private void Update()
     {
-        for (int i = 0; i <= instanceIdx; i++) {
-            inputInstances[i].UpdateInputCondition();
-            outputInstances[i].UpdateOutputBehaviour();
+        for (int i = 0; i < inputInstanceList.Count; i++) {
+            inputInstanceList[i].UpdateInputCondition();
+            outputInstanceList[i].UpdateOutputBehaviour();
         }
 
         if (confirmed) {
-            for (int i = 0; i <= instanceIdx; i++) {
-                if (inputInstances[i].inputCondition) {
-                    outputInstances[i].OutputBehaviour();
+            for (int i = 0; i < inputInstanceList.Count; i++) {
+                if (inputInstanceList[i].inputCondition) {
+                    outputInstanceList[i].OutputBehaviour();
                 } else {
-                    outputInstances[i].OutputBehaviourNegative();
+                    outputInstanceList[i].OutputBehaviourNegative();
                 }
             }
         }
@@ -147,29 +165,20 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
-    private void OpenMenu()
-    {
-        menuIsOpened = true;
-        menuCanvas.SetActive(true);
-    }
-    private void CloseMenu()
-    {
-        menuIsOpened = false;
-        menuCanvas.SetActive(false);
-    }
-    private void LoadCardSelectionScene()
-    {
-        SceneManager.LoadScene(1);
-    }
-
 
     private void ConfirmSmartObject()
     {
-        for (int i = 0; i <= instanceIdx; i++)
+        for (int i = 0; i < inputInstanceList.Count; i++)
         {
-            confirmed = true;
-            inputInstances[i].ConfirmInputCondition();
-            outputInstances[i].ConfirmOutputBehaviour();
+            if (!(inputInstanceList[i].CanBeConfirmed
+                && outputInstanceList[i].CanBeConfirmed)) return;
+        }
+        // all instances must be confirmable to confirm the Smart Object
+        confirmed = true;
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            inputInstanceList[i].ConfirmInputCondition();
+            outputInstanceList[i].ConfirmOutputBehaviour();
         }
     }
 
@@ -250,12 +259,31 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
+    private int GetAvailableMinimumInstanceID()
+    {
+        int idCandidate = 0;
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            if (inputInstanceList[i].InstanceID == -1) continue;
+            if (idCandidate == inputInstanceList[i].InstanceID) idCandidate++;
+        }
+        return idCandidate;
+    }
+
+
+    private void OpenMenu()
+    {
+        menuIsOpened = true;
+        menuCanvas.SetActive(true);
+    }
+    private void CloseMenu()
+    {
+        menuIsOpened = false;
+        menuCanvas.SetActive(false);
+    }
+    private void LoadCardSelectionScene()
+    {
+        SceneManager.LoadScene(1); // CardSelectionScene
+    }
+
 }
-
-
-/*
- * manipulation of list if necessary when creating multiple instances
- * private void AddInstanceToList(){}
- * private void RemoveInstanceFromList(){}
- * 
- */

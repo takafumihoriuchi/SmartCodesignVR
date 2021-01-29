@@ -22,13 +22,26 @@ public abstract class Card
     protected string cardName;
     protected string descriptionText;
     protected string contentText;
-    protected abstract string getIndexText(int instanceIdx);
+    private int instanceID = -1;
+    public int InstanceID { set { } get { return instanceID; } }
 
-    protected bool isConfirmed;
+    protected bool isConfirmed = false;
+    public bool IsConfirmed { set { isConfirmed = value; } get { return isConfirmed; } }
+    // todo "back to edit"のボタンが押された時などにIsConfirmedを全てfalseに戻す (Coreでの処理)
+    protected bool isFocused = true; // todo この状態に応じて操作を許可・不許可にする // この状態がfalseのインスタンス（自分）については、反映されないようにする
+    public bool IsFocused { set { } get { return isFocused; } }
+    protected bool canBeConfirmed = false; // todo Coreの処理として、全てのインスタンスでこれがtrueならConfirmできる
+    public bool CanBeConfirmed { set { } get { return canBeConfirmed; } }
 
     protected abstract void BehaviourDuringPrototyping();
 
     protected abstract void InitPropFields();
+
+    private string getIndexText() {
+        //return "<u>" + getIndexSubText() + " #" + (instanceID + 1).ToString() + "</u>";
+        return "<u>" + getIndexSubText() + " #" + (instanceID + 1).ToString() + "</u>";
+    }
+    protected abstract string getIndexSubText();
 
 
     public void CardDescriptionSetup(
@@ -50,7 +63,7 @@ public abstract class Card
         ref GameObject environmentObject,
         ref GameObject propObjects,
         GameObject statementFieldGroup,
-        int instanceIdx)
+        int instanceID)
     {
         this.environmentObject = environmentObject;
         this.environmentObject.SetActive(true);
@@ -60,8 +73,9 @@ public abstract class Card
         this.propObjects.SetActive(true);
 
         this.statementFieldGroup = statementFieldGroup;
+        this.instanceID = instanceID;
         indexTextTMP = this.statementFieldGroup.transform.Find("IndexText").gameObject.GetComponent<TextMeshProUGUI>();
-        indexTextTMP.SetText(getIndexText(instanceIdx));
+        indexTextTMP.SetText(getIndexText());
         contentTextTMP = this.statementFieldGroup.transform.Find("ContentText").gameObject.GetComponent<TextMeshProUGUI>();
         contentTextTMP.SetText(contentText);
         variableTextTMP = this.statementFieldGroup.transform.Find("Variable/VariableText").gameObject.GetComponent<TextMeshProUGUI>();
@@ -103,13 +117,12 @@ public abstract class InputCard : Card
 
     protected abstract void UpdatesForInputConditionEvaluation();
 
-    protected override string getIndexText(int instanceIdx) {
-        return "<u>input #" + instanceIdx.ToString() + "</u>";
-    }
+    protected override string getIndexSubText() {return "input";}
 
 }
 
 
+// todo リファクタの余地あり
 public abstract class OutputCard : Card
 {
     public abstract void OutputBehaviour();
@@ -117,7 +130,5 @@ public abstract class OutputCard : Card
     public abstract void ConfirmOutputBehaviour();
     public abstract void OutputBehaviourNegative();
 
-    protected override string getIndexText(int instanceIdx) {
-        return "<u>output #" + instanceIdx.ToString() + "</u>";
-    }
+    protected override string getIndexSubText() {return "output";}
 }
