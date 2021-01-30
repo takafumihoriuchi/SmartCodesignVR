@@ -24469,13 +24469,15 @@ MonoBehaviour:
   outputCardNameField: {fileID: 1755149133}
   inputDescriptionField: {fileID: 437521025}
   outputDescriptionField: {fileID: 1249500611}
-  inputDiagramImage: {fileID: 0}
-  outputDiagramImage: {fileID: 0}
   inputStatementFieldGroup: {fileID: 735259227}
   outputStatementFieldGroup: {fileID: 681084082}
   addInstanceButton: {fileID: 1345550970}
   removeInstanceButton: {fileID: 282238575}
-  confirmationBtn: {fileID: 1122732427}
+  ioArrowObject: {fileID: 45922758}
+  confirmationMessageField: {fileID: 1866987956}
+  confirmationButton: {fileID: 1122732427}
+  backToEditButton: {fileID: 1915126197}
+  finalizationButton: {fileID: 790782959}
   menuCanvas: {fileID: 1620759698}
   backToSceneButton: {fileID: 1958442298}
   closeMenuButton: {fileID: 183275434}
