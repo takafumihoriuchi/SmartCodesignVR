@@ -53,19 +53,7 @@ public class MakeSoundCard : OutputCard
         // another line here will probably be needed in other OutputCard subclasses
     }
 
-    public override void UpdateOutputBehaviour()
-    {
-        if (isConfirmed)
-        {
-            return; // once confirmed, no more updates are needed for this perticular subclass
-        }
-        else
-        {
-            BehaviourDuringPrototyping();
-        }
-    }
 
-    
 
     public override void OutputBehaviour()
     {
@@ -73,6 +61,7 @@ public class MakeSoundCard : OutputCard
         {
             soundRecorder.Stop();
             stopWatch.Reset();
+            // Stopwatch.Reset: Stops time interval measurement and resets the elapsed time to zero.
         }
         if (!soundRecorder.isPlaying)
         {
@@ -84,7 +73,8 @@ public class MakeSoundCard : OutputCard
 
     public override void OutputBehaviourNegative()
     {
-        // todo Stop() when the inputCondition fails to hold true
+        // Stop() when the inputCondition fails to hold true
+        if (soundRecorder.isPlaying) soundRecorder.Stop();
     }
 
 
@@ -92,7 +82,7 @@ public class MakeSoundCard : OutputCard
     {
         if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed) {
             if (OVRInput.GetDown(OVRInput.RawButton.A)) StartRecording();
-            if (OVRInput.GetUp(OVRInput.RawButton.A)) SaveRecording();
+            if (OVRInput.GetUp(OVRInput.RawButton.A))　SaveRecording();
         }
 
         if (OVRInput.GetDown(OVRInput.RawButton.X)) soundRecorder.Play();
@@ -101,7 +91,17 @@ public class MakeSoundCard : OutputCard
         MicrophoneAnimation();
     }
 
-    
+    // このクラスについては、OnFocusedで行う操作は特にない；動作はカードごとに違う。
+    protected override void OnFocusGranted()
+    {
+        return;
+    }
+
+    protected override void OnFocusDeprived()
+    {
+        return;
+    }
+
 
     private void StartRecording()
     {

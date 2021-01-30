@@ -77,6 +77,20 @@ public class FireCard : InputCard
             SetRangeOpacity(ALPHA_LOW, ALPHA_HIGH, ALPHA_LOW);
             variableTextTMP.SetText("far away");
         }
+
+    }
+
+    protected override void OnFocusGranted()
+    {
+        SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
+        return;
+    }
+
+    protected override void OnFocusDeprived()
+    {
+        // 他のインスタンスの色spriteと干渉しちゃうから、offにする（alphaを0にする）
+        SetRangeOpacity(0.0f, 0.0f, 0.0f);
+        return;
     }
 
     private bool DetectDistanceShort()

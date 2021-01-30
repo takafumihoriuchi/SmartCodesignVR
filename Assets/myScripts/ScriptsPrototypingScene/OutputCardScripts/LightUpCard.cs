@@ -52,8 +52,8 @@ public class LightUpCard : OutputCard
         edittedEnvObjMaterial = GetMaterialArray(envPartsGameObject);
 
         eventBridgeHandler = paintBrush.RequestEventHandlers();
-        eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
-        eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+        //eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
+        //eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
     }
 
 
@@ -112,20 +112,28 @@ public class LightUpCard : OutputCard
         }
     }
 
+    protected override void OnFocusGranted()
+    {
+        eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
+        eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+        // load colors
+        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+    }
+
+    protected override void OnFocusDeprived()
+    {
+        eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
+        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
+        // save colors
+        // => already saved 'dynamically' during interaction
+        // reset colors
+        ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+    }
 
 
     public override void ConfirmOutputBehaviour()
     {
         isConfirmed = true;
-        eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
-        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
-        // todo when confirmation is canceled, add listeners again
-    }
-
-
-    public override void UpdateOutputBehaviour()
-    {
-        // all process taken care in trigger-events
     }
 
 
@@ -134,7 +142,7 @@ public class LightUpCard : OutputCard
         ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
     }
     
-
+    // TODO 複数インスタンスある時に、多分これだとピカピカ光っちゃう（他のとconflictしてスイッチングする）
     public override void OutputBehaviourNegative()
     {
         ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);

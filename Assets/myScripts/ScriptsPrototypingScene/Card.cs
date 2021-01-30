@@ -29,10 +29,22 @@ public abstract class Card
     protected bool isConfirmed = false;
     public bool IsConfirmed { set { isConfirmed = value; } get { return isConfirmed; } } // todo coreでこの変数の対応をする
     // todo "back to edit"のボタンが押された時などにIsConfirmedを全てfalseに戻す (Coreでの処理)
+
+    protected abstract void OnFocusGranted();
+    protected abstract void OnFocusDeprived();
     protected bool isFocused; // todo この状態に応じて操作を許可・不許可にする // この状態がfalseのインスタンス（自分）については、反映されないようにする
-    public bool IsFocused { set { isFocused = value; } get { return isFocused; } }
-    // instance内部でのbehaviourの処理があるから、inputCardだけではなく、outputCardにもIsFocusedは必要
-    protected bool canBeConfirmed = false; // todo Coreの処理として、全てのインスタンスでこれがtrueならConfirmできる
+    public bool IsFocused {
+        set {
+            isFocused = value;
+            if (isFocused) OnFocusGranted();
+            else OnFocusDeprived();
+        }
+        get {
+            return isFocused;
+        }
+    }
+
+    protected bool canBeConfirmed = false; // Coreの処理として、全てのインスタンスでこれがtrueならConfirmできる
     public bool CanBeConfirmed { set { } get { return canBeConfirmed; } }
 
     protected abstract void BehaviourDuringPrototyping();
@@ -89,6 +101,7 @@ public abstract class Card
         contentTextTMP = this.statementFieldGroup.transform.Find("ContentText").gameObject.GetComponent<TextMeshProUGUI>();
         contentTextTMP.SetText(contentText);
         variableTextTMP = this.statementFieldGroup.transform.Find("Variable/VariableText").gameObject.GetComponent<TextMeshProUGUI>();
+        variableTextTMP.SetText(string.Empty);
         // variableTextTMP is set dynamically
         this.statementFieldGroup.SetActive(true);
         // 直接activateするのではなく、
@@ -123,11 +136,18 @@ public abstract class InputCard : Card
     }
 
     public void UpdateInputCondition() {
+
         UpdatesForInputConditionEvaluation();
-        if (isConfirmed) {
+
+        if (isConfirmed)
+        {
             inputCondition = InputConditionDefinition();
         }
-        else BehaviourDuringPrototyping();
+        else
+        {
+            BehaviourDuringPrototyping();
+            canBeConfirmed = !string.IsNullOrEmpty(variableTextTMP.text);
+        }
     }
 
     protected abstract void UpdatesForInputConditionEvaluation();
@@ -141,9 +161,22 @@ public abstract class InputCard : Card
 public abstract class OutputCard : Card
 {
     public abstract void OutputBehaviour();
-    public abstract void UpdateOutputBehaviour();
+    //public abstract void UpdateOutputBehaviour();
     public abstract void ConfirmOutputBehaviour();
     public abstract void OutputBehaviourNegative();
+
+    public void UpdateOutputBehaviour()
+    {
+        if (isConfirmed)
+        {
+            // no actions are needed (as for current implemented cards)
+        }
+        else
+        {
+            BehaviourDuringPrototyping();
+            canBeConfirmed = !string.IsNullOrEmpty(variableTextTMP.text);
+        }
+    }
 
     protected override string getIndexSubText() {return "output";}
 }
