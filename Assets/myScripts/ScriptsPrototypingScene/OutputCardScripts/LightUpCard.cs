@@ -28,13 +28,13 @@ public class LightUpCard : OutputCard
     {
         cardName = "Light Up";
         descriptionText =
-            "I can light up LEDs in different colors." +
-            "Steps:" +
-            "1. <indent=15%>Pickup paint brush with the trigger button.</indent>" +
-            "2. <indent=15%>Dip paint brush in paint bucket.</indent>" +
-            "3. <indent=15%>Rub the paint on the object.</indent>" +
-            "*. <indent=15%>Different parts can be set to different colors.</indent>" +
-            "*. <indent=15%>Paint can be removed by putting \"water\" on the object.</indent>";
+            "<i>I can light up LEDs in different colors.</i>\n" +
+            "<b>Steps:</b>\n" +
+            "<b>1.</b> <indent=10%>Pickup paint brush with the trigger button.</indent>\n" +
+            "<b>2.</b> <indent=10%>Dip paint brush in paint bucket.</indent>\n" +
+            "<b>3.</b> <indent=10%>Rub the paint on the object.</indent>\n" +
+            "<b>*</b> Different parts can be set to different colors.\n" +
+            "<b>*</b> Paint can be removed by putting \"water\" on the object.";
         contentText = "turn on LED lights in the colors of";
     }
 

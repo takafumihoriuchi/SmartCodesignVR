@@ -71,7 +71,7 @@ public abstract class Card
         ref GameObject cardNameField,
         ref GameObject descriptionField)
     {
-        this.cardNameField = cardNameField;
+        this.cardNameField = cardNameField; // todo 最初からTMP型として取り込めばいい
         cardNameFieldTMP = this.cardNameField.GetComponent<TextMeshProUGUI>();
         cardNameFieldTMP.SetText(cardName);
         this.cardNameField.SetActive(true);
@@ -88,6 +88,8 @@ public abstract class Card
         ref GameObject statementFieldGroup,
         int instanceID)
     {
+        this.instanceID = instanceID; // substitute before setting indexText
+
         this.environmentObject = environmentObject;
         this.environmentObject.SetActive(true);
 
@@ -95,12 +97,10 @@ public abstract class Card
         InitPropFields();
         this.propObjects.SetActive(true);
 
-
-
         // TODO 位置の調整；自分だけじゃなくて、他人の位置を操作しないといけない。（というか、自分の位置はオリジナルと同じ）
         // => 自分は動かないから、addInstanceが押された時に、他の奴らを動かせばいい。
         this.statementFieldGroup = Object.Instantiate(
-            statementFieldGroup, statementFieldGroup.transform);
+            statementFieldGroup, statementFieldGroup.transform.parent);
         //this.statementFieldGroup = Object.Instantiate(
         //    statementFieldGroup, statementFieldGroup.transform.position,
         //    Quaternion.identity, statementFieldGroup.transform);
@@ -112,14 +112,12 @@ public abstract class Card
         variableTextTMP = this.statementFieldGroup.transform.Find("Variable/VariableText").gameObject.GetComponent<TextMeshProUGUI>();
         variableTextTMP.SetText(string.Empty);
         // variableTextTMP is set dynamically
-        this.statementFieldGroup.SetActive(true);
         // 直接activateするのではなく、
         // instantiateして複製してから、それをactivateする (after adjustening transform.position.y)
         // need to adjust transform.position when PrototypingSceneCore.instIdx >= 1
         // must instantiate() first
         // something like "transform.position.y += xxx*i" ??
-
-        this.instanceID = instanceID;
+        this.statementFieldGroup.SetActive(true);
     }
 
 

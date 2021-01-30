@@ -112,20 +112,21 @@ public class PrototypingSceneCore : MonoBehaviour
         environmentObject = GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]);
 
         int idx = 0;
+        int minInstanceID = AvailableMinInstanceID();
 
         inputProps = GetInPropsByName(CardSelectionMediator.selectionDict["input"]);
         inputInstanceList.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
         inputInstanceList[idx].CardDescriptionSetup(
             ref inputCardNameField, ref inputDescriptionField); // todo 参照型だから多分大丈夫だと思うけど、最初に生成したものが後に削除された場合、これらの要素が残るかを確認する
         inputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, AvailableMinInstanceID());
+            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
 
         outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
         outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
         outputInstanceList[idx].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
         outputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, AvailableMinInstanceID());
+            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
 
         GrantFocusToTargetInstances(idx);
 
@@ -180,11 +181,12 @@ public class PrototypingSceneCore : MonoBehaviour
         int idx = inputInstanceList.Count - 1; // tail of updated list
 
         // note that we are skipping CardDescriptionSetup(); this is only necessary in the first instance generated in Start()
+        int minInstanceID = AvailableMinInstanceID();
 
         inputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, AvailableMinInstanceID());
+            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
         outputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, AvailableMinInstanceID());
+            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
 
         //GrantFocusToTargetInstances(idx);
         //DepriveFocusFromOtherInstances(idx);
@@ -265,7 +267,7 @@ public class PrototypingSceneCore : MonoBehaviour
         Vector3 uppermostArrowPosition = ioArrowList[n-1].transform.position;
         Vector3 newArrowPosition = uppermostArrowPosition + new Vector3(0, VSHAMT, 0);
         GameObject newIOArrow = Instantiate(ioArrowList[0],
-            newArrowPosition, Quaternion.identity, ioArrowList[0].transform);
+            newArrowPosition, Quaternion.identity, ioArrowList[0].transform.parent);
         ioArrowList.Add(newIOArrow);
     }
 

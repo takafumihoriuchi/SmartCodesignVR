@@ -8,7 +8,7 @@ public class WeatherCard : InputCard
     {
         maxInstanceNum = 5; // sunny, cloudy, rainy, snowing, thunderstorm
         cardName = "Weather";
-        descriptionText = "I can get information about the weather forecast.";
+        descriptionText = "<i>I can get information about the weather forecast.</i>\n";
         contentText = "When it is about to";
     }
 

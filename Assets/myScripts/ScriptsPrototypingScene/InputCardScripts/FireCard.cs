@@ -24,11 +24,11 @@ public class FireCard : InputCard
         cardName = "Fire";
         descriptionText =
             //"Specifies the distance of fire from the object." +
-            "I can detect the presence of fire." +
-            "Steps:" +
-            "1. <indent=15%>Grab the fire by holding the trigger on controller.</indent>" +
-            "2. <indent=15%>Move it near/away to the object.</indent>" +
-            "3. <indent=15%>Release the fire on the ground.</indent>" +
+            "<i>I can detect the presence of fire.</i>\n" +
+            "<b>Steps:</b>\n" +
+            "<b>1.</b> <indent=10%>Grab the fire by holding the trigger on controller.</indent>\n" +
+            "<b>2.</b> <indent=10%>Move it near/away to the object.</indent>\n" +
+            "<b>3.</b> <indent=10%>Release the fire on the ground.</indent>\n" +
             "Maximum number of instances: 3";
         contentText = "When I see fire in distance";
     }
