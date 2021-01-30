@@ -26,9 +26,19 @@ public abstract class Card
     private int instanceID = -1;
     public int InstanceID { set { } get { return instanceID; } }
 
+    protected abstract void OnConfirm();
+    protected abstract void OnBackToEdit();
     protected bool isConfirmed = false;
-    public bool IsConfirmed { set { isConfirmed = value; } get { return isConfirmed; } } // todo coreでこの変数の対応をする
-    // todo "back to edit"のボタンが押された時などにIsConfirmedを全てfalseに戻す (Coreでの処理)
+    public bool IsConfirmed {
+        set {
+            isConfirmed = value;
+            if (isConfirmed) OnConfirm(); // todo もしpropsが参照なら、OnConfirmをInputCard Classで定義して、その中で　InputConditionDefinition = DetermineInputEvaluationDelegate();　を呼ぶことができる。
+            else OnBackToEdit();
+        }
+        get {
+            return isConfirmed;
+        }
+    }
 
     protected abstract void OnFocusGranted();
     protected abstract void OnFocusDeprived();
@@ -52,7 +62,6 @@ public abstract class Card
     protected abstract void InitPropFields();
 
     private string getIndexText() {
-        //return "<u>" + getIndexSubText() + " #" + (instanceID + 1).ToString() + "</u>";
         return "<u>" + getIndexSubText() + " #" + (instanceID + 1).ToString() + "</u>";
     }
     protected abstract string getIndexSubText();
@@ -130,10 +139,15 @@ public abstract class InputCard : Card
 
     protected abstract InputConditionDelegate DetermineInputEvaluationDelegate();
 
-    public void ConfirmInputCondition() {
-        isConfirmed = true;
-        InputConditionDefinition = DetermineInputEvaluationDelegate();
-    }
+
+    //public void ConfirmInputCondition() {
+    //    //isConfirmed = true;
+    //    InputConditionDefinition = DetermineInputEvaluationDelegate();
+    //}
+    // TODO ConfirmInputCondition()は廃止した。
+    // InputConditionDefinition = DetermineInputEvaluationDelegate();
+    // を別の場所から呼ぶ必要あり
+
 
     public void UpdateInputCondition() {
 
@@ -161,8 +175,6 @@ public abstract class InputCard : Card
 public abstract class OutputCard : Card
 {
     public abstract void OutputBehaviour();
-    //public abstract void UpdateOutputBehaviour();
-    public abstract void ConfirmOutputBehaviour();
     public abstract void OutputBehaviourNegative();
 
     public void UpdateOutputBehaviour()

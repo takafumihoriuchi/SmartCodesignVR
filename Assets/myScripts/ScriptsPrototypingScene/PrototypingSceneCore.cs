@@ -68,7 +68,7 @@ public class PrototypingSceneCore : MonoBehaviour
     [SerializeField] private Button backToEditButton = null; // todo make new and put instance in inspector
     [SerializeField] private Button finalizationButton = null;
     // todo make new and add "finalize smart object" button in inspector
-    bool confirmed = false; // after-confirmed か before-confirmed かを知るため（back-to-edit の操作で可逆性あり）
+    bool isConfirmed = false; // after-confirmed か before-confirmed かを知るため（back-to-edit の操作で可逆性あり）
 
 
     [SerializeField] private GameObject menuCanvas = null;
@@ -132,11 +132,11 @@ public class PrototypingSceneCore : MonoBehaviour
         //outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
         inputInstanceList[idx].StatementFieldGroup.
             GetComponent<Button>().onClick.AddListener(
-            () => { StatementBoxOnClick(inputInstanceList[idx].InstanceID); }
+            () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
             );
         outputInstanceList[idx].StatementFieldGroup.
             GetComponent<Button>().onClick.AddListener(
-            () => { StatementBoxOnClick(outputInstanceList[idx].InstanceID); }
+            () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
             );
         // todo この方法で良いのかの確認
 
@@ -186,21 +186,21 @@ public class PrototypingSceneCore : MonoBehaviour
         // ボタンの登録　（一番初めのinstanceのボタン登録はStart()で個別にやる）
         inputInstanceList[idx].StatementFieldGroup.
             GetComponent<Button>().onClick.AddListener(
-            () => { StatementBoxOnClick(inputInstanceList[idx].InstanceID); }
+            () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
             );
         outputInstanceList[idx].StatementFieldGroup.
             GetComponent<Button>().onClick.AddListener(
-            () => { StatementBoxOnClick(outputInstanceList[idx].InstanceID); }
+            () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
             );
         // どのインスタンスのボタンが押されたのかの情報が欲しい => TODO この方法(lambda expression)で実現できているのかの動作確認
         // inputInstanceList[idx].InstanceID は最初にセットされた後は、書き換えられない想定だからユニークなインスタンスに紐ずく
 
-        ShiftStatementBoxes(); // 他人を押し上げる
+        ShiftStatementFields(); // 他人を押し上げる
 
         // 矢印 => インスタンスに付随する必要はない。instance.Countに応じて、個数と位置を調整する
         AddIOArrow();
 
-        if (!CheckInstanceListCapacity()) addInstanceButton.interactable = false;
+        addInstanceButton.interactable = CheckInstanceListCapacity();
     }
 
 
@@ -208,7 +208,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // todo IsFocusedなものとそうでないものとで色の濃淡を変化させる
     // todo on click でfocusが移り変わる機能の実装
     // recieves the instance-ID of the clicked statement-box
-    private void StatementBoxOnClick(int instanceID)
+    private void StatementFieldOnClick(int instanceID)
     {
         int idx = GetInstanceListIndexFromInstanceID(instanceID);
         //GrantFocusToTargetInstances(idx);
@@ -216,7 +216,7 @@ public class PrototypingSceneCore : MonoBehaviour
         DepriveFocusFromOtherAndGrantToTargetInstances(idx);
     }
 
-    private void ShiftStatementBoxes()
+    private void ShiftStatementFields()
     {
         Vector3 inputBasePosition = inputStatementFieldGroup.transform.position;
         Vector3 outputBasePosition = outputStatementFieldGroup.transform.position;
@@ -244,10 +244,11 @@ public class PrototypingSceneCore : MonoBehaviour
         }
         GrantFocusToTargetInstances(inputInstanceList.Count - 1); // focus on tail instance
 
-        ShiftStatementBoxes();
+        ShiftStatementFields();
         ReduceIOArrow();
 
-        if (inputInstanceList.Count <= 1) removeInstanceButton.interactable = false;
+        if (inputInstanceList.Count <= 1)
+            removeInstanceButton.interactable = false;
     }
 
     // ずらし方がIOinstanceとは異なる。ここでは、新しいのが上に積み上げられる
@@ -322,12 +323,13 @@ public class PrototypingSceneCore : MonoBehaviour
             outputInstanceList[i].UpdateOutputBehaviour();
         }
 
+        // check if all instances has been set a value
         bool isConfirmable = CheckConfirmability(); // CanBeConfirmed プロパティを各カードクラスで更新する
         if (isConfirmable) confirmationButton.interactable = true;
         else confirmationButton.interactable = false;
         // todo Update()の中ではなく、どこかの発火から処理を行うのが理想的
 
-        if (confirmed)
+        if (isConfirmed)
         {
             for (int i = 0; i < instanceCount; i++)
             {
@@ -351,7 +353,8 @@ public class PrototypingSceneCore : MonoBehaviour
     private bool CheckConfirmability()
     {
         bool bflag = true;
-        for (int i = 0; i < inputInstanceList.Count; i++)
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
         {
             bflag &= inputInstanceList[i].CanBeConfirmed;
             bflag &= outputInstanceList[i].CanBeConfirmed;
@@ -360,32 +363,88 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    // confirmationBtn is interactable only when all instances are confirmable (done)
+    // Confirmation Button OnClick
     private void ConfirmSmartObject()
     {
-        confirmed = true; // todo what to do with IsConfirmed in each instance??
-        for (int i = 0; i < inputInstanceList.Count; i++)
-        {
-            inputInstanceList[i].ConfirmInputCondition();
-            outputInstanceList[i].ConfirmOutputBehaviour();
+        isConfirmed = true;
+
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++) {
+            inputInstanceList[i].IsConfirmed = true;
+            outputInstanceList[i].IsConfirmed = true;
         }
+
+        confirmationButton.interactable = false;
         backToEditButton.interactable = true;
         finalizationButton.interactable = true;
+
+        addInstanceButton.interactable = false;
+        removeInstanceButton.interactable = false;
+
+        ChangeStatementFieldButtonInteractability(false);
+        ChangeUnfocusedStatementFieldColors(BEIGE);
     }
 
+    // Back-To-Edit Button OnClick
     private void GoBackToEditMode()
     {
-        // todo 内容を確認する
-        confirmed = false;
+        isConfirmed = false;
+
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            inputInstanceList[i].IsConfirmed = false;
+            outputInstanceList[i].IsConfirmed = false;
+        }
+
+        confirmationButton.interactable = true;
         backToEditButton.interactable = false;
         finalizationButton.interactable = false;
+
+        addInstanceButton.interactable = CheckInstanceListCapacity();
+        removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
+
+        ChangeStatementFieldButtonInteractability(true);
+        ChangeUnfocusedStatementFieldColors(SHADE);
     }
 
+    private void ChangeStatementFieldButtonInteractability(bool tf)
+    {
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            inputInstanceList[i].StatementFieldGroup.
+                GetComponent<Button>().interactable = tf;
+            outputInstanceList[i].StatementFieldGroup.
+                GetComponent<Button>().interactable = tf;
+        }
+    }
+
+    private void ChangeUnfocusedStatementFieldColors(Color color)
+    {
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            if (inputInstanceList[i].IsFocused) continue;
+            else
+            {
+                inputInstanceList[i].StatementFieldGroup.
+                    GetComponent<Image>().color = color;
+                outputInstanceList[i].StatementFieldGroup.
+                    GetComponent<Image>().color = color;
+            }
+        }
+    }
+
+    // Finalization Button OnClick
     private void FinalizeSmartObject()
     {
         // todo pack smart object information data and pass to next scene
-        // CardSelectionMediator class に新しいフィールドを用意する
-        SceneManager.LoadScene(3); // InteractionScene
+        // => CardSelectionMediator class に新しいフィールドを用意する
+        // Smart Object を記述するのに何が必要かを考える（environment object, input-delegate, output-behaviour, props, ...）
+
+        Debug.Log("Moving to InteractionScene");
+        // SceneManager.LoadScene(3); // InteractionScene
     }
 
 

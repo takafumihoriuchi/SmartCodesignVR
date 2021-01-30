@@ -51,6 +51,7 @@ public class LightUpCard : OutputCard
         originalEnvObjMaterial = GetMaterialArray(envPartsGameObject);
         edittedEnvObjMaterial = GetMaterialArray(envPartsGameObject);
 
+        // todo 参照型がこのクラス限定で厳しければ、paintBrushだけをinstantiate()して、focusが移るたびにactiveを切り替えればいい。
         eventBridgeHandler = paintBrush.RequestEventHandlers();
         //eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
         //eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
@@ -112,30 +113,6 @@ public class LightUpCard : OutputCard
         }
     }
 
-    protected override void OnFocusGranted()
-    {
-        eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
-        eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
-        // load colors
-        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
-    }
-
-    protected override void OnFocusDeprived()
-    {
-        eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
-        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
-        // save colors
-        // => already saved 'dynamically' during interaction
-        // reset colors
-        ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
-    }
-
-
-    public override void ConfirmOutputBehaviour()
-    {
-        isConfirmed = true;
-    }
-
 
     public override void OutputBehaviour()
     {
@@ -143,6 +120,7 @@ public class LightUpCard : OutputCard
     }
     
     // TODO 複数インスタンスある時に、多分これだとピカピカ光っちゃう（他のとconflictしてスイッチングする）
+    // LEDだからピカピカして欲しいならそれでもいいけど、点滅が早すぎてユーザーフレンドリーじゃないと思う
     public override void OutputBehaviourNegative()
     {
         ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
@@ -183,13 +161,45 @@ public class LightUpCard : OutputCard
         return matArr;
     }
 
+
+    // TODO 要検討；propsが複製なのか参照なのかで変わってくる
+    // TODO 参照の場合、今の実装だとまずいことになるから、
+    // （他のインスタンスで変更した色がこのインスタンスでも変更されてしまう）
+    // （つまり、TriggerEnterなどを+=,-=しても、他のインスタンスでつけたらこっちでもつけたのと同じことになってしまう）
+    // その場合は、SetActivateする前に、インスタンスごとにinstantiate()で自前のを用意して、
+    // それをSetActivate()したのちに、Focusが移るたびに、SetActiveをtrueにしたりfalseにしたりする
+
+    protected override void OnFocusGranted()
+    {
+        eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
+        eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+        // load colors
+        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+    }
+    protected override void OnFocusDeprived()
+    {
+        eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
+        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
+        // save colors
+        // => already saved 'dynamically' during interaction
+        // reset colors
+        ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+    }
+
+    protected override void OnConfirm()
+    {
+        // propsを隠したい
+        // if ()
+        return;
+    }
+    protected override void OnBackToEdit()
+    {
+        // propsを再登場させたい
+        return;
+    }
+
 }
 
-
-// "MonoBehaviour.OnDestroy()" <= cannot be used; not subclass of MonoBehaviour
-// todo insert these to disable the trigger events of brushTip
-// eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
-// eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip; 
 
 /*
 

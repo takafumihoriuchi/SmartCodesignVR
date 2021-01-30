@@ -47,14 +47,6 @@ public class MakeSoundCard : OutputCard
 
 
 
-    public override void ConfirmOutputBehaviour()
-    {
-        isConfirmed = true;
-        // another line here will probably be needed in other OutputCard subclasses
-    }
-
-
-
     public override void OutputBehaviour()
     {
         if ((float)stopWatch.Elapsed.TotalSeconds >= clipDuration)
@@ -77,7 +69,7 @@ public class MakeSoundCard : OutputCard
         if (soundRecorder.isPlaying) soundRecorder.Stop();
     }
 
-
+    // only called from core when isFocused is true
     protected override void BehaviourDuringPrototyping()
     {
         if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed) {
@@ -89,17 +81,6 @@ public class MakeSoundCard : OutputCard
         // todo design the UX for this interaction
 
         MicrophoneAnimation();
-    }
-
-    // このクラスについては、OnFocusedで行う操作は特にない；動作はカードごとに違う。
-    protected override void OnFocusGranted()
-    {
-        return;
-    }
-
-    protected override void OnFocusDeprived()
-    {
-        return;
     }
 
 
@@ -148,6 +129,14 @@ public class MakeSoundCard : OutputCard
             micPropModel.transform.localScale = originalScale;
         }
     }
+
+    // このクラスについては、OnFocusedで行う操作は特にない；動作はカードごとに違う。
+    // todo propsが全て同じものなのか、別物なのか、
+    // それによって次の4つのメソッドの処理は変わる
+    protected override void OnFocusGranted() { return; }
+    protected override void OnFocusDeprived() { return; }
+    protected override void OnConfirm() { return; }
+    protected override void OnBackToEdit() { return; }
 
 }
 

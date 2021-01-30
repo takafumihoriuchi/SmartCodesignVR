@@ -80,28 +80,9 @@ public class FireCard : InputCard
 
     }
 
-    protected override void OnFocusGranted()
-    {
-        SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
-        return;
-    }
-
-    protected override void OnFocusDeprived()
-    {
-        // 他のインスタンスの色spriteと干渉しちゃうから、offにする（alphaを0にする）
-        SetRangeOpacity(0.0f, 0.0f, 0.0f);
-        return;
-    }
-
     private bool DetectDistanceShort()
     {
         if (markerDistance < BOUNDARY_SM) return true;
-        else return false;
-    }
-
-    private bool DetectDistanceLong()
-    {
-        if (markerDistance > BOUNDARY_ML) return true;
         else return false;
     }
 
@@ -112,6 +93,13 @@ public class FireCard : InputCard
         else
             return false;
     }
+
+    private bool DetectDistanceLong()
+    {
+        if (markerDistance > BOUNDARY_ML) return true;
+        else return false;
+    }
+
 
     private void SetRangeOpacity(float r, float b, float g)
     {
@@ -129,5 +117,37 @@ public class FireCard : InputCard
         tmpColor.a = g;
         rangeImageGreen.color = tmpColor;
     }
+
+
+    // todo 床に描画してるSpriteが参照型で全て同じものなのか、別物なのか、
+    // それによって次の4つのメソッドの処理は変わる
+    // 現状の下のメソッドでは「コピーが複数存在する」と考えて実装している。
+    // TODO => 参照の方が都合がいいから、参照型で実装する。そういうふうに実装する。
+    protected override void OnFocusGranted()
+    {
+        SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
+        return;
+    }
+    protected override void OnFocusDeprived()
+    {
+        // 他のインスタンスの色spriteと干渉しちゃうから、offにする（alphaを0にする）
+        SetRangeOpacity(0.0f, 0.0f, 0.0f);
+        return;
+    }
+
+    protected override void OnConfirm()
+    {
+        // TODO
+        InputConditionDefinition = DetermineInputEvaluationDelegate(); // todo 全てのinputcardに必要な重要な命令だから、ここに置くべきではない。InputCard classに移すこと。
+        // TODO
+
+        if (isFocused) SetRangeOpacity(0.0f, 0.0f, 0.0f);
+    }
+    protected override void OnBackToEdit()
+    {
+        if (isFocused) SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
+    }
+
+    
 
 }
