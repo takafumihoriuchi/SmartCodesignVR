@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using TMPro;
 
 
 public class CardSelectionMediator
@@ -62,14 +63,15 @@ public class PrototypingSceneCore : MonoBehaviour
 
     // Confirmation Canvas Fields
 
-    [SerializeField] private GameObject confirmationMessageField = null; // todo assign in inspector
-    // todo こういうtext-fieldは、ここで直接 TextMeshProUGUI として読み込んだ方が良いのでは?
+    // todo こういうtext-fieldは、最初からそのコンポーネントしか使わないことがわかっていれば、GameObject以外を使用しても良い。
+    [SerializeField] private TextMeshProUGUI confirmationMessageField = null; // todo assign in inspector
     [SerializeField] private Button confirmationButton = null;
     [SerializeField] private Button backToEditButton = null; // todo make new and put instance in inspector
     [SerializeField] private Button finalizationButton = null;
     // todo make new and add "finalize smart object" button in inspector
     bool isConfirmed = false; // after-confirmed か before-confirmed かを知るため（back-to-edit の操作で可逆性あり）
-
+    readonly string beforeConfirmMessage = "Ready to test the Smart Object?";
+    readonly string afterConfirmMessage = "Do you want to keep editing or finalize?";
 
     [SerializeField] private GameObject menuCanvas = null;
     [SerializeField] private Button backToSceneButton = null;
@@ -148,12 +150,17 @@ public class PrototypingSceneCore : MonoBehaviour
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = false;
 
+        confirmationMessageField.SetText(beforeConfirmMessage);
         confirmationButton.onClick.AddListener(ConfirmSmartObject);
         confirmationButton.interactable = false; // set to true when every-instances.canBeConfirmed is true
+        confirmationButton.gameObject.SetActive(true);
         backToEditButton.onClick.AddListener(GoBackToEditMode);
         backToEditButton.interactable = false;
+        backToEditButton.gameObject.SetActive(false);
         finalizationButton.onClick.AddListener(FinalizeSmartObject);
         finalizationButton.interactable = false;
+        finalizationButton.gameObject.SetActive(false);
+
 
         backToSceneButton.onClick.AddListener(LoadCardSelectionScene);
         closeMenuButton.onClick.AddListener(CloseMenu);
@@ -375,8 +382,12 @@ public class PrototypingSceneCore : MonoBehaviour
         }
 
         confirmationButton.interactable = false;
+        confirmationButton.gameObject.SetActive(false);
         backToEditButton.interactable = true;
+        backToEditButton.gameObject.SetActive(true);
         finalizationButton.interactable = true;
+        finalizationButton.gameObject.SetActive(true);
+        confirmationMessageField.SetText(afterConfirmMessage);
 
         addInstanceButton.interactable = false;
         removeInstanceButton.interactable = false;
@@ -398,8 +409,12 @@ public class PrototypingSceneCore : MonoBehaviour
         }
 
         confirmationButton.interactable = true;
+        confirmationButton.gameObject.SetActive(true);
         backToEditButton.interactable = false;
+        backToEditButton.gameObject.SetActive(false);
         finalizationButton.interactable = false;
+        finalizationButton.gameObject.SetActive(false);
+        confirmationMessageField.SetText(beforeConfirmMessage);
 
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
