@@ -78,11 +78,11 @@ public abstract class Card
 
         // TODO 位置の調整；自分だけじゃなくて、他人の位置を操作しないといけない。（というか、自分の位置はオリジナルと同じ）
         // => 自分は動かないから、addInstanceが押された時に、他の奴らを動かせばいい。
-        //Vector3 uppermostArrowPosition = ioArrowList[n - 1].transform.position;
-        //Vector3 newPosition = uppermostArrowPosition + new Vector3(0, VSHAMT, 0);
         this.statementFieldGroup = Object.Instantiate(
-            statementFieldGroup, statementFieldGroup.transform.position,
-            Quaternion.identity, statementFieldGroup.transform);
+            statementFieldGroup, statementFieldGroup.transform);
+        //this.statementFieldGroup = Object.Instantiate(
+        //    statementFieldGroup, statementFieldGroup.transform.position,
+        //    Quaternion.identity, statementFieldGroup.transform);
         // => indicating that the transform is identical to the original
         indexTextTMP = this.statementFieldGroup.transform.Find("IndexText").gameObject.GetComponent<TextMeshProUGUI>();
         indexTextTMP.SetText(getIndexText());
@@ -90,10 +90,10 @@ public abstract class Card
         contentTextTMP.SetText(contentText);
         variableTextTMP = this.statementFieldGroup.transform.Find("Variable/VariableText").gameObject.GetComponent<TextMeshProUGUI>();
         // variableTextTMP is set dynamically
-
-        this.statementFieldGroup.SetActive(true); // TODO 直接activateするのではなく、
+        this.statementFieldGroup.SetActive(true);
+        // 直接activateするのではなく、
         // instantiateして複製してから、それをactivateする (after adjustening transform.position.y)
-        // todo need to adjust transform.position when PrototypingSceneCore.instIdx >= 1
+        // need to adjust transform.position when PrototypingSceneCore.instIdx >= 1
         // must instantiate() first
         // something like "transform.position.y += xxx*i" ??
 

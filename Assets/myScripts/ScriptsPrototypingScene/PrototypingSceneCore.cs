@@ -15,6 +15,9 @@ public class CardSelectionMediator
         {"input", null},
         {"output", null}
     };
+
+    // todo 最後に受け渡すデータ
+
 }
 
 
@@ -79,11 +82,10 @@ public class PrototypingSceneCore : MonoBehaviour
     private List<InputCard> inputInstanceList = new List<InputCard>();
     private List<OutputCard> outputInstanceList = new List<OutputCard>();
 
+    readonly Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f); // statement focused
+    readonly Color SHADE = new Color(0.7803f, 0.7568f, 0.7019f, 1.0f); // statement shaded
+
     const float VSHAMT = 0.5f; // vertical shift amount
-    private Color focusedStatementColor;
-    private Color shadedStatementColor;
-    // const Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f);
-    // Color newColor = new Color(0.3f, 0.4f, 0.6f);
 
     // for developmental use only
     private void DevelopmentPurposeAssign()
@@ -115,7 +117,6 @@ public class PrototypingSceneCore : MonoBehaviour
             ref inputCardNameField, ref inputDescriptionField); // todo 参照型だから多分大丈夫だと思うけど、最初に生成したものが後に削除された場合、これらの要素が残るかを確認する
         inputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref inputProps, ref inputStatementFieldGroup, AvailableMinInstanceID());
-        // todo "inputStatementFieldGroup"は値渡しになっている？参照になっているような気がしている
 
         outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
         outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
@@ -129,18 +130,19 @@ public class PrototypingSceneCore : MonoBehaviour
         // ボタンとしてのstatementBoxの追加と、それが押下された時にIsFocusedがtrueになる処理
         //inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
         //outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
-        inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(() => { StatementBoxOnClick(idx); });
-        outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(() => { StatementBoxOnClick(idx); });
+        inputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementBoxOnClick(inputInstanceList[idx].InstanceID); }
+            );
+        outputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementBoxOnClick(outputInstanceList[idx].InstanceID); }
+            );
+        // todo この方法で良いのかの確認
 
         ioArrowList.Add(ioArrowObject);
 
-        // color settings (focused and not focused)
-        focusedStatementColor = inputInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color;
-        shadedStatementColor = focusedStatementColor - new Color(0.2f,0.2f,0.2f,1f);
-        // TODO Jan30: new Colorのalphaは1fでいいのか、単純な引き算なら0になってしまうが、
-
         // UI button settings
-
         addInstanceButton.onClick.AddListener(AddInstanceToList);
         removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
         addInstanceButton.interactable = CheckInstanceListCapacity();
@@ -163,12 +165,15 @@ public class PrototypingSceneCore : MonoBehaviour
         return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
     }
 
-
+    // todo Startの中の処理と合わせて、リファクタの余地あり; ボタン登録も関数化可能(indexを引数に渡す)
     private void AddInstanceToList()
     {
         inputInstanceList.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
         outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
         int idx = inputInstanceList.Count - 1; // tail of updated list
+
+        // note that we are skipping CardDescriptionSetup(); this is only necessary in the first instance generated in Start()
+
         inputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref inputProps, ref inputStatementFieldGroup, AvailableMinInstanceID());
         outputInstanceList[idx].CardStatementSetup(
@@ -178,11 +183,16 @@ public class PrototypingSceneCore : MonoBehaviour
         DepriveFocusFromOtherInstances(idx);
 
         // ボタンの登録　（一番初めのinstanceのボタン登録はStart()で個別にやる）
-        //inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
-        //outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
-        inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(() => { StatementBoxOnClick(idx); });
-        outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(() => { StatementBoxOnClick(idx); });
-        // todo どのインスタンスのボタンが押されたのかの情報が欲しい
+        inputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementBoxOnClick(inputInstanceList[idx].InstanceID); }
+            );
+        outputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementBoxOnClick(outputInstanceList[idx].InstanceID); }
+            );
+        // どのインスタンスのボタンが押されたのかの情報が欲しい => TODO この方法(lambda expression)で実現できているのかの動作確認
+        // inputInstanceList[idx].InstanceID は最初にセットされた後は、書き換えられない想定だからユニークなインスタンスに紐ずく
 
         ShiftStatementBoxes(); // 他人を押し上げる
 
@@ -196,8 +206,10 @@ public class PrototypingSceneCore : MonoBehaviour
     // TODO 本当にこれで良いのかがわからない。つまり、idxの渡し方が
     // todo IsFocusedなものとそうでないものとで色の濃淡を変化させる
     // todo on click でfocusが移り変わる機能の実装
-    private void StatementBoxOnClick(int idx)
+    // recieves the instance-ID of the clicked statement-box
+    private void StatementBoxOnClick(int instanceID)
     {
+        int idx = GetInstanceListIndexFromInstanceID(instanceID);
         GrantFocusToInstances(idx);
         DepriveFocusFromOtherInstances(idx);
     }
@@ -265,9 +277,9 @@ public class PrototypingSceneCore : MonoBehaviour
             {
                 inputInstanceList[i].IsFocused = false;
                 outputInstanceList[i].IsFocused = false;
-                // todo statement (is button) の色を変える
-                inputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = ;
-                inputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = ;
+                // statement (is button) の色を変える
+                inputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = SHADE;
+                outputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = SHADE;
             }
         }
     }
@@ -276,9 +288,9 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         inputInstanceList[targetIdx].IsFocused = true;
         outputInstanceList[targetIdx].IsFocused = true;
-        // todo statement (is button) の色を変える
-        inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = ;
-        inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = ;
+        // statement (is button) の色を変える
+        inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
+        outputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
     }
 
 
@@ -436,6 +448,17 @@ public class PrototypingSceneCore : MonoBehaviour
             if (idCandidate == inputInstanceList[i].InstanceID) idCandidate++;
         }
         return idCandidate;
+    }
+
+    // returns index in Instance List 
+    // returns -1 when not found in Instance List
+    private int GetInstanceListIndexFromInstanceID(int id)
+    {
+        for (int idx = 0; idx < inputInstanceList.Count; idx++)
+        {
+            if (inputInstanceList[idx].InstanceID == id) return idx;
+        }
+        return -1; // todo may want to make it throw error
     }
 
 
