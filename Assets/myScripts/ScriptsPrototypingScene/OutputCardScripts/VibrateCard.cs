@@ -4,19 +4,54 @@ using UnityEngine;
 
 public class VibrateCard : OutputCard
 {
-
     public VibrateCard()
+    {
+        cardName = "Vibrate";
+        descriptionText =
+            "I can vibrate.";
+        contentText = "vibrate at the frequency of";
+        // shake the object to determine the frequency
+        // もしくは、Moveのtrajectoryのコードを使いまわしてもいいかも。
+        // 時間制限をつけて、その間にshakeしてもらう。その時の小刻みな軌跡を辿る。
+    }
+
+    protected override void InitPropFields()
     {
 
     }
 
-    protected override string GetCardName() { return "Vibrate"; }
-    protected override string InitContentText() { return ""; }
-    protected override void InitPropFields() { }
-    public override void ConfirmOutputBehaviour() { }
-    public override void UpdateOutputBehaviour() { }
-    public override void OutputBehaviour() { }
-    public override void OutputBehaviourNegative() { }
-    protected override void BehaviourDuringPrototyping() { }
+    public override void OutputBehaviour()
+    {
 
+    }
+
+    public override void OutputBehaviourNegative()
+    {
+
+    }
+
+    protected override void BehaviourDuringPrototyping()
+    {
+
+    }
+
+    protected override void OnFocusGranted()
+    {
+
+    }
+
+    protected override void OnFocusDeprived()
+    {
+
+    }
+
+    protected override void OnConfirm()
+    {
+
+    }
+
+    protected override void OnBackToEdit()
+    {
+
+    }
 }

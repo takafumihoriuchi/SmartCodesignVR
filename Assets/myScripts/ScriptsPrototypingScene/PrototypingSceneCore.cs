@@ -47,7 +47,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
     // IO Canvas Fileds
 
-    [SerializeField] private GameObject inputCardNameField = null;
+    [SerializeField] private GameObject inputCardNameField = null; // todo これとかは初めからTextMeshProUGUIで読み込んでしまった方が少し効率が良い
     [SerializeField] private GameObject outputCardNameField = null;
     [SerializeField] private GameObject inputDescriptionField = null;
     [SerializeField] private GameObject outputDescriptionField = null;

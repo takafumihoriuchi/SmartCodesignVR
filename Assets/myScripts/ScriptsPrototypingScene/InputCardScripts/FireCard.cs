@@ -22,8 +22,9 @@ public class FireCard : InputCard
     {
         maxInstanceNum = 3; // setting unique for InputCards
         cardName = "Fire";
-        descriptionText
-            = "Specifies the distance of fire from the object." +
+        descriptionText =
+            //"Specifies the distance of fire from the object." +
+            "I can detect the presence of fire." +
             "Steps:" +
             "1. <indent=15%>Grab the fire by holding the trigger on controller.</indent>" +
             "2. <indent=15%>Move it near/away to the object.</indent>" +

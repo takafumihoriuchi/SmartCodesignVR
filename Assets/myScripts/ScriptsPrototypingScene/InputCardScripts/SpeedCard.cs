@@ -4,13 +4,52 @@ using UnityEngine;
 
 public class SpeedCard : InputCard
 {
+    public SpeedCard()
+    {
+        maxInstanceNum = 5;
+        cardName = "Speed";
+        descriptionText = "I can detect whether I am moving fast or slow.";
+        contentText = "When am moving";
+    }
 
-    public SpeedCard() { }
-    protected override string GetCardName() { return "Speed"; }
-    protected override string InitContentText() { return ""; }
-    protected override void InitPropFields() { }
-    protected override InputConditionDelegate DetermineInputEvaluationDelegate() { return null; }
-    protected override void UpdatesForInputConditionEvaluation() { }
-    protected override void BehaviourDuringPrototyping() { }
+    protected override void InitPropFields()
+    {
+
+    }
+
+    protected override InputConditionDelegate DetermineInputEvaluationDelegate()
+    {
+        return null;
+    }
+
+    protected override void UpdatesForInputConditionEvaluation()
+    {
+
+    }
+
+    protected override void BehaviourDuringPrototyping()
+    {
+
+    }
+
+    protected override void OnFocusGranted()
+    {
+
+    }
+
+    protected override void OnFocusDeprived()
+    {
+
+    }
+
+    protected override void OnConfirm()
+    {
+
+    }
+
+    protected override void OnBackToEdit()
+    {
+
+    }
 
 }

@@ -27,8 +27,8 @@ public class LightUpCard : OutputCard
     public LightUpCard()
     {
         cardName = "Light Up";
-        descriptionText
-            = "I can light up LED in different colors." +
+        descriptionText =
+            "I can light up LEDs in different colors." +
             "Steps:" +
             "1. <indent=15%>Pickup paint brush with the trigger button.</indent>" +
             "2. <indent=15%>Dip paint brush in paint bucket.</indent>" +

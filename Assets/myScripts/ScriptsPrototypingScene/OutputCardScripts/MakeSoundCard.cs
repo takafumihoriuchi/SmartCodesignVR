@@ -27,8 +27,9 @@ public class MakeSoundCard : OutputCard
     {
         // executed before gameobjects are passed to this class instance
         cardName = "Make Sound";
-        descriptionText
-            = "Plays sound that was recorded." +
+        descriptionText =
+            // "Plays sound that was recorded." +
+            "I can produce sound or play music." +
             "Steps:" +
             "1. <indent=15%>Grab the microphone.</indent>" +
             "2. <indent=15%>Press and hold A-button to start recording.</indent>" +

@@ -8,16 +8,52 @@ public class SendCard : OutputCard
 
     public SendCard()
     {
+        cardName = "Send";
+        descriptionText =
+            "I can send an Email or SMS.";
+        contentText = "send a message to the following address:";
+        // e.g. add UI-text-box under the parent of the variable box.
+        // OVR offers a VR keyboard
+    }
+
+    protected override void InitPropFields()
+    {
 
     }
 
-    protected override string GetCardName() { return "Send"; }
-    protected override string InitContentText() { return ""; }
-    protected override void InitPropFields() { }
-    public override void ConfirmOutputBehaviour() { }
-    public override void UpdateOutputBehaviour() { }
-    public override void OutputBehaviour() { }
-    public override void OutputBehaviourNegative() { }
-    protected override void BehaviourDuringPrototyping() { }
+    public override void OutputBehaviour()
+    {
+
+    }
+
+    public override void OutputBehaviourNegative()
+    {
+
+    }
+
+    protected override void BehaviourDuringPrototyping()
+    {
+
+    }
+
+    protected override void OnFocusGranted()
+    {
+
+    }
+
+    protected override void OnFocusDeprived()
+    {
+
+    }
+
+    protected override void OnConfirm()
+    {
+
+    }
+
+    protected override void OnBackToEdit()
+    {
+
+    }
 
 }

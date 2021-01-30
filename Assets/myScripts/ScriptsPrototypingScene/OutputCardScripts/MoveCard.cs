@@ -4,19 +4,52 @@ using UnityEngine;
 
 public class MoveCard : OutputCard
 {
-
     public MoveCard()
+    {
+        cardName = "Move";
+        descriptionText =
+            "I can move myself.";
+        contentText = "move in the assigned trajectory.";
+    }
+
+    protected override void InitPropFields()
     {
 
     }
 
-    protected override string GetCardName() { return "Move"; }
-    protected override string InitContentText() { return ""; }
-    protected override void InitPropFields() { }
-    public override void ConfirmOutputBehaviour() { }
-    public override void UpdateOutputBehaviour() { }
-    public override void OutputBehaviour() { }
-    public override void OutputBehaviourNegative() { }
-    protected override void BehaviourDuringPrototyping() { }
+    public override void OutputBehaviour()
+    {
+
+    }
+
+    public override void OutputBehaviourNegative()
+    {
+
+    }
+
+    protected override void BehaviourDuringPrototyping()
+    {
+
+    }
+
+    protected override void OnFocusGranted()
+    {
+
+    }
+
+    protected override void OnFocusDeprived()
+    {
+
+    }
+
+    protected override void OnConfirm()
+    {
+
+    }
+
+    protected override void OnBackToEdit()
+    {
+
+    }
 
 }

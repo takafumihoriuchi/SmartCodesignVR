@@ -4,14 +4,52 @@ using UnityEngine;
 
 public class SoundCard : InputCard
 {
-    // 物が置いてあって（牛とか猫とか）、その鳴き声が聞こえたら、xxxする、など？？
+    public SoundCard()
+    {
+        maxInstanceNum = 5;
+        cardName = "Sound";
+        descriptionText = "I can detect sound.";
+        contentText = "When I hear a"; // dog, child, ... （ひとつくらい奇を衒ったもの）
+    }
 
-    public SoundCard() { }
-    protected override string GetCardName() { return "Sound"; }
-    protected override string InitContentText() { return ""; }
-    protected override void InitPropFields() { }
-    protected override InputConditionDelegate DetermineInputEvaluationDelegate() { return null; }
-    protected override void UpdatesForInputConditionEvaluation() { }
-    protected override void BehaviourDuringPrototyping() { }
+    protected override void InitPropFields()
+    {
+
+    }
+
+    protected override InputConditionDelegate DetermineInputEvaluationDelegate()
+    {
+        return null;
+    }
+
+    protected override void UpdatesForInputConditionEvaluation()
+    {
+
+    }
+
+    protected override void BehaviourDuringPrototyping()
+    {
+
+    }
+
+    protected override void OnFocusGranted()
+    {
+
+    }
+
+    protected override void OnFocusDeprived()
+    {
+
+    }
+
+    protected override void OnConfirm()
+    {
+
+    }
+
+    protected override void OnBackToEdit()
+    {
+
+    }
 
 }
