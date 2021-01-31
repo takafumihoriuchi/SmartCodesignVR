@@ -84,8 +84,13 @@ public class PrototypingSceneCore : MonoBehaviour
     private List<InputCard> inputInstanceList = new List<InputCard>();
     private List<OutputCard> outputInstanceList = new List<OutputCard>();
 
-    readonly Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f); // statement focused
-    readonly Color SHADE = new Color(0.7803f, 0.7568f, 0.7019f, 1.0f); // statement shaded
+    // statement field colors
+    readonly Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f); // focused
+    readonly Color LIGHT_BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 0.4f); // unfocused
+    readonly Color SHADED_BEIGE = new Color(0.7803f, 0.7568f, 0.7019f, 1.0f); // unfocused
+    // arrow colors
+    readonly Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f); // focused
+    readonly Color LIGHT_WHITE = new Color(1.0f, 1.0f, 1.0f, 0.4f); // unfocused
 
     const float VSHAMT = 0.5f; // vertical shift amount
 
@@ -128,6 +133,9 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
 
+        ioArrowList.Add(Instantiate(ioArrowObject, ioArrowObject.transform.parent));
+        ioArrowList[0].SetActive(true);
+
         GrantFocusToTargetInstances(idx);
 
         // ボタンとしてのstatementBoxの追加と、それが押下された時にIsFocusedがtrueになる処理
@@ -143,7 +151,7 @@ public class PrototypingSceneCore : MonoBehaviour
             );
         // todo この方法で良いのかの確認
 
-        ioArrowList.Add(ioArrowObject);
+
 
         // UI button settings
 
@@ -169,6 +177,47 @@ public class PrototypingSceneCore : MonoBehaviour
 
     }
 
+
+    private void Update()
+    {
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            if (!inputInstanceList[i].IsFocused) continue;
+            inputInstanceList[i].UpdateInputCondition();
+            outputInstanceList[i].UpdateOutputBehaviour();
+        }
+
+        // check if all instances has been set a value
+        bool isConfirmable = CheckConfirmability(); // CanBeConfirmed プロパティを各カードクラスで更新する
+        if (isConfirmable) confirmationButton.interactable = true;
+        else confirmationButton.interactable = false;
+        // todo Update()の中ではなく、どこかの発火から処理を行うのが理想的
+
+        if (isConfirmed)
+        {
+            for (int i = 0; i < instanceCount; i++)
+            {
+                if (inputInstanceList[i].inputCondition)
+                {
+                    outputInstanceList[i].OutputBehaviour();
+                }
+                else
+                {
+                    outputInstanceList[i].OutputBehaviourNegative();
+                }
+            }
+        }
+
+        if (OVRInput.GetDown(OVRInput.RawButton.Start))
+        {
+            if (!menuIsOpened) OpenMenu();
+            else CloseMenu();
+        }
+
+    }
+
+
     private bool CheckInstanceListCapacity()
     {
         return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
@@ -189,6 +238,10 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
 
+        // 矢印 => インスタンスに付随する必要はない。instance.Countに応じて、個数と位置を調整する
+        AddIOArrow(); // must call this before "DepriveFocusFromOtherAndGrantToTargetInstances(idx);"
+        // todo eliminate these kind of dependencies on sequences
+
         //GrantFocusToTargetInstances(idx);
         //DepriveFocusFromOtherInstances(idx);
         DepriveFocusFromOtherAndGrantToTargetInstances(idx);
@@ -206,9 +259,6 @@ public class PrototypingSceneCore : MonoBehaviour
         // inputInstanceList[idx].InstanceID は最初にセットされた後は、書き換えられない想定だからユニークなインスタンスに紐ずく
 
         ShiftStatementFields(); // 他人を押し上げる
-
-        // 矢印 => インスタンスに付随する必要はない。instance.Countに応じて、個数と位置を調整する
-        AddIOArrow();
 
         // check for allawability of adding and removing instances
         addInstanceButton.interactable = CheckInstanceListCapacity();
@@ -291,8 +341,9 @@ public class PrototypingSceneCore : MonoBehaviour
                 inputInstanceList[i].IsFocused = false;
                 outputInstanceList[i].IsFocused = false;
                 // statement (is button) の色を変える
-                inputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = SHADE;
-                outputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = SHADE;
+                inputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
+                outputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
+                ioArrowList[focusedIdx].GetComponent<Image>().color = LIGHT_WHITE;
             }
         }
     }
@@ -304,61 +355,29 @@ public class PrototypingSceneCore : MonoBehaviour
         // statement (is button) の色を変える
         inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
         outputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
+        ioArrowList[targetIdx].GetComponent<Image>().color = WHITE;
     }
 
     private void DepriveFocusFromOtherAndGrantToTargetInstances(int targetIdx)
     {
-        // Note: focus transition order must be "deprivae from other THEN focus on target" for some specific card types
+        // NOTE: focus transition order must be "deprivae from other THEN focus on target" for some specific card types
         int instanceCount = inputInstanceList.Count;
         for (int i = 0; i < instanceCount; i++)
         {
+            if (i == targetIdx) continue;
             inputInstanceList[i].IsFocused = false;
             outputInstanceList[i].IsFocused = false;
-            inputInstanceList[i].StatementFieldGroup.GetComponent<Image>().color = SHADE;
-            outputInstanceList[i].StatementFieldGroup.GetComponent<Image>().color = SHADE;
+            inputInstanceList[i].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
+            outputInstanceList[i].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
+            ioArrowList[i].GetComponent<Image>().color = LIGHT_WHITE;
         }
         inputInstanceList[targetIdx].IsFocused = true;
         outputInstanceList[targetIdx].IsFocused = true;
         inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
         outputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
+        ioArrowList[targetIdx].GetComponent<Image>().color = WHITE;
     }
 
-
-    private void Update()
-    {
-        int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++) {
-            if (!inputInstanceList[i].IsFocused) continue;
-            inputInstanceList[i].UpdateInputCondition();
-            outputInstanceList[i].UpdateOutputBehaviour();
-        }
-
-        // check if all instances has been set a value
-        bool isConfirmable = CheckConfirmability(); // CanBeConfirmed プロパティを各カードクラスで更新する
-        if (isConfirmable) confirmationButton.interactable = true;
-        else confirmationButton.interactable = false;
-        // todo Update()の中ではなく、どこかの発火から処理を行うのが理想的
-
-        if (isConfirmed)
-        {
-            for (int i = 0; i < instanceCount; i++)
-            {
-                if (inputInstanceList[i].inputCondition)
-                {
-                    outputInstanceList[i].OutputBehaviour();
-                }
-                else
-                {
-                    outputInstanceList[i].OutputBehaviourNegative();
-                }
-            }
-        }
-
-        if (OVRInput.GetDown(OVRInput.RawButton.Start)) {
-            if (!menuIsOpened) OpenMenu();
-            else CloseMenu();
-        }
-    }
 
     private bool CheckConfirmability()
     {
@@ -397,6 +416,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
         ChangeStatementFieldButtonInteractability(false);
         ChangeUnfocusedStatementFieldColors(BEIGE);
+        ChangeUnfocusedArrowColors(WHITE);
     }
 
     // Back-To-Edit Button OnClick
@@ -423,7 +443,8 @@ public class PrototypingSceneCore : MonoBehaviour
         removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
 
         ChangeStatementFieldButtonInteractability(true);
-        ChangeUnfocusedStatementFieldColors(SHADE);
+        ChangeUnfocusedStatementFieldColors(LIGHT_BEIGE);
+        ChangeUnfocusedArrowColors(LIGHT_WHITE);
     }
 
     private void ChangeStatementFieldButtonInteractability(bool tf)
@@ -451,6 +472,15 @@ public class PrototypingSceneCore : MonoBehaviour
                 outputInstanceList[i].StatementFieldGroup.
                     GetComponent<Image>().color = color;
             }
+        }
+    }
+
+    private void ChangeUnfocusedArrowColors(Color color)
+    {
+        for (int i = 0; i < ioArrowList.Count; i++)
+        {
+            if (inputInstanceList[i].IsFocused) continue;
+            else ioArrowList[i].GetComponent<Image>().color = color;
         }
     }
 

@@ -171,15 +171,11 @@ public class LightUpCard : OutputCard
 
     protected override void OnFocusGranted()
     {
-        eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
-        eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
         // load colors
         ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
     }
     protected override void OnFocusDeprived()
     {
-        eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
-        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
         // save colors
         // => already saved 'dynamically' during interaction
         // reset colors
@@ -189,12 +185,27 @@ public class LightUpCard : OutputCard
     protected override void OnConfirm()
     {
         // propsを隠したい
-        // if ()
+
+        if (isFocused)
+        {
+            eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
+            eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
+        }
+
         return;
     }
     protected override void OnBackToEdit()
     {
         // propsを再登場させたい
+
+        // todo propsをreferenceとして受け取るということで、全体を再検討する。
+        // （referenceの方が無駄が少ない）
+        if (isFocused)
+        {
+            eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
+            eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+        }
+
         return;
     }
 
