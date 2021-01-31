@@ -68,17 +68,21 @@ public class FireCard : InputCard
 
         if (!markerIsGrabbed) return;
 
-        if (DetectDistanceShort()) {
+        if (DetectDistanceShort())
+        {
             SetRangeOpacity(ALPHA_HIGH, ALPHA_LOW, ALPHA_LOW);
             variableTextTMP.SetText("very close");
-        } else if (DetectDistanceLong()) {
-            SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_HIGH);
-            variableTextTMP.SetText("close by");
-        } else if (DetectDistanceMid()) {
+        }
+        else if (DetectDistanceMid())
+        {
             SetRangeOpacity(ALPHA_LOW, ALPHA_HIGH, ALPHA_LOW);
+            variableTextTMP.SetText("close");
+        }
+        else if (DetectDistanceLong())
+        {
+            SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_HIGH);
             variableTextTMP.SetText("far away");
         }
-
     }
 
     private bool DetectDistanceShort()

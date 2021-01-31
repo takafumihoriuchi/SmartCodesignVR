@@ -102,7 +102,7 @@ public class PrototypingSceneCore : MonoBehaviour
             + CardSelectionMediator.selectionDict["output"] + "]");
     }
 
-
+    // Startの中は、なるべくメソッドで処理の塊をバッチ化する。（ボタンのAddListenerの塊とか）
     private void Start()
     {
         DevelopmentPurposeAssign(); // make sure to delete after development
@@ -146,9 +146,10 @@ public class PrototypingSceneCore : MonoBehaviour
         ioArrowList.Add(ioArrowObject);
 
         // UI button settings
+
         addInstanceButton.onClick.AddListener(AddInstanceToList);
-        removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
         addInstanceButton.interactable = CheckInstanceListCapacity();
+        removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
         removeInstanceButton.interactable = false;
 
         confirmationMessageField.SetText(beforeConfirmMessage);
@@ -209,7 +210,9 @@ public class PrototypingSceneCore : MonoBehaviour
         // 矢印 => インスタンスに付随する必要はない。instance.Countに応じて、個数と位置を調整する
         AddIOArrow();
 
+        // check for allawability of adding and removing instances
         addInstanceButton.interactable = CheckInstanceListCapacity();
+        removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
     }
 
 
