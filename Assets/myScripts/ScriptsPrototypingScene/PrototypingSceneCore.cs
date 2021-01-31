@@ -163,25 +163,29 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
+
+    // Update() の中は必要最低限に留めて、発火を活用した方が効率的
     private void Update()
     {
         int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++)
+        int focusedIdx = GetFocusedInstanceIndex();
+        inputInstanceList[focusedIdx].UpdateInputCondition();
+        outputInstanceList[focusedIdx].UpdateOutputBehaviour();
+
+        // Check if the selected keywords have no overlaps
+        if (!ConditionKeywordIsUnique(focusedIdx))
         {
-            if (!inputInstanceList[i].IsFocused) continue;
-            inputInstanceList[i].UpdateInputCondition();
-            outputInstanceList[i].UpdateOutputBehaviour();
+            inputInstanceList[focusedIdx].ConditionKeyword = inputInstanceList[focusedIdx].ALREADY_EXISTS;
         }
 
         // check if all instances has been set a value
         bool isConfirmable = CheckConfirmability(); // CanBeConfirmed プロパティを各カードクラスで更新する
         if (isConfirmable) confirmationButton.interactable = true;
         else confirmationButton.interactable = false;
-        // todo Update()の中ではなく、どこかの発火から処理を行うのが理想的
 
         if (isConfirmed)
         {
-            for (int i = 0; i < instanceCount; i++)
+            for (int i = 0; i < instanceCount; i++) // 全てのインスタンスが対象
             {
                 if (inputInstanceList[i].inputCondition)
                 {
@@ -200,6 +204,26 @@ public class PrototypingSceneCore : MonoBehaviour
             else CloseMenu();
         }
 
+    }
+
+    private bool ConditionKeywordIsUnique(int focusedIdx)
+    {
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            if (i == focusedIdx) continue;
+            if (inputInstanceList[i].ConditionKeyword
+                == inputInstanceList[focusedIdx].ConditionKeyword) return false;
+        }
+        return true;
+    }
+
+    private int GetFocusedInstanceIndex()
+    {
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            if (inputInstanceList[i].IsFocused) return i;
+        }
+        return -1;
     }
 
 
@@ -475,7 +499,7 @@ public class PrototypingSceneCore : MonoBehaviour
         // todo pack smart object information data and pass to next scene
         // => CardSelectionMediator class に新しいフィールドを用意する
         // Smart Object を記述するのに何が必要かを考える（environment object, input-delegate, output-behaviour, props, ...）
-
+        // delegateのdictionaryと、選択されているキーワードのリスト(<=新しく作成する)も渡す
         Debug.Log("Moving to InteractionScene");
         // SceneManager.LoadScene(3); // InteractionScene
     }

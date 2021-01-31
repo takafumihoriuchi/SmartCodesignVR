@@ -108,7 +108,7 @@ public class LightUpCard : OutputCard
             paintCount--;
             if (paintCount == 0)
             {
-                variableTextTMP.SetText(string.Empty);
+                variableTextTMP.SetText(string.Empty); // 重要
             }
         }
     }

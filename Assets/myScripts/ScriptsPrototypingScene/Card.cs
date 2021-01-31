@@ -129,45 +129,26 @@ public abstract class InputCard : Card
     protected int maxInstanceNum;
     public int MaxInstanceNum { set { } get { return maxInstanceNum; } }
 
-    // delegate を dictionary で対応。
-    // これにより, dictionaryのkeyを比較することで、
-    // 既に他のインスタンスで選ばれているものかどうかをCoreから知ることができる。
-    protected string conditionKeyword;
-    public string ConditionKeyword { set { } get { return conditionKeyword; } }
     public delegate bool InputEvaluationDelegate();
-    public Dictionary<string, InputEvaluationDelegate> inputEvalDeleDict; // CoreからSmartObjectに渡すことになる；全てのインスタンスのConditinKeywordを含んだリストと共に
-    //protected InputEvaluationDelegate InputConditionDefinition; // 前からある；いらない？
-    //protected abstract InputEvaluationDelegate DetermineInputEvaluationDelegate(); // 前からある；いらない？
-    // todo canBeConfirmedの設定も重要
+    public Dictionary<string, InputEvaluationDelegate> inputEvalDeleDict;
+    protected string conditionKeyword = string.Empty;
+    public string ConditionKeyword {
+        set { conditionKeyword = value; variableTextTMP.SetText(conditionKeyword); }
+        get { return conditionKeyword; } }
+    public readonly string ALREADY_EXISTS = "already exists";
 
     [HideInInspector] public bool inputCondition = false;
 
-    //public void ConfirmInputCondition() {
-    //    //isConfirmed = true;
-    //    InputConditionDefinition = DetermineInputEvaluationDelegate();
-    //}
-    // TODO ConfirmInputCondition()は廃止した。
-    // InputConditionDefinition = DetermineInputEvaluationDelegate();
-    // を別の場所から呼ぶ必要あり
-
-
-    public void UpdateInputCondition() {
-
-        UpdatesForInputConditionEvaluation();
-
-        if (isConfirmed)
-        {
-            //inputCondition = InputConditionDefinition();
+    public void UpdateInputCondition()
+    {
+        if (isConfirmed) {
             inputCondition = inputEvalDeleDict[conditionKeyword]();
-        }
-        else
-        {
+            // Confirm後のテスト中は常時判定する必要があるからここに置いている
+        } else {
             BehaviourDuringPrototyping();
-            canBeConfirmed = !string.IsNullOrEmpty(variableTextTMP.text);
+            canBeConfirmed = !(string.IsNullOrEmpty(conditionKeyword) || conditionKeyword == ALREADY_EXISTS);
         }
     }
-
-    protected abstract void UpdatesForInputConditionEvaluation();
 
     protected override string getIndexSubText() {return "input";}
 
@@ -184,6 +165,7 @@ public abstract class OutputCard : Card
     {
         if (isConfirmed)
         {
+            return;
             // no actions are needed (as for current implemented cards)
         }
         else

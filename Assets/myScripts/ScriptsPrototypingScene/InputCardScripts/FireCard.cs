@@ -18,12 +18,16 @@ public class FireCard : InputCard
     const float BOUNDARY_SM = 1.0f;
     const float BOUNDARY_ML = 2.2f;
 
+    readonly string VERY_CLOSE = "very close";
+    readonly string CLOSE = "close";
+    readonly string FAR_AWAY = "far away";
+
     public FireCard()
     {
         maxInstanceNum = 3;
         cardName = "Fire";
         descriptionText =
-            "<i>I can detect the presence of fire.</i>\n" +
+            "<i>I can detect the presence (i.e. distance) of fire.</i>\n" +
             "<b>Steps:</b>\n" +
             "<b>1.</b> <indent=10%>Grab the fire by holding the trigger on controller.</indent>\n" +
             "<b>2.</b> <indent=10%>Move it near/away to the object.</indent>\n" +
@@ -33,9 +37,9 @@ public class FireCard : InputCard
 
         inputEvalDeleDict = new Dictionary<string, InputEvaluationDelegate>
         {
-            {"very close", DetectDistanceShort},
-            {"close", DetectDistanceMid},
-            {"far away", DetectDistanceLong}
+            {VERY_CLOSE, DetectDistanceShort},
+            {CLOSE, DetectDistanceMid},
+            {FAR_AWAY, DetectDistanceLong}
         };
     }
 
@@ -66,45 +70,29 @@ public class FireCard : InputCard
         // todo * can be rewritten as: rangeImageRed = propObjects.transform.Find("floorCanvas/tmpImageRed").gameObject.GetComponent<Image>();
     }
 
-    protected override InputConditionDelegate DetermineInputEvaluationDelegate()
-    {
-        if (markerDistance < BOUNDARY_SM) return DetectDistanceShort;
-        else if (markerDistance > BOUNDARY_ML) return DetectDistanceLong;
-        else return DetectDistanceMid;
-    }
-
-    protected override void UpdatesForInputConditionEvaluation() // 今となっては、この関数名も微妙
-    {
-        markerDistance = Vector3.Distance(
-                environmentObject.transform.position,
-                markerObj.transform.position);
-    }
-
     protected override void BehaviourDuringPrototyping()
     {
-        markerIsGrabbed
-            = markerObj.transform.GetComponent<OVRGrabbable>().isGrabbed;
+        markerDistance = Vector3.Distance(environmentObject.transform.position, markerObj.transform.position);
+        markerIsGrabbed = markerObj.transform.GetComponent<OVRGrabbable>().isGrabbed;
 
         if (markerIsGrabbed || Input.GetKey(KeyCode.Z)) // 'Z' is for development purpose only
         {
             if (DetectDistanceShort())
             {
                 SetRangeOpacity(ALPHA_HIGH, ALPHA_LOW, ALPHA_LOW);
-                variableTextTMP.SetText("very close");
-                conditionKeyword = "very close";
+                conditionKeyword = VERY_CLOSE; 
             }
             else if (DetectDistanceMid())
             {
                 SetRangeOpacity(ALPHA_LOW, ALPHA_HIGH, ALPHA_LOW);
-                variableTextTMP.SetText("close");
-                conditionKeyword = "close";
+                conditionKeyword = CLOSE;
             }
             else if (DetectDistanceLong())
             {
                 SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_HIGH);
-                variableTextTMP.SetText("far away");
-                conditionKeyword = "far away";
+                conditionKeyword = FAR_AWAY;
             }
+            variableTextTMP.SetText(conditionKeyword);
         }
     }
 
@@ -139,27 +127,21 @@ public class FireCard : InputCard
     }
     protected override void OnFocusDeprived()
     {
-        // TODO
-        InputConditionDefinition = DetermineInputEvaluationDelegate(); // todo 全てのinputcardに必要な重要な命令だから、ここに置くべきではない。InputCard classに移すこと。
-        // TODO
         // 他のインスタンスの色spriteと干渉しちゃうから、offにする（alphaを0にする）
+        // => 現状ではrefで受け取っているから、正確にはこれは必要ない処理
         SetRangeOpacity(0.0f, 0.0f, 0.0f);
         return;
     }
 
     protected override void OnConfirm()
     {
-        // TODO
-        if (isFocused) InputConditionDefinition = DetermineInputEvaluationDelegate(); // todo 全てのinputcardに必要な重要な命令だから、ここに置くべきではない。InputCard classに移すこと。
-        // TODO
-
         if (isFocused) SetRangeOpacity(0.0f, 0.0f, 0.0f);
     }
     protected override void OnBackToEdit()
     {
         if (isFocused) SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
     }
-
+    // 参照渡しを念頭に置いて設計すればこれらメソッドは要らないかもしれない
     
 
 }
