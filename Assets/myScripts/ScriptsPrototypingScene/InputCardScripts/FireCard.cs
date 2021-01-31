@@ -14,7 +14,7 @@ public class FireCard : InputCard
     private bool markerIsGrabbed = false;
 
     const float ALPHA_LOW = 0.1f;
-    const float ALPHA_HIGH = 0.5f;
+    const float ALPHA_HIGH = 0.4f;
     const float BOUNDARY_SM = 1.0f;
     const float BOUNDARY_ML = 2.2f;
 
