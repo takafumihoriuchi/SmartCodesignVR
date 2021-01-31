@@ -86,17 +86,17 @@ public class CardSelectionSceneCore : MonoBehaviour
     // for passing selection-infromation to next scene
     private void RecordSelectedCardsAsString()
     {
-        CardSelectionMediator.selectionDict["environment"]
+        SmartObject.cardSelectionDict["environment"]
             = selectionDict["environment"].name;
-        CardSelectionMediator.selectionDict["input"]
+        SmartObject.cardSelectionDict["input"]
             = selectionDict["input"].name;
-        CardSelectionMediator.selectionDict["output"]
+        SmartObject.cardSelectionDict["output"]
             = selectionDict["output"].name;
         // printf for development use
         Debug.Log("[env, in, out] = ["
-                  + CardSelectionMediator.selectionDict["environment"] + ", "
-                  + CardSelectionMediator.selectionDict["input"] + ", "
-                  + CardSelectionMediator.selectionDict["output"] + "]" );
+                  + SmartObject.cardSelectionDict["environment"] + ", "
+                  + SmartObject.cardSelectionDict["input"] + ", "
+                  + SmartObject.cardSelectionDict["output"] + "]" );
     }
 
 }

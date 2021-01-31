@@ -20,10 +20,9 @@ public class FireCard : InputCard
 
     public FireCard()
     {
-        maxInstanceNum = 3; // setting unique for InputCards
+        maxInstanceNum = 3;
         cardName = "Fire";
         descriptionText =
-            //"Specifies the distance of fire from the object." +
             "<i>I can detect the presence of fire.</i>\n" +
             "<b>Steps:</b>\n" +
             "<b>1.</b> <indent=10%>Grab the fire by holding the trigger on controller.</indent>\n" +
@@ -31,6 +30,26 @@ public class FireCard : InputCard
             "<b>3.</b> <indent=10%>Release the fire on the ground.</indent>\n" +
             "Maximum number of instances: 3";
         contentText = "When I see fire in distance";
+
+        inputEvalDeleDict = new Dictionary<string, InputEvaluationDelegate>
+        {
+            {"very close", DetectDistanceShort},
+            {"close", DetectDistanceMid},
+            {"far away", DetectDistanceLong}
+        };
+    }
+
+    private bool DetectDistanceShort() {
+        if (markerDistance < BOUNDARY_SM) return true;
+        else return false;
+    }
+    private bool DetectDistanceMid() {
+        if (markerDistance >= BOUNDARY_SM && markerDistance <= BOUNDARY_ML) return true;
+        else return false;
+    }
+    private bool DetectDistanceLong() {
+        if (markerDistance > BOUNDARY_ML) return true;
+        else return false;
     }
 
     protected override void InitPropFields()
@@ -54,7 +73,7 @@ public class FireCard : InputCard
         else return DetectDistanceMid;
     }
 
-    protected override void UpdatesForInputConditionEvaluation()
+    protected override void UpdatesForInputConditionEvaluation() // 今となっては、この関数名も微妙
     {
         markerDistance = Vector3.Distance(
                 environmentObject.transform.position,
@@ -72,38 +91,21 @@ public class FireCard : InputCard
             {
                 SetRangeOpacity(ALPHA_HIGH, ALPHA_LOW, ALPHA_LOW);
                 variableTextTMP.SetText("very close");
+                conditionKeyword = "very close";
             }
             else if (DetectDistanceMid())
             {
                 SetRangeOpacity(ALPHA_LOW, ALPHA_HIGH, ALPHA_LOW);
                 variableTextTMP.SetText("close");
+                conditionKeyword = "close";
             }
             else if (DetectDistanceLong())
             {
                 SetRangeOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_HIGH);
                 variableTextTMP.SetText("far away");
+                conditionKeyword = "far away";
             }
         }
-    }
-
-    private bool DetectDistanceShort()
-    {
-        if (markerDistance < BOUNDARY_SM) return true;
-        else return false;
-    }
-
-    private bool DetectDistanceMid()
-    {
-        if (markerDistance >= BOUNDARY_SM && markerDistance <= BOUNDARY_ML)
-            return true;
-        else
-            return false;
-    }
-
-    private bool DetectDistanceLong()
-    {
-        if (markerDistance > BOUNDARY_ML) return true;
-        else return false;
     }
 
 

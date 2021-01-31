@@ -7,21 +7,6 @@ using UnityEngine.EventSystems;
 using TMPro;
 
 
-public class CardSelectionMediator
-{
-    // parameters are set in CardSelectionScene
-    public static Dictionary<string, string> selectionDict
-        = new Dictionary<string, string>() {
-        {"environment", null},
-        {"input", null},
-        {"output", null}
-    };
-
-    // todo 最後に受け渡すデータ
-
-}
-
-
 public class PrototypingSceneCore : MonoBehaviour
 {
     // Environment Objects
@@ -97,14 +82,14 @@ public class PrototypingSceneCore : MonoBehaviour
     // for developmental use only
     private void DevelopmentPurposeAssign()
     {
-        CardSelectionMediator.selectionDict["environment"] = "TrashBin";
-        CardSelectionMediator.selectionDict["input"] = "Fire";
-        CardSelectionMediator.selectionDict["output"] = "LightUp";
+        SmartObject.cardSelectionDict["environment"] = "TrashBin";
+        SmartObject.cardSelectionDict["input"] = "Fire";
+        SmartObject.cardSelectionDict["output"] = "LightUp";
 
         Debug.Log("[env, in, out] = ["
-            + CardSelectionMediator.selectionDict["environment"] + ", "
-            + CardSelectionMediator.selectionDict["input"] + ", "
-            + CardSelectionMediator.selectionDict["output"] + "]");
+            + SmartObject.cardSelectionDict["environment"] + ", "
+            + SmartObject.cardSelectionDict["input"] + ", "
+            + SmartObject.cardSelectionDict["output"] + "]");
     }
 
     // Startの中は、なるべくメソッドで処理の塊をバッチ化する。（ボタンのAddListenerの塊とか）
@@ -114,20 +99,20 @@ public class PrototypingSceneCore : MonoBehaviour
 
         DeactivateAllCardRepresentations();
 
-        environmentObject = GetEnvObjByName(CardSelectionMediator.selectionDict["environment"]);
+        environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
 
         int idx = 0;
         int minInstanceID = AvailableMinInstanceID();
 
-        inputProps = GetInPropsByName(CardSelectionMediator.selectionDict["input"]);
-        inputInstanceList.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
+        inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
+        inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
         inputInstanceList[idx].CardDescriptionSetup(
             ref inputCardNameField, ref inputDescriptionField); // todo 参照型だから多分大丈夫だと思うけど、最初に生成したものが後に削除された場合、これらの要素が残るかを確認する
         inputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
 
-        outputProps = GetOutPropsByName(CardSelectionMediator.selectionDict["output"]);
-        outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
+        outputProps = GetOutPropsByName(SmartObject.cardSelectionDict["output"]);
+        outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
         outputInstanceList[idx].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
         outputInstanceList[idx].CardStatementSetup(
@@ -226,8 +211,8 @@ public class PrototypingSceneCore : MonoBehaviour
     // todo Startの中の処理と合わせて、リファクタの余地あり; ボタン登録も関数化可能(indexを引数に渡す)
     private void AddInstanceToList()
     {
-        inputInstanceList.Add(GetInputInstanceByName(CardSelectionMediator.selectionDict["input"]));
-        outputInstanceList.Add(GetOutputInstanceByName(CardSelectionMediator.selectionDict["output"]));
+        inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
+        outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
         int idx = inputInstanceList.Count - 1; // tail of updated list
 
         // note that we are skipping CardDescriptionSetup(); this is only necessary in the first instance generated in Start()

@@ -129,14 +129,18 @@ public abstract class InputCard : Card
     protected int maxInstanceNum;
     public int MaxInstanceNum { set { } get { return maxInstanceNum; } }
 
+    // delegate を dictionary で対応。
+    // これにより, dictionaryのkeyを比較することで、
+    // 既に他のインスタンスで選ばれているものかどうかをCoreから知ることができる。
+    protected string conditionKeyword;
+    public string ConditionKeyword { set { } get { return conditionKeyword; } }
+    public delegate bool InputEvaluationDelegate();
+    public Dictionary<string, InputEvaluationDelegate> inputEvalDeleDict; // CoreからSmartObjectに渡すことになる；全てのインスタンスのConditinKeywordを含んだリストと共に
+    //protected InputEvaluationDelegate InputConditionDefinition; // 前からある；いらない？
+    //protected abstract InputEvaluationDelegate DetermineInputEvaluationDelegate(); // 前からある；いらない？
+    // todo canBeConfirmedの設定も重要
+
     [HideInInspector] public bool inputCondition = false;
-
-    protected delegate bool InputConditionDelegate();
-
-    protected InputConditionDelegate InputConditionDefinition;
-
-    protected abstract InputConditionDelegate DetermineInputEvaluationDelegate();
-
 
     //public void ConfirmInputCondition() {
     //    //isConfirmed = true;
@@ -153,7 +157,8 @@ public abstract class InputCard : Card
 
         if (isConfirmed)
         {
-            inputCondition = InputConditionDefinition();
+            //inputCondition = InputConditionDefinition();
+            inputCondition = inputEvalDeleDict[conditionKeyword]();
         }
         else
         {
