@@ -230,14 +230,14 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private void ShiftStatementFields()
     {
-        Vector3 inputBasePosition = inputStatementFieldGroup.transform.position;
-        Vector3 outputBasePosition = outputStatementFieldGroup.transform.position;
+        Vector3 inputBasePosition = inputStatementFieldGroup.transform.localPosition;
+        Vector3 outputBasePosition = outputStatementFieldGroup.transform.localPosition;
         int instanceCount = inputInstanceList.Count;
         for (int i = 0; i < instanceCount; i++)
         {
-            Vector3 verticalShiftAmount = new Vector3(0, VSHAMT * (instanceCount-1-i), 0);
-            inputInstanceList[i].StatementFieldGroup.transform.position = inputBasePosition + verticalShiftAmount;
-            outputInstanceList[i].StatementFieldGroup.transform.position = outputBasePosition + verticalShiftAmount;
+            Vector3 verticalShiftAmount = new Vector3(0, VSHAMT * (instanceCount - 1 - i), 0);
+            inputInstanceList[i].StatementFieldGroup.transform.localPosition = inputBasePosition + verticalShiftAmount;
+            outputInstanceList[i].StatementFieldGroup.transform.localPosition = outputBasePosition + verticalShiftAmount;
         }
     }
 
@@ -267,10 +267,8 @@ public class PrototypingSceneCore : MonoBehaviour
     private void AddIOArrow()
     {
         int n = ioArrowList.Count;
-        Vector3 uppermostArrowPosition = ioArrowList[n-1].transform.position;
-        Vector3 newArrowPosition = uppermostArrowPosition + new Vector3(0, VSHAMT, 0);
-        GameObject newIOArrow = Instantiate(ioArrowList[0],
-            newArrowPosition, Quaternion.identity, ioArrowList[0].transform.parent);
+        GameObject newIOArrow = Instantiate(ioArrowList[n - 1], ioArrowList[n - 1].transform.parent);
+        newIOArrow.transform.localPosition += new Vector3(0, VSHAMT, 0);
         ioArrowList.Add(newIOArrow);
     }
 
