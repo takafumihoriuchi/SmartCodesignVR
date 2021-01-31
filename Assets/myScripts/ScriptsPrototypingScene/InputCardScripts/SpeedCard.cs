@@ -17,16 +17,6 @@ public class SpeedCard : InputCard
 
     }
 
-    protected override InputConditionDelegate DetermineInputEvaluationDelegate()
-    {
-        return null;
-    }
-
-    protected override void UpdatesForInputConditionEvaluation()
-    {
-
-    }
-
     protected override void BehaviourDuringPrototyping()
     {
 

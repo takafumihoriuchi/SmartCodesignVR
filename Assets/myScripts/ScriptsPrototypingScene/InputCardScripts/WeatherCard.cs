@@ -10,19 +10,12 @@ public class WeatherCard : InputCard
         cardName = "Weather";
         descriptionText = "<i>I can get information about the weather forecast.</i>\n";
         contentText = "When it is about to";
+
+        //
+
     }
 
     protected override void InitPropFields()
-    {
-
-    }
-
-    protected override InputConditionDelegate DetermineInputEvaluationDelegate()
-    {
-        return null;
-    }
-
-    protected override void UpdatesForInputConditionEvaluation()
     {
 
     }
