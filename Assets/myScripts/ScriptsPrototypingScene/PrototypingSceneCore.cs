@@ -83,6 +83,7 @@ public class PrototypingSceneCore : MonoBehaviour
         environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
         inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
         outputProps = GetOutPropsByName(SmartObject.cardSelectionDict["output"]);
+
         AddInstanceToList();
 
         // UI text settings
@@ -237,21 +238,25 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    // remove focused IO-Instance
+    // remove the focused IO-Instance
     private void RemoveInstanceFromList()
     {
         for (int i = 0; i < inputInstanceList.Count; i++)
         {
             if (inputInstanceList[i].IsFocused)
             {
+                Destroy(inputInstanceList[i].StatementFieldGroup);
+                Destroy(outputInstanceList[i].StatementFieldGroup);
                 inputInstanceList.RemoveAt(i);
                 outputInstanceList.RemoveAt(i);
                 break;
             }
         }
+        Debug.Log("in RemoveInstanceFromList(), after for-loop.");
         // move focus to the youngest instance
         GrantFocusToTargetInstances(inputInstanceList.Count - 1);
         ShiftStatementFieldPositions();
+        Debug.Log("1 line above ReduceIOArrow();");
         ReduceIOArrow();
         ShiftFocusToTargetIOArrow(0, true);        
         if (inputInstanceList.Count <= 1) removeInstanceButton.interactable = false;
@@ -271,7 +276,9 @@ public class PrototypingSceneCore : MonoBehaviour
     // remove the top-most arrow
     private void ReduceIOArrow()
     {
-        ioArrowList.RemoveAt(ioArrowList.Count-1);
+        int idx = ioArrowList.Count - 1;
+        Destroy(ioArrowList[idx]);
+        ioArrowList.RemoveAt(idx);
     }
 
 
@@ -305,15 +312,18 @@ public class PrototypingSceneCore : MonoBehaviour
     // set optional parameter to 'true' if calling with real index
     private void ShiftFocusToTargetIOArrow(int idx, bool realIndex=false)
     {
-        int revIdx;
-        if (realIndex) revIdx = idx;
-        else revIdx = ioArrowList.Count - 1 - idx;
+        if (!realIndex) idx = RevIdx(idx);
         for (int i = 0; i < ioArrowList.Count;  i++)
         {
-            if (i == revIdx) ioArrowList[revIdx].GetComponent<Image>().color = WHITE;
-            else ioArrowList[revIdx].GetComponent<Image>().color = LIGHT_WHITE;
+            if (i == idx) ioArrowList[i].GetComponent<Image>().color = WHITE;
+            else ioArrowList[i].GetComponent<Image>().color = LIGHT_WHITE;
         }
         
+    }
+
+    private int RevIdx(int idx)
+    {
+        return ioArrowList.Count - 1 - idx;
     }
 
 
@@ -427,8 +437,8 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         for (int i = 0; i < ioArrowList.Count; i++)
         {
-            if (inputInstanceList[i].IsFocused) continue;
-            else ioArrowList[i].GetComponent<Image>().color = color;
+            if (inputInstanceList[RevIdx(i)].IsFocused) continue;
+            else ioArrowList[RevIdx(i)].GetComponent<Image>().color = color;
         }
     }
 
@@ -519,7 +529,7 @@ public class PrototypingSceneCore : MonoBehaviour
     private void ActivateTaggedObjects()
     {
         GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("ActivateOnLoad");
-        foreach (GameObject obj in taggedObjects) obj.SetActive(false);
+        foreach (GameObject obj in taggedObjects) obj.SetActive(true);
     }
 
 

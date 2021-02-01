@@ -8549,10 +8549,10 @@ MonoBehaviour:
   outPropsMove: {fileID: 83582459}
   outPropsSend: {fileID: 380078435}
   inputCardNameField: {fileID: 911191876}
-  outputCardNameField: {fileID: 1755149135}
   inputDescriptionField: {fileID: 437521027}
-  outputDescriptionField: {fileID: 1249500613}
   inputStatementFieldGroup: {fileID: 735259227}
+  outputCardNameField: {fileID: 1755149135}
+  outputDescriptionField: {fileID: 1249500613}
   outputStatementFieldGroup: {fileID: 681084082}
   addInstanceButton: {fileID: 1345550970}
   removeInstanceButton: {fileID: 282238575}
