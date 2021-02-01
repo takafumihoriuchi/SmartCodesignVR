@@ -61,6 +61,7 @@ public abstract class Card
 
     protected abstract void InitPropFields();
 
+    // index text string is used for ddtermining which statement-field-button was selected
     private string getIndexText() {
         return "<u>" + getIndexSubText() + " #" + (instanceID + 1).ToString() + "</u>";
     }

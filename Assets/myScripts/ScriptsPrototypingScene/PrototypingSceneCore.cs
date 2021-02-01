@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using TMPro;
-
+using System.Text.RegularExpressions;
 
 public class PrototypingSceneCore : MonoBehaviour
 {
@@ -109,7 +109,7 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    // Update() の中は必要最低限に留めて、発火を活用した方が効率的
+    // todo Update() の中は必要最低限に留めて、発火を活用した方が効率的
     private void Update()
     {
         int instanceCount = inputInstanceList.Count;
@@ -150,7 +150,14 @@ public class PrototypingSceneCore : MonoBehaviour
         }
 
 
-        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+        ///
+        //string statementIndexText = EventSystem.current.currentSelectedGameObject.transform.Find("IndexText").gameObject.GetComponent<TMP_Text>().text;
+        //Debug.Log(statementIndexText);
+        //string extrudedIndexText = Regex.Replace(statementIndexText, @"[^0-9]", "");
+        //Debug.Log(extrudedIndexText);
+        //int extrudedIndex = int.Parse(extrudedIndexText);
+        //Debug.Log(extrudedIndex);
+        ///
 
     }
 
@@ -169,31 +176,44 @@ public class PrototypingSceneCore : MonoBehaviour
         ShiftFocusToTargetIOArrow(idx);
         ShiftStatementFieldPositions();
 
-        //Debug.Log("inputInstanceList.Count = " + inputInstanceList.Count);
-        //Debug.Log("idx = " + idx);
-
-        // todo 問題の原因は、おそらく、inputInstanceListがCount=3とかの時に生成したところ
-        // （その時はidx=2）のボタンを、Count=2とかの時（...List[0~1]のみ許される）の時に
-        // アクセスしようとした場合に発生する。
-        // このラムダを渡す方法自体はきちんと動作しているんだけど、
-        // いつまでも同じ...List[idx]の場所を参照しているんだと思う。
-        // 動的にリスナーもインスタンスの動きに追従しないといけない。
-        // EventSystems.EventSystem.currentSelectedGameObject
-        // これを使って試してみよう。
-
         // button settings for IO-Instance-Field (contains button component)
-        inputInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
-            );
-        outputInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
-            );
+        //inputInstanceList[idx].StatementFieldGroup.
+        //    GetComponent<Button>().onClick.AddListener(
+        //    () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
+        //    );
+        //outputInstanceList[idx].StatementFieldGroup.
+        //    GetComponent<Button>().onClick.AddListener(
+        //    () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
+        //    );
+
+        inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
+        outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
 
         // check for allawability of adding and removing instances
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
+    }
+
+
+    // IO-Statement-Field Button OnClick
+    // recieves instance-ID of the clicked statement-box
+    //private void StatementFieldOnClick(int instanceID)
+    //{
+    //    int idx = GetInstanceListIndexFromInstanceID(instanceID);
+    //    ShiftFocusToTargetInstances(idx);
+    //    ShiftFocusToTargetIOArrow(idx);
+    //}
+
+    private void StatementFieldOnClick()
+    {
+        // get "instance-index" from "statement-field-button-label"
+        string statementIdText = EventSystem.current.currentSelectedGameObject.transform.Find("IndexText").gameObject.GetComponent<TMP_Text>().text;
+        string extrudedIdText = Regex.Replace(statementIdText, @"[^0-9]", "");
+        int extrudedId = int.Parse(extrudedIdText);
+        int instanceID = extrudedId - 1;
+        int instanceIdx = GetInstanceListIndexFromInstanceID(instanceID);
+        ShiftFocusToTargetInstances(instanceIdx);
+        ShiftFocusToTargetIOArrow(instanceIdx);
     }
 
 
@@ -207,27 +227,6 @@ public class PrototypingSceneCore : MonoBehaviour
         }
         return idCandidate;
     }
-
-    //int IDtest = 0;
-    //private int AvailableMinInstanceID()
-    //{
-    //    IDtest++;
-    //    return IDtest;
-    //}
-
-
-    // IO-Statement-Field Button OnClick
-    // recieves instance-ID of the clicked statement-box
-    private void StatementFieldOnClick(int instanceID)
-    {
-        //Debug.Log("Statement-Box #" + instanceID + " was pressed");
-        int idx = GetInstanceListIndexFromInstanceID(instanceID);
-        //Debug.Log("list index is: " + idx);
-        ShiftFocusToTargetInstances(idx);
-        ShiftFocusToTargetIOArrow(idx);
-    }
-
-    // TODO 問題はこれ関連の何かだと思う。Removeボタンで最新でないinstanceをremoveした後、何かをクリックするとトラブルに突入する。
 
 
     private bool ConditionKeywordIsUnique(int focusedIdx)
@@ -255,10 +254,6 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private bool CheckInstanceListCapacity()
     {
-        //Debug.Log("in CheckInstanceListCapacity()");
-        //Debug.Log("inputInstanceList.Count = " + inputInstanceList.Count);
-        //Debug.Log("inputInstanceList[0].MaxInstanceNum = " + inputInstanceList[0].MaxInstanceNum);
-        //Debug.Log("inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum = " + (inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum));
         return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
     }
 
