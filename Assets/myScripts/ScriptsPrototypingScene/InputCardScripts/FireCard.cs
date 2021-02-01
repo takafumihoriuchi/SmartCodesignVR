@@ -8,11 +8,10 @@ public class FireCard : InputCard
 {
     private GameObject markerObj;
 
-    private Image imageInnerCore;
-    private Image imageOuterCore;
-    private Image imageMantle;
-    private Image imageCrust;
-    //private List<Image> strataImageList;
+    private SpriteRenderer spriteInnerCore;
+    private SpriteRenderer spriteOuterCore;
+    private SpriteRenderer spriteMantle;
+    private SpriteRenderer spriteCrust;
 
     private float markerDistance;
     private bool markerIsGrabbed = false;
@@ -20,9 +19,9 @@ public class FireCard : InputCard
     const float ALPHA_LOW = 0.1f;
     const float ALPHA_HIGH = 0.4f;
 
-    const float BOUNDARY_XSS = 0.85f;
-    const float BOUNDARY_SM = 1.73f;
-    const float BOUNDARY_ML = 2.52f;
+    const float BOUNDARY_XSS = 0.8f;
+    const float BOUNDARY_SM = 1.6f;
+    const float BOUNDARY_ML = 2.4f;
 
     readonly string VERY_CLOSE = "very close";
     readonly string CLOSE = "close";
@@ -71,14 +70,12 @@ public class FireCard : InputCard
     protected override void InitPropFields()
     {
         markerObj = propObjects.transform.Find("marker").gameObject;
-        //strataImageList.Add(propObjects.transform.Find("floorCanvas/distanceInnerCore").gameObject.GetComponent<Image>());
-        //strataImageList.Add(propObjects.transform.Find("floorCanvas/distanceOuterCore").gameObject.GetComponent<Image>());
-        //strataImageList.Add(propObjects.transform.Find("floorCanvas/distanceMantle").gameObject.GetComponent<Image>());
-        //strataImageList.Add(propObjects.transform.Find("floorCanvas/distanceCrust").gameObject.GetComponent<Image>());
-        imageInnerCore = propObjects.transform.Find("floorCanvas/distanceInnerCore").gameObject.GetComponent<Image>();
-        imageOuterCore = propObjects.transform.Find("floorCanvas/distanceOuterCore").gameObject.GetComponent<Image>();
-        imageMantle = propObjects.transform.Find("floorCanvas/distanceMantle").gameObject.GetComponent<Image>();
-        imageCrust = propObjects.transform.Find("floorCanvas/distanceCrust").gameObject.GetComponent<Image>();
+
+        spriteInnerCore = propObjects.transform.Find("floorCanvas/distanceInnerCore").gameObject.GetComponent<SpriteRenderer>();
+        spriteOuterCore = propObjects.transform.Find("floorCanvas/distanceOuterCore").gameObject.GetComponent<SpriteRenderer>();
+        spriteMantle = propObjects.transform.Find("floorCanvas/distanceMantle").gameObject.GetComponent<SpriteRenderer>();
+        spriteCrust = propObjects.transform.Find("floorCanvas/distanceCrust").gameObject.GetComponent<SpriteRenderer>();
+
         SetStrataOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
     }
 
@@ -116,19 +113,10 @@ public class FireCard : InputCard
 
     private void SetStrataOpacity(float ic, float oc, float ma, float cr)
     {
-        Color tmpColor = imageInnerCore.color;
-        //tmpColor = imageInnerCore.color;
-        tmpColor.a = ic;
-        imageInnerCore.color = tmpColor;
-        //tmpColor = imageOuterCore.color;
-        tmpColor.a = oc;
-        imageOuterCore.color = tmpColor;
-        //tmpColor = imageMantle.color;
-        tmpColor.a = ma;
-        imageMantle.color = tmpColor;
-        //tmpColor = imageCrust.color;
-        tmpColor.a = cr;
-        imageCrust.color = tmpColor;
+        spriteInnerCore.color = new Color(1.0f, 1.0f, 1.0f, ic);
+        spriteOuterCore.color = new Color(1.0f, 1.0f, 1.0f, oc);
+        spriteMantle.color = new Color(1.0f, 1.0f, 1.0f, ma);
+        spriteCrust.color = new Color(1.0f, 1.0f, 1.0f, cr);
     }
 
 
