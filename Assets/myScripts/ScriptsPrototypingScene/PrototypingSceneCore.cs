@@ -71,133 +71,41 @@ public class PrototypingSceneCore : MonoBehaviour
     readonly Color LIGHT_WHITE = new Color(1.0f, 1.0f, 1.0f, 0.4f); // arrow unfocused
 
 
-    // for developmental use only
-    private void DevelopmentPurposeAssign()
-    {
-        SmartObject.cardSelectionDict["environment"] = "TrashBin";
-        SmartObject.cardSelectionDict["input"] = "Fire";
-        SmartObject.cardSelectionDict["output"] = "LightUp";
-
-        Debug.Log("[env, in, out] = ["
-            + SmartObject.cardSelectionDict["environment"] + ", "
-            + SmartObject.cardSelectionDict["input"] + ", "
-            + SmartObject.cardSelectionDict["output"] + "]");
-    }
-
-
     // keep in mind DRY: Don't Repeat Yourself
     private void Start()
     {
-        DevelopmentPurposeAssign(); // to delete after development
+        // to delete after development
+        DevelopmentPurposeAssign();
 
+        // instance preparation
         DeactivateTaggedObjects();
         ActivateTaggedObjects();
         environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
         inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
         outputProps = GetOutPropsByName(SmartObject.cardSelectionDict["output"]);
-
         AddInstanceToList();
 
-        ///
-
-        //int idx = 0;
-        //int minInstanceID = AvailableMinInstanceID();
-        //inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
-        //outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
-        //ioArrowList.Add(CreateIOArrow());
-
-        ////inputInstanceList[idx].CardDescriptionSetup(
-        ////    ref inputCardNameField, ref inputDescriptionField); // only needed for first instance => call in Start()
-
-        //inputInstanceList[idx].CardStatementSetup(
-        //    ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
-
-        ////outputInstanceList[idx].CardDescriptionSetup(
-        ////    ref outputCardNameField, ref outputDescriptionField); // only needed for first instance => call in Start()
-
-        //outputInstanceList[idx].CardStatementSetup(
-        //    ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
-
-        ////ioArrowList.Add(Instantiate(ioArrowObject, ioArrowObject.transform.parent));
-        ////ioArrowList[0].SetActive(true);
-
-        ////GrantFocusToTargetInstances(idx);
-        //ShiftFocusToTargetInstances(idx);
-        //ShiftFocusToTargetIOArrow(idx);
-
-        //inputInstanceList[idx].StatementFieldGroup.
-        //    GetComponent<Button>().onClick.AddListener(
-        //    () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
-        //    );
-        //outputInstanceList[idx].StatementFieldGroup.
-        //    GetComponent<Button>().onClick.AddListener(
-        //    () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
-        //    );
-
-        ///
-
+        // UI text settings
         inputInstanceList[0].CardDescriptionSetup(
             ref inputCardNameField, ref inputDescriptionField);
-
         outputInstanceList[0].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
+        confirmationMessageField.SetText(beforeConfirmMessage);
 
-        // Button settings
+        // button settings
         addInstanceButton.onClick.AddListener(AddInstanceToList);
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
         removeInstanceButton.interactable = false;
-
         confirmationButton.onClick.AddListener(ConfirmSmartObject);
         confirmationButton.interactable = false;
-
         backToEditButton.onClick.AddListener(GoBackToEditMode);
         backToEditButton.interactable = false;
-
         finalizationButton.onClick.AddListener(FinalizeSmartObject);
         finalizationButton.interactable = false;
-
         backToSceneButton.onClick.AddListener(LoadCardSelectionScene);
         closeMenuButton.onClick.AddListener(CloseMenu);
-
-        confirmationMessageField.SetText(beforeConfirmMessage);
     }
-
-
-
-    private void AddInstanceToList()
-    {
-        inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
-        outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
-        ioArrowList.Add(CreateIOArrow()); // must be calledbefore "DepriveFocusFromOtherAndGrantToTargetInstances(idx);"
-        int idx = inputInstanceList.Count - 1; // tail of updated list; call after adding new instance
-        int minInstanceID = AvailableMinInstanceID(); // can be called either before or after adding new instance
-        inputInstanceList[idx].CardStatementSetup(ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
-        outputInstanceList[idx].CardStatementSetup(ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
-        //GrantFocusToTargetInstances(idx);
-        //DepriveFocusFromOtherInstances(idx);
-        ShiftFocusToTargetInstances(idx);
-        ShiftFocusToTargetIOArrow(idx);
-
-        // ボタンの登録　（一番初めのinstanceのボタン登録はStart()で個別にやる）
-        inputInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
-            );
-        outputInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
-            );
-        // どのインスタンスのボタンが押されたのかの情報が欲しい => TODO この方法(lambda expression)で実現できているのかの動作確認
-        // inputInstanceList[idx].InstanceID は最初にセットされた後は、書き換えられない想定だからユニークなインスタンスに紐ずく
-
-        ShiftStatementFieldPositions(); // 他人を押し上げる
-
-        // check for allawability of adding and removing instances
-        addInstanceButton.interactable = CheckInstanceListCapacity();
-        removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
-    }
-
 
 
     // Update() の中は必要最低限に留めて、発火を活用した方が効率的
@@ -241,6 +149,39 @@ public class PrototypingSceneCore : MonoBehaviour
         }
 
     }
+
+    private void AddInstanceToList()
+    {
+        inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
+        outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
+        ioArrowList.Add(CreateIOArrow());
+        int idx = inputInstanceList.Count - 1; // tail of updated list; call after adding new instance
+        int minInstanceID = AvailableMinInstanceID();
+        inputInstanceList[idx].CardStatementSetup(ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
+        outputInstanceList[idx].CardStatementSetup(ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
+
+        ShiftFocusToTargetInstances(idx);
+        ShiftFocusToTargetIOArrow(idx);
+        ShiftStatementFieldPositions();
+
+        // button settings for IO-Instance-Field (contains button component)
+        inputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
+            );
+        outputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
+            );
+
+        // check for allawability of adding and removing instances
+        addInstanceButton.interactable = CheckInstanceListCapacity();
+        removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
+    }
+
+
+
+    
 
 
     private bool ConditionKeywordIsUnique(int focusedIdx)
@@ -633,5 +574,18 @@ public class PrototypingSceneCore : MonoBehaviour
         SceneManager.LoadScene(1); // CardSelectionScene
     }
 
+
+    // for developmental use only
+    private void DevelopmentPurposeAssign()
+    {
+        SmartObject.cardSelectionDict["environment"] = "TrashBin";
+        SmartObject.cardSelectionDict["input"] = "Fire";
+        SmartObject.cardSelectionDict["output"] = "LightUp";
+
+        Debug.Log("[env, in, out] = ["
+            + SmartObject.cardSelectionDict["environment"] + ", "
+            + SmartObject.cardSelectionDict["input"] + ", "
+            + SmartObject.cardSelectionDict["output"] + "]");
+    }
 
 }
