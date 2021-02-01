@@ -109,10 +109,9 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    // todo Update() の中は必要最低限に留めて、発火を活用した方が効率的
+    // todo minimize computation in Update(); use trigger events when possible
     private void Update()
     {
-        int instanceCount = inputInstanceList.Count;
         int focusedIdx = GetFocusedInstanceIndex();
         inputInstanceList[focusedIdx].UpdateInputCondition();
         outputInstanceList[focusedIdx].UpdateOutputBehaviour();
@@ -130,7 +129,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
         if (isConfirmed)
         {
-            for (int i = 0; i < instanceCount; i++) // 全てのインスタンスが対象
+            for (int i = 0; i < inputInstanceList.Count; i++) // 全てのインスタンスが対象
             {
                 if (inputInstanceList[i].inputCondition)
                 {
