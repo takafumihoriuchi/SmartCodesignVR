@@ -16,9 +16,6 @@ public class FireCard : InputCard
     private float markerDistance;
     private bool markerIsGrabbed = false;
 
-    const float ALPHA_LOW = 0.1f;
-    const float ALPHA_HIGH = 0.4f;
-
     const float BOUNDARY_XSS = 0.8f;
     const float BOUNDARY_SM = 1.6f;
     const float BOUNDARY_ML = 2.4f;
@@ -28,10 +25,15 @@ public class FireCard : InputCard
     readonly string MIDDLE = "middle";
     readonly string FAR_AWAY = "far away";
 
+    const float ALPHA_LOW = 0.1f;
+    const float ALPHA_HIGH = 0.4f;
+
     public FireCard()
     {
         maxInstanceNum = 4;
+
         cardName = "Fire";
+
         descriptionText =
             "<i>I can detect the presence (i.e. distance) of fire.</i>\n" +
             "<b>Steps:</b>\n" +
@@ -39,6 +41,7 @@ public class FireCard : InputCard
             "<b>2.</b> <indent=10%>Move it near/away to the object.</indent>\n" +
             "<b>3.</b> <indent=10%>Release the fire on the ground.</indent>\n" +
             "Maximum number of instances: 4";
+
         contentText = "When I see fire in distance";
 
         inputEvalDeleDict = new Dictionary<string, InputEvaluationDelegate>
@@ -51,20 +54,28 @@ public class FireCard : InputCard
     }
 
     private bool DetectDistanceVeryClose() {
+        UpdateMarkerDistance();
         if (markerDistance < BOUNDARY_XSS) return true;
         else return false;
     }
     private bool DetectDistanceClose() {
+        UpdateMarkerDistance();
         if (markerDistance >= BOUNDARY_XSS && markerDistance <= BOUNDARY_SM) return true;
         else return false;
     }
     private bool DetectDistanceMiddle() {
+        UpdateMarkerDistance();
         if (markerDistance >= BOUNDARY_SM && markerDistance <= BOUNDARY_ML) return true;
         else return false;
     }
     private bool DetectDistanceFarAway() {
+        UpdateMarkerDistance();
         if (markerDistance > BOUNDARY_ML) return true;
         else return false;
+    }
+
+    private float UpdateMarkerDistance() {
+        return Vector3.Distance(environmentObject.transform.position, markerObj.transform.position);
     }
 
     protected override void InitPropFields()
@@ -81,7 +92,8 @@ public class FireCard : InputCard
 
     protected override void BehaviourDuringPrototyping()
     {
-        markerDistance = Vector3.Distance(environmentObject.transform.position, markerObj.transform.position);
+        UpdateMarkerDistance();
+
         markerIsGrabbed = markerObj.transform.GetComponent<OVRGrabbable>().isGrabbed;
 
         if (markerIsGrabbed || Input.GetKey(KeyCode.Z)) // 'Z' is for development purpose only
