@@ -179,7 +179,8 @@ public class LightUpCard : OutputCard
         // save colors
         // => already saved 'dynamically' during interaction
         // reset colors
-        ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+        //ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+        // => こいつを消してしまえば、ロードした時にそのインスタンスの色に塗るだけだからうまくいく。
     }
 
     protected override void OnConfirm()

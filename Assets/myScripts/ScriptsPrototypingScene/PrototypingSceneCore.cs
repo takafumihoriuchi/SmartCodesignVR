@@ -10,45 +10,45 @@ using TMPro;
 public class PrototypingSceneCore : MonoBehaviour
 {
 
-    [SerializeField] private GameObject envObjTrashBin = null;
-    [SerializeField] private GameObject envObjTree = null;
-    [SerializeField] private GameObject envObjStreetLight = null;
-    [SerializeField] private GameObject envObjStreetSign = null;
-    [SerializeField] private GameObject envObjBridge = null;
+    [SerializeField] private GameObject envObjTrashBin = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject envObjTree = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject envObjStreetLight = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject envObjStreetSign = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject envObjBridge = null; // tag "DeactivateOnLoad"
 
-    [SerializeField] private GameObject inPropsButton = null;
-    [SerializeField] private GameObject inPropsSound = null;
-    [SerializeField] private GameObject inPropsFire = null;
-    [SerializeField] private GameObject inPropsSpeed = null;
-    [SerializeField] private GameObject inPropsWeather = null;
+    [SerializeField] private GameObject inPropsButton = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropsSound = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropsFire = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropsSpeed = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropsWeather = null; // tag "DeactivateOnLoad"
 
-    [SerializeField] private GameObject outPropsLightUp = null;
-    [SerializeField] private GameObject outPropsMakeSound = null;
-    [SerializeField] private GameObject outPropsVibrate = null;
-    [SerializeField] private GameObject outPropsMove = null;
-    [SerializeField] private GameObject outPropsSend = null;
+    [SerializeField] private GameObject outPropsLightUp = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropsMakeSound = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropsVibrate = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropsMove = null; // tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropsSend = null; // tag "DeactivateOnLoad"
 
     [SerializeField] private TextMeshProUGUI inputCardNameField = null;
     [SerializeField] private TextMeshProUGUI inputDescriptionField = null;
-    [SerializeField] private GameObject inputStatementFieldGroup = null; // contains Button component
+    [SerializeField] private GameObject inputStatementFieldGroup = null; // tag "DeactivateOnLoad"
 
     [SerializeField] private TextMeshProUGUI outputCardNameField = null;
     [SerializeField] private TextMeshProUGUI outputDescriptionField = null;
-    [SerializeField] private GameObject outputStatementFieldGroup = null; // contains Button component
+    [SerializeField] private GameObject outputStatementFieldGroup = null; // tag "DeactivateOnLoad"
 
     [SerializeField] private Button addInstanceButton = null;
     [SerializeField] private Button removeInstanceButton = null;
 
-    [SerializeField] private GameObject ioArrowObject = null;
+    [SerializeField] private GameObject ioArrowObject = null; // tag "DeactivateOnLoad"
 
     [SerializeField] private TextMeshProUGUI confirmationMessageField = null;
     [SerializeField] private Button confirmationButton = null;
-    [SerializeField] private Button backToEditButton = null;
-    [SerializeField] private Button finalizationButton = null;
+    [SerializeField] private Button backToEditButton = null; // tag "DeactivateOnLoad"
+    [SerializeField] private Button finalizationButton = null; // tag "DeactivateOnLoad"
     readonly string beforeConfirmMessage = "Ready to test the Smart Object?";
     readonly string afterConfirmMessage = "Do you want to keep editing or finalize?";
 
-    [SerializeField] private GameObject menuCanvas = null;
+    [SerializeField] private GameObject menuCanvas = null; // tag "DeactivateOnLoad"
     [SerializeField] private Button backToSceneButton = null;
     [SerializeField] private Button closeMenuButton = null;
 
@@ -58,6 +58,8 @@ public class PrototypingSceneCore : MonoBehaviour
     private List<InputCard> inputInstanceList = new List<InputCard>();
     private List<OutputCard> outputInstanceList = new List<OutputCard>();
     private List<GameObject> ioArrowList = new List<GameObject>();
+    //  IO-Instance list: mapping between index and vertical positioning is in descending order
+    // Arrow list: mapping between index and vertical positioning is in ascending order
     bool isConfirmed = false; // to distinguish between before/after-confirmed
     private bool menuIsOpened = false;
 
@@ -88,94 +90,94 @@ public class PrototypingSceneCore : MonoBehaviour
     {
         DevelopmentPurposeAssign(); // to delete after development
 
-        DeactivateAllCardRepresentations();
+        DeactivateTaggedObjects();
+        ActivateTaggedObjects();
         environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
-
-        int idx = 0;
-        int minInstanceID = AvailableMinInstanceID();
-
         inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
-        inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
-        inputInstanceList[idx].CardDescriptionSetup(
-            ref inputCardNameField, ref inputDescriptionField);
-        inputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
-
         outputProps = GetOutPropsByName(SmartObject.cardSelectionDict["output"]);
-        outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
-        outputInstanceList[idx].CardDescriptionSetup(
+
+        AddInstanceToList();
+
+        ///
+
+        //int idx = 0;
+        //int minInstanceID = AvailableMinInstanceID();
+        //inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
+        //outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
+        //ioArrowList.Add(CreateIOArrow());
+
+        ////inputInstanceList[idx].CardDescriptionSetup(
+        ////    ref inputCardNameField, ref inputDescriptionField); // only needed for first instance => call in Start()
+
+        //inputInstanceList[idx].CardStatementSetup(
+        //    ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
+
+        ////outputInstanceList[idx].CardDescriptionSetup(
+        ////    ref outputCardNameField, ref outputDescriptionField); // only needed for first instance => call in Start()
+
+        //outputInstanceList[idx].CardStatementSetup(
+        //    ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
+
+        ////ioArrowList.Add(Instantiate(ioArrowObject, ioArrowObject.transform.parent));
+        ////ioArrowList[0].SetActive(true);
+
+        ////GrantFocusToTargetInstances(idx);
+        //ShiftFocusToTargetInstances(idx);
+        //ShiftFocusToTargetIOArrow(idx);
+
+        //inputInstanceList[idx].StatementFieldGroup.
+        //    GetComponent<Button>().onClick.AddListener(
+        //    () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
+        //    );
+        //outputInstanceList[idx].StatementFieldGroup.
+        //    GetComponent<Button>().onClick.AddListener(
+        //    () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
+        //    );
+
+        ///
+
+        inputInstanceList[0].CardDescriptionSetup(
+            ref inputCardNameField, ref inputDescriptionField);
+
+        outputInstanceList[0].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
-        outputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
 
-        ioArrowList.Add(Instantiate(ioArrowObject, ioArrowObject.transform.parent));
-        ioArrowList[0].SetActive(true);
-
-        GrantFocusToTargetInstances(idx);
-
-        // ボタンとしてのstatementBoxの追加と、それが押下された時にIsFocusedがtrueになる処理
-        //inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
-        //outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementBoxOnClick);
-        inputInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
-            );
-        outputInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
-            );
-        // todo この方法で良いのかの確認
-
-
-
-        // UI button settings
-
+        // Button settings
         addInstanceButton.onClick.AddListener(AddInstanceToList);
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.onClick.AddListener(RemoveInstanceFromList);
         removeInstanceButton.interactable = false;
 
-        confirmationMessageField.SetText(beforeConfirmMessage);
         confirmationButton.onClick.AddListener(ConfirmSmartObject);
-        confirmationButton.interactable = false; // set to true when every-instances.canBeConfirmed is true
-        confirmationButton.gameObject.SetActive(true);
+        confirmationButton.interactable = false;
+
         backToEditButton.onClick.AddListener(GoBackToEditMode);
         backToEditButton.interactable = false;
-        backToEditButton.gameObject.SetActive(false);
+
         finalizationButton.onClick.AddListener(FinalizeSmartObject);
         finalizationButton.interactable = false;
-        finalizationButton.gameObject.SetActive(false);
-
 
         backToSceneButton.onClick.AddListener(LoadCardSelectionScene);
         closeMenuButton.onClick.AddListener(CloseMenu);
 
+        confirmationMessageField.SetText(beforeConfirmMessage);
     }
 
 
 
-    // todo Startの中の処理と合わせて、リファクタの余地あり; ボタン登録も関数化可能(indexを引数に渡す)
     private void AddInstanceToList()
     {
         inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
         outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
-        int idx = inputInstanceList.Count - 1; // tail of updated list
-
-        // note that we are skipping CardDescriptionSetup(); this is only necessary in the first instance generated in Start()
-        int minInstanceID = AvailableMinInstanceID();
-
-        inputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
-        outputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
-
-        // 矢印 => インスタンスに付随する必要はない。instance.Countに応じて、個数と位置を調整する
-        AddIOArrow(); // must call this before "DepriveFocusFromOtherAndGrantToTargetInstances(idx);"
-        // todo eliminate these kind of dependencies on sequences
-
+        ioArrowList.Add(CreateIOArrow()); // must be calledbefore "DepriveFocusFromOtherAndGrantToTargetInstances(idx);"
+        int idx = inputInstanceList.Count - 1; // tail of updated list; call after adding new instance
+        int minInstanceID = AvailableMinInstanceID(); // can be called either before or after adding new instance
+        inputInstanceList[idx].CardStatementSetup(ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
+        outputInstanceList[idx].CardStatementSetup(ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
         //GrantFocusToTargetInstances(idx);
         //DepriveFocusFromOtherInstances(idx);
-        DepriveFocusFromOtherAndGrantToTargetInstances(idx);
+        ShiftFocusToTargetInstances(idx);
+        ShiftFocusToTargetIOArrow(idx);
 
         // ボタンの登録　（一番初めのinstanceのボタン登録はStart()で個別にやる）
         inputInstanceList[idx].StatementFieldGroup.
@@ -189,7 +191,7 @@ public class PrototypingSceneCore : MonoBehaviour
         // どのインスタンスのボタンが押されたのかの情報が欲しい => TODO この方法(lambda expression)で実現できているのかの動作確認
         // inputInstanceList[idx].InstanceID は最初にセットされた後は、書き換えられない想定だからユニークなインスタンスに紐ずく
 
-        ShiftStatementFields(); // 他人を押し上げる
+        ShiftStatementFieldPositions(); // 他人を押し上げる
 
         // check for allawability of adding and removing instances
         addInstanceButton.interactable = CheckInstanceListCapacity();
@@ -240,6 +242,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
     }
 
+
     private bool ConditionKeywordIsUnique(int focusedIdx)
     {
         if (string.IsNullOrEmpty(inputInstanceList[focusedIdx].ConditionKeyword)) return true;
@@ -251,6 +254,7 @@ public class PrototypingSceneCore : MonoBehaviour
         }
         return true;
     }
+
 
     private int GetFocusedInstanceIndex()
     {
@@ -267,22 +271,18 @@ public class PrototypingSceneCore : MonoBehaviour
         return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
     }
 
-    
 
-
-    // TODO 本当にこれで良いのかがわからない。つまり、idxの渡し方が
-    // todo IsFocusedなものとそうでないものとで色の濃淡を変化させる
-    // todo on click でfocusが移り変わる機能の実装
-    // recieves the instance-ID of the clicked statement-box
+    // IO-Statement-Field Button OnClick
+    // recieves instance-ID of the clicked statement-box
     private void StatementFieldOnClick(int instanceID)
     {
         int idx = GetInstanceListIndexFromInstanceID(instanceID);
-        //GrantFocusToTargetInstances(idx);
-        //DepriveFocusFromOtherInstances(idx);
-        DepriveFocusFromOtherAndGrantToTargetInstances(idx);
+        ShiftFocusToTargetInstances(idx);
+        ShiftFocusToTargetIOArrow(idx);
     }
 
-    private void ShiftStatementFields()
+
+    private void ShiftStatementFieldPositions()
     {
         Vector3 inputBasePosition = inputStatementFieldGroup.transform.localPosition;
         Vector3 outputBasePosition = outputStatementFieldGroup.transform.localPosition;
@@ -296,90 +296,97 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    // AddInstanceとは異なり、focuseされている要素をremoveする
-    private void RemoveInstanceFromList() // removeボタンが押せるということは、removeしていい、ということ
+    // remove focused IO-Instance
+    private void RemoveInstanceFromList()
     {
         for (int i = 0; i < inputInstanceList.Count; i++)
         {
-            if (inputInstanceList[i].IsFocused) // <- 消す対象
+            if (inputInstanceList[i].IsFocused)
             {
                 inputInstanceList.RemoveAt(i);
                 outputInstanceList.RemoveAt(i);
                 break;
             }
         }
-        GrantFocusToTargetInstances(inputInstanceList.Count - 1); // focus on tail instance
-
-        ShiftStatementFields();
+        // move focus to the youngest instance
+        GrantFocusToTargetInstances(inputInstanceList.Count - 1);
+        ShiftStatementFieldPositions();
         ReduceIOArrow();
-
-        if (inputInstanceList.Count <= 1)
-            removeInstanceButton.interactable = false;
+        ShiftFocusToTargetIOArrow(0, true);        
+        if (inputInstanceList.Count <= 1) removeInstanceButton.interactable = false;
     }
 
-    // ずらし方がIOinstanceとは異なる。ここでは、新しいのが上に積み上げられる
-    private void AddIOArrow()
+
+    // returns position adjusted io-arrow gameObject
+    private GameObject CreateIOArrow()
     {
-        int n = ioArrowList.Count;
-        GameObject newIOArrow = Instantiate(ioArrowList[n - 1], ioArrowList[n - 1].transform.parent);
-        newIOArrow.transform.localPosition += new Vector3(0, VSHAMT, 0);
-        ioArrowList.Add(newIOArrow);
+        GameObject newArrow = Instantiate(ioArrowObject, ioArrowObject.transform.parent);
+        newArrow.transform.localPosition += new Vector3(0, VSHAMT * (ioArrowList.Count), 0);
+        newArrow.SetActive(true);
+        return newArrow;
     }
 
-    // reduceしてはいけない時には、すでに呼び出せないようになっている
+    
+    // remove the top-most arrow
     private void ReduceIOArrow()
     {
         ioArrowList.RemoveAt(ioArrowList.Count-1);
     }
 
 
-    // 呼び出す側で xputInstanceList.IndexOf(xxx)（特にbuttonがpressされた時）
-    private void DepriveFocusFromOtherInstances(int focusedIdx)
+    private void GrantFocusToTargetInstances(int targetIdx)
+    {
+        SetIOInstanceFocusState(targetIdx, true);
+        SetIOStatementFieldColor(targetIdx, BEIGE);
+    }
+
+
+    private void ShiftFocusToTargetInstances(int targetIdx)
     {
         int instanceCount = inputInstanceList.Count;
         for (int i = 0; i < instanceCount; i++)
         {
-            if (i == focusedIdx) continue;
+            if (i == targetIdx)
+            {
+                SetIOInstanceFocusState(targetIdx, true);
+                SetIOStatementFieldColor(targetIdx, BEIGE);
+            }
             else
             {
-                inputInstanceList[i].IsFocused = false;
-                outputInstanceList[i].IsFocused = false;
-                // statement (is button) の色を変える
-                inputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
-                outputInstanceList[focusedIdx].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
-                ioArrowList[focusedIdx].GetComponent<Image>().color = LIGHT_WHITE;
+                SetIOInstanceFocusState(i, false);
+                SetIOStatementFieldColor(i, LIGHT_BEIGE);
             }
         }
     }
 
-    private void GrantFocusToTargetInstances(int targetIdx)
+
+    // parameter int:idx is passed assuming the use with IOInstance index order
+    // set optional parameter to 'true' if calling with real index
+    private void ShiftFocusToTargetIOArrow(int idx, bool realIndex=false)
     {
-        inputInstanceList[targetIdx].IsFocused = true;
-        outputInstanceList[targetIdx].IsFocused = true;
-        // statement (is button) の色を変える
-        inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
-        outputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
-        ioArrowList[targetIdx].GetComponent<Image>().color = WHITE;
+        int revIdx;
+        if (realIndex) revIdx = idx;
+        else revIdx = ioArrowList.Count - 1 - idx;
+        for (int i = 0; i < ioArrowList.Count;  i++)
+        {
+            if (i == revIdx) ioArrowList[revIdx].GetComponent<Image>().color = WHITE;
+            else ioArrowList[revIdx].GetComponent<Image>().color = LIGHT_WHITE;
+        }
+        
     }
 
-    private void DepriveFocusFromOtherAndGrantToTargetInstances(int targetIdx)
+
+    private void SetIOInstanceFocusState(int idx, bool tf)
     {
-        // NOTE: focus transition order must be "deprivae from other THEN focus on target" for some specific card types
-        int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++)
-        {
-            if (i == targetIdx) continue;
-            inputInstanceList[i].IsFocused = false;
-            outputInstanceList[i].IsFocused = false;
-            inputInstanceList[i].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
-            outputInstanceList[i].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
-            ioArrowList[i].GetComponent<Image>().color = LIGHT_WHITE;
-        }
-        inputInstanceList[targetIdx].IsFocused = true;
-        outputInstanceList[targetIdx].IsFocused = true;
-        inputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
-        outputInstanceList[targetIdx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
-        ioArrowList[targetIdx].GetComponent<Image>().color = WHITE;
+        inputInstanceList[idx].IsFocused = tf;
+        outputInstanceList[idx].IsFocused = tf;
+    }
+
+
+    private void SetIOStatementFieldColor(int idx, Color color)
+    {
+        inputInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color = color;
+        outputInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color = color;
     }
 
 
@@ -418,10 +425,11 @@ public class PrototypingSceneCore : MonoBehaviour
         addInstanceButton.interactable = false;
         removeInstanceButton.interactable = false;
 
-        ChangeStatementFieldButtonInteractability(false);
+        ChangeStatementFieldInteractability(false);
         ChangeUnfocusedStatementFieldColors(BEIGE);
         ChangeUnfocusedArrowColors(WHITE);
     }
+
 
     // Back-To-Edit Button OnClick
     private void GoBackToEditMode()
@@ -446,15 +454,15 @@ public class PrototypingSceneCore : MonoBehaviour
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
 
-        ChangeStatementFieldButtonInteractability(true);
+        ChangeStatementFieldInteractability(true);
         ChangeUnfocusedStatementFieldColors(LIGHT_BEIGE);
         ChangeUnfocusedArrowColors(LIGHT_WHITE);
     }
 
-    private void ChangeStatementFieldButtonInteractability(bool tf)
+
+    private void ChangeStatementFieldInteractability(bool tf)
     {
-        int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++)
+        for (int i = 0; i < inputInstanceList.Count; i++)
         {
             inputInstanceList[i].StatementFieldGroup.
                 GetComponent<Button>().interactable = tf;
@@ -463,21 +471,16 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
+
     private void ChangeUnfocusedStatementFieldColors(Color color)
     {
-        int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++)
+        for (int i = 0; i < inputInstanceList.Count; i++)
         {
             if (inputInstanceList[i].IsFocused) continue;
-            else
-            {
-                inputInstanceList[i].StatementFieldGroup.
-                    GetComponent<Image>().color = color;
-                outputInstanceList[i].StatementFieldGroup.
-                    GetComponent<Image>().color = color;
-            }
+            else SetIOStatementFieldColor(i, color);
         }
     }
+
 
     private void ChangeUnfocusedArrowColors(Color color)
     {
@@ -487,6 +490,7 @@ public class PrototypingSceneCore : MonoBehaviour
             else ioArrowList[i].GetComponent<Image>().color = color;
         }
     }
+
 
     // Finalization Button OnClick
     private void FinalizeSmartObject()
@@ -513,6 +517,7 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
+
     private GameObject GetInPropsByName(string cardName)
     {
         switch (cardName)
@@ -525,6 +530,7 @@ public class PrototypingSceneCore : MonoBehaviour
             default: return null;
         }
     }
+
 
     private GameObject GetOutPropsByName(string cardName)
     {
@@ -539,6 +545,7 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
+
     private InputCard GetInputInstanceByName(string cardName)
     {
         switch (cardName)
@@ -551,6 +558,7 @@ public class PrototypingSceneCore : MonoBehaviour
             default: return null;
         }
     }
+
 
     private OutputCard GetOutputInstanceByName(string cardName)
     {
@@ -565,16 +573,22 @@ public class PrototypingSceneCore : MonoBehaviour
         }
     }
 
-    // for making sure that all card representations are initially deactivated
-    private void DeactivateAllCardRepresentations()
+
+    // safety measure for preventing human errors
+    private void ActivateTaggedObjects()
     {
-        GameObject[] cardRepresentations;
-        cardRepresentations = GameObject.FindGameObjectsWithTag("DeactivateOnLoad");
-        foreach (GameObject prop in cardRepresentations)
-        {
-            prop.SetActive(false);
-        }
+        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("ActivateOnLoad");
+        foreach (GameObject obj in taggedObjects) obj.SetActive(false);
     }
+
+
+    // safety measure for preventing human errors
+    private void DeactivateTaggedObjects()
+    {
+        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("DeactivateOnLoad");
+        foreach (GameObject obj in taggedObjects) obj.SetActive(false);
+    }
+
 
     private int AvailableMinInstanceID()
     {
@@ -587,6 +601,7 @@ public class PrototypingSceneCore : MonoBehaviour
         return idCandidate;
     }
 
+
     // returns index in Instance List 
     // returns -1 when not found in Instance List
     private int GetInstanceListIndexFromInstanceID(int id)
@@ -595,7 +610,7 @@ public class PrototypingSceneCore : MonoBehaviour
         {
             if (inputInstanceList[idx].InstanceID == id) return idx;
         }
-        return -1; // todo may want to make it throw error
+        return -1;
     }
 
 
@@ -605,40 +620,18 @@ public class PrototypingSceneCore : MonoBehaviour
         menuCanvas.SetActive(true);
     }
 
+
     private void CloseMenu()
     {
         menuIsOpened = false;
         menuCanvas.SetActive(false);
     }
 
+
     private void LoadCardSelectionScene()
     {
         SceneManager.LoadScene(1); // CardSelectionScene
     }
 
+
 }
-
-/*
-
-private void DepriveFocusFromOthers(InputCard inInstance, OutputCard outInstance)
-{
-    int focusedIdx = inputInstanceList.IndexOf(inInstance);
-    // index should be identical for input and output instance list
-    if (focusedIdx != outputInstanceList.IndexOf(outInstance))
-    {
-        Debug.Log("Warning: Indexes of Input and Output instance list are not aligned.");
-        // some error handling here
-    }
-    int instanceCount = inputInstanceList.Count;
-    for (int i = 0; i < instanceCount; i++)
-    {
-        if (i == focusedIdx) continue;
-        else
-        {
-            inputInstanceList[i].IsFocused = false;
-            outputInstanceList[i].IsFocused = false;
-        }
-    }
-}
-
-*/

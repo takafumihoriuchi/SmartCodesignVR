@@ -69,19 +69,11 @@ public abstract class Card
     // only necessary for the first card instance
     public void CardDescriptionSetup(
         ref TextMeshProUGUI cardNameField,
-        ref TextMeshProUGUI descriptionField)
-    {
-        this.cardNameField = cardNameField; // todo 最初からTMP型として取り込めばいい
-        //cardNameFieldTMP = this.cardNameField.GetComponent<TextMeshProUGUI>();
-        //cardNameFieldTMP.SetText(cardName);
-        cardNameField.SetText(cardName);
-        //this.cardNameField.SetActive(true);
-
+        ref TextMeshProUGUI descriptionField) {
+        this.cardNameField = cardNameField;
         this.descriptionField = descriptionField;
-        //descriptionFieldTMP = this.descriptionField.GetComponent<TextMeshProUGUI>();
-        //descriptionFieldTMP.SetText(descriptionText);
+        cardNameField.SetText(cardName);
         descriptionField.SetText(descriptionText);
-        //this.descriptionField.SetActive(true);
     }
 
     public void CardStatementSetup(
