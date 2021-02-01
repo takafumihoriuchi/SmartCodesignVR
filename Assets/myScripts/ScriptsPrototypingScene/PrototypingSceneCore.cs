@@ -149,6 +149,9 @@ public class PrototypingSceneCore : MonoBehaviour
             else CloseMenu();
         }
 
+
+        Debug.Log(EventSystem.current.currentSelectedGameObject.name);
+
     }
 
 
@@ -166,8 +169,17 @@ public class PrototypingSceneCore : MonoBehaviour
         ShiftFocusToTargetIOArrow(idx);
         ShiftStatementFieldPositions();
 
-        Debug.Log("inputInstanceList.Count = " + inputInstanceList.Count);
-        Debug.Log("idx = " + idx);
+        //Debug.Log("inputInstanceList.Count = " + inputInstanceList.Count);
+        //Debug.Log("idx = " + idx);
+
+        // todo 問題の原因は、おそらく、inputInstanceListがCount=3とかの時に生成したところ
+        // （その時はidx=2）のボタンを、Count=2とかの時（...List[0~1]のみ許される）の時に
+        // アクセスしようとした場合に発生する。
+        // このラムダを渡す方法自体はきちんと動作しているんだけど、
+        // いつまでも同じ...List[idx]の場所を参照しているんだと思う。
+        // 動的にリスナーもインスタンスの動きに追従しないといけない。
+        // EventSystems.EventSystem.currentSelectedGameObject
+        // これを使って試してみよう。
 
         // button settings for IO-Instance-Field (contains button component)
         inputInstanceList[idx].StatementFieldGroup.
@@ -208,9 +220,9 @@ public class PrototypingSceneCore : MonoBehaviour
     // recieves instance-ID of the clicked statement-box
     private void StatementFieldOnClick(int instanceID)
     {
-        Debug.Log("Statement-Box #" + instanceID + " was pressed");
+        //Debug.Log("Statement-Box #" + instanceID + " was pressed");
         int idx = GetInstanceListIndexFromInstanceID(instanceID);
-        Debug.Log("list index is: " + idx);
+        //Debug.Log("list index is: " + idx);
         ShiftFocusToTargetInstances(idx);
         ShiftFocusToTargetIOArrow(idx);
     }
@@ -243,10 +255,10 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private bool CheckInstanceListCapacity()
     {
-        Debug.Log("in CheckInstanceListCapacity()");
-        Debug.Log("inputInstanceList.Count = " + inputInstanceList.Count);
-        Debug.Log("inputInstanceList[0].MaxInstanceNum = " + inputInstanceList[0].MaxInstanceNum);
-        Debug.Log("inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum = " + (inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum));
+        //Debug.Log("in CheckInstanceListCapacity()");
+        //Debug.Log("inputInstanceList.Count = " + inputInstanceList.Count);
+        //Debug.Log("inputInstanceList[0].MaxInstanceNum = " + inputInstanceList[0].MaxInstanceNum);
+        //Debug.Log("inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum = " + (inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum));
         return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
     }
 
