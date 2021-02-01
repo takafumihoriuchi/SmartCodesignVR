@@ -149,16 +149,6 @@ public class PrototypingSceneCore : MonoBehaviour
             else CloseMenu();
         }
 
-
-        ///
-        //string statementIndexText = EventSystem.current.currentSelectedGameObject.transform.Find("IndexText").gameObject.GetComponent<TMP_Text>().text;
-        //Debug.Log(statementIndexText);
-        //string extrudedIndexText = Regex.Replace(statementIndexText, @"[^0-9]", "");
-        //Debug.Log(extrudedIndexText);
-        //int extrudedIndex = int.Parse(extrudedIndexText);
-        //Debug.Log(extrudedIndex);
-        ///
-
     }
 
 
@@ -176,16 +166,6 @@ public class PrototypingSceneCore : MonoBehaviour
         ShiftFocusToTargetIOArrow(idx);
         ShiftStatementFieldPositions();
 
-        // button settings for IO-Instance-Field (contains button component)
-        //inputInstanceList[idx].StatementFieldGroup.
-        //    GetComponent<Button>().onClick.AddListener(
-        //    () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
-        //    );
-        //outputInstanceList[idx].StatementFieldGroup.
-        //    GetComponent<Button>().onClick.AddListener(
-        //    () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
-        //    );
-
         inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
         outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
 
@@ -194,15 +174,6 @@ public class PrototypingSceneCore : MonoBehaviour
         removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
     }
 
-
-    // IO-Statement-Field Button OnClick
-    // recieves instance-ID of the clicked statement-box
-    //private void StatementFieldOnClick(int instanceID)
-    //{
-    //    int idx = GetInstanceListIndexFromInstanceID(instanceID);
-    //    ShiftFocusToTargetInstances(idx);
-    //    ShiftFocusToTargetIOArrow(idx);
-    //}
 
     private void StatementFieldOnClick()
     {
@@ -572,9 +543,6 @@ public class PrototypingSceneCore : MonoBehaviour
         GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("DeactivateOnLoad");
         foreach (GameObject obj in taggedObjects) obj.SetActive(false);
     }
-
-
-
 
 
     // returns index in Instance List 

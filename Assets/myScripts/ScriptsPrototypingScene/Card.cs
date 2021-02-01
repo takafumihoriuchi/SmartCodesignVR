@@ -7,10 +7,7 @@ using TMPro;
 public abstract class Card
 {
     protected TextMeshProUGUI cardNameField;
-    //protected TextMeshProUGUI cardNameFieldTMP;
     protected TextMeshProUGUI descriptionField;
-    //protected TextMeshProUGUI descriptionFieldTMP;
-    // todo 変数で対応できないかの確認
 
     protected GameObject environmentObject;
     protected GameObject propObjects;
@@ -32,7 +29,7 @@ public abstract class Card
     public bool IsConfirmed {
         set {
             isConfirmed = value;
-            if (isConfirmed) OnConfirm(); // todo もしpropsが参照なら、OnConfirmをInputCard Classで定義して、その中で　InputConditionDefinition = DetermineInputEvaluationDelegate();　を呼ぶことができる。
+            if (isConfirmed) OnConfirm();
             else OnBackToEdit();
         }
         get {

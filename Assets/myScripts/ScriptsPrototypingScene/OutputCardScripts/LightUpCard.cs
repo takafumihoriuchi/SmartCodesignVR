@@ -51,10 +51,10 @@ public class LightUpCard : OutputCard
         originalEnvObjMaterial = GetMaterialArray(envPartsGameObject);
         edittedEnvObjMaterial = GetMaterialArray(envPartsGameObject);
 
-        // todo 参照型がこのクラス限定で厳しければ、paintBrushだけをinstantiate()して、focusが移るたびにactiveを切り替えればいい。
+        // todo 参照渡しを意識して組み直す
         eventBridgeHandler = paintBrush.RequestEventHandlers();
-        //eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
-        //eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+        eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
+        eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
     }
 
 
