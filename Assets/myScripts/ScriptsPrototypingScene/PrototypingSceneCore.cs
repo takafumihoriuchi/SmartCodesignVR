@@ -151,6 +151,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
     }
 
+
     private void AddInstanceToList()
     {
         inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
@@ -164,6 +165,9 @@ public class PrototypingSceneCore : MonoBehaviour
         ShiftFocusToTargetInstances(idx);
         ShiftFocusToTargetIOArrow(idx);
         ShiftStatementFieldPositions();
+
+        Debug.Log("inputInstanceList.Count = " + inputInstanceList.Count);
+        Debug.Log("idx = " + idx);
 
         // button settings for IO-Instance-Field (contains button component)
         inputInstanceList[idx].StatementFieldGroup.
@@ -181,8 +185,37 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
+    private int AvailableMinInstanceID()
+    {
+        int idCandidate = 0;
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            if (inputInstanceList[i].InstanceID == -1) continue; // skip itself (set to initial value)
+            if (idCandidate == inputInstanceList[i].InstanceID) idCandidate++;
+        }
+        return idCandidate;
+    }
 
-    
+    //int IDtest = 0;
+    //private int AvailableMinInstanceID()
+    //{
+    //    IDtest++;
+    //    return IDtest;
+    //}
+
+
+    // IO-Statement-Field Button OnClick
+    // recieves instance-ID of the clicked statement-box
+    private void StatementFieldOnClick(int instanceID)
+    {
+        Debug.Log("Statement-Box #" + instanceID + " was pressed");
+        int idx = GetInstanceListIndexFromInstanceID(instanceID);
+        Debug.Log("list index is: " + idx);
+        ShiftFocusToTargetInstances(idx);
+        ShiftFocusToTargetIOArrow(idx);
+    }
+
+    // TODO 問題はこれ関連の何かだと思う。Removeボタンで最新でないinstanceをremoveした後、何かをクリックするとトラブルに突入する。
 
 
     private bool ConditionKeywordIsUnique(int focusedIdx)
@@ -210,17 +243,11 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private bool CheckInstanceListCapacity()
     {
+        Debug.Log("in CheckInstanceListCapacity()");
+        Debug.Log("inputInstanceList.Count = " + inputInstanceList.Count);
+        Debug.Log("inputInstanceList[0].MaxInstanceNum = " + inputInstanceList[0].MaxInstanceNum);
+        Debug.Log("inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum = " + (inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum));
         return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
-    }
-
-
-    // IO-Statement-Field Button OnClick
-    // recieves instance-ID of the clicked statement-box
-    private void StatementFieldOnClick(int instanceID)
-    {
-        int idx = GetInstanceListIndexFromInstanceID(instanceID);
-        ShiftFocusToTargetInstances(idx);
-        ShiftFocusToTargetIOArrow(idx);
     }
 
 
@@ -252,14 +279,13 @@ public class PrototypingSceneCore : MonoBehaviour
                 break;
             }
         }
-        Debug.Log("in RemoveInstanceFromList(), after for-loop.");
         // move focus to the youngest instance
         GrantFocusToTargetInstances(inputInstanceList.Count - 1);
         ShiftStatementFieldPositions();
-        Debug.Log("1 line above ReduceIOArrow();");
         ReduceIOArrow();
-        ShiftFocusToTargetIOArrow(0, true);        
-        if (inputInstanceList.Count <= 1) removeInstanceButton.interactable = false;
+        ShiftFocusToTargetIOArrow(0, true);
+        addInstanceButton.interactable = CheckInstanceListCapacity();
+        removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
     }
 
 
@@ -541,16 +567,7 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    private int AvailableMinInstanceID()
-    {
-        int idCandidate = 0;
-        for (int i = 0; i < inputInstanceList.Count; i++)
-        {
-            if (inputInstanceList[i].InstanceID == -1) continue; // skip itself (set to initial value)
-            if (idCandidate == inputInstanceList[i].InstanceID) idCandidate++;
-        }
-        return idCandidate;
-    }
+
 
 
     // returns index in Instance List 
