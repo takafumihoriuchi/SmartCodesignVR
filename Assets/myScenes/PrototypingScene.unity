@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 45922761}
   - component: {fileID: 45922760}
   m_Layer: 0
-  m_Name: Arrow
+  m_Name: IOArrow
   m_TagString: DeactivateOnLoad
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5502,7 +5502,7 @@ GameObject:
   - component: {fileID: 911191876}
   m_Layer: 0
   m_Name: SelectionText
-  m_TagString: DeactivateOnLoad
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5741,37 +5741,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &924076434
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 924076435}
-  m_Layer: 0
-  m_Name: IOArrowGroup
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &924076435
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 924076434}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1723601373}
-  m_Father: {fileID: 1132578715}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1033865147
 GameObject:
   m_ObjectHideFlags: 0
@@ -6494,7 +6463,7 @@ Transform:
   - {fileID: 2110837863}
   - {fileID: 471436839}
   - {fileID: 1156718639}
-  - {fileID: 924076435}
+  - {fileID: 1723601373}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8579,10 +8548,10 @@ MonoBehaviour:
   outPropsVibrate: {fileID: 775730992}
   outPropsMove: {fileID: 83582459}
   outPropsSend: {fileID: 380078435}
-  inputCardNameField: {fileID: 911191874}
-  outputCardNameField: {fileID: 1755149133}
-  inputDescriptionField: {fileID: 437521025}
-  outputDescriptionField: {fileID: 1249500611}
+  inputCardNameField: {fileID: 911191876}
+  outputCardNameField: {fileID: 1755149135}
+  inputDescriptionField: {fileID: 437521027}
+  outputDescriptionField: {fileID: 1249500613}
   inputStatementFieldGroup: {fileID: 735259227}
   outputStatementFieldGroup: {fileID: 681084082}
   addInstanceButton: {fileID: 1345550970}
@@ -10805,7 +10774,7 @@ GameObject:
   - component: {fileID: 1723601375}
   - component: {fileID: 1723601374}
   m_Layer: 0
-  m_Name: Canvas
+  m_Name: IOArrowCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10823,8 +10792,8 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 45922759}
-  m_Father: {fileID: 924076435}
-  m_RootOrder: 0
+  m_Father: {fileID: 1132578715}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -10960,7 +10929,7 @@ GameObject:
   - component: {fileID: 1755149135}
   m_Layer: 0
   m_Name: SelectionText
-  m_TagString: DeactivateOnLoad
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

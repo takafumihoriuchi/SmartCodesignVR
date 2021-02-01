@@ -6,10 +6,10 @@ using TMPro;
 
 public abstract class Card
 {
-    protected GameObject cardNameField;
-    protected TextMeshProUGUI cardNameFieldTMP;
-    protected GameObject descriptionField;
-    protected TextMeshProUGUI descriptionFieldTMP;
+    protected TextMeshProUGUI cardNameField;
+    //protected TextMeshProUGUI cardNameFieldTMP;
+    protected TextMeshProUGUI descriptionField;
+    //protected TextMeshProUGUI descriptionFieldTMP;
     // todo 変数で対応できないかの確認
 
     protected GameObject environmentObject;
@@ -66,20 +66,22 @@ public abstract class Card
     }
     protected abstract string getIndexSubText();
 
-
+    // only necessary for the first card instance
     public void CardDescriptionSetup(
-        ref GameObject cardNameField,
-        ref GameObject descriptionField)
+        ref TextMeshProUGUI cardNameField,
+        ref TextMeshProUGUI descriptionField)
     {
         this.cardNameField = cardNameField; // todo 最初からTMP型として取り込めばいい
-        cardNameFieldTMP = this.cardNameField.GetComponent<TextMeshProUGUI>();
-        cardNameFieldTMP.SetText(cardName);
-        this.cardNameField.SetActive(true);
+        //cardNameFieldTMP = this.cardNameField.GetComponent<TextMeshProUGUI>();
+        //cardNameFieldTMP.SetText(cardName);
+        cardNameField.SetText(cardName);
+        //this.cardNameField.SetActive(true);
 
         this.descriptionField = descriptionField;
-        descriptionFieldTMP = this.descriptionField.GetComponent<TextMeshProUGUI>();
-        descriptionFieldTMP.SetText(descriptionText);
-        this.descriptionField.SetActive(true);
+        //descriptionFieldTMP = this.descriptionField.GetComponent<TextMeshProUGUI>();
+        //descriptionFieldTMP.SetText(descriptionText);
+        descriptionField.SetText(descriptionText);
+        //this.descriptionField.SetActive(true);
     }
 
     public void CardStatementSetup(

@@ -9,7 +9,6 @@ using TMPro;
 
 public class PrototypingSceneCore : MonoBehaviour
 {
-    // Environment Objects
 
     [SerializeField] private GameObject envObjTrashBin = null;
     [SerializeField] private GameObject envObjTree = null;
@@ -29,55 +28,46 @@ public class PrototypingSceneCore : MonoBehaviour
     [SerializeField] private GameObject outPropsMove = null;
     [SerializeField] private GameObject outPropsSend = null;
 
+    [SerializeField] private TextMeshProUGUI inputCardNameField = null;
+    [SerializeField] private TextMeshProUGUI inputDescriptionField = null;
+    [SerializeField] private GameObject inputStatementFieldGroup = null; // contains Button component
 
-    // IO Canvas Fileds
-
-    [SerializeField] private GameObject inputCardNameField = null; // todo これとかは初めからTextMeshProUGUIで読み込んでしまった方が少し効率が良い
-    [SerializeField] private GameObject outputCardNameField = null;
-    [SerializeField] private GameObject inputDescriptionField = null;
-    [SerializeField] private GameObject outputDescriptionField = null;
-
-    [SerializeField] private GameObject inputStatementFieldGroup = null; // type:Button
-    [SerializeField] private GameObject outputStatementFieldGroup = null; // type:Button
+    [SerializeField] private TextMeshProUGUI outputCardNameField = null;
+    [SerializeField] private TextMeshProUGUI outputDescriptionField = null;
+    [SerializeField] private GameObject outputStatementFieldGroup = null; // contains Button component
 
     [SerializeField] private Button addInstanceButton = null;
     [SerializeField] private Button removeInstanceButton = null;
 
-    [SerializeField] private GameObject ioArrowObject = null; // arrow image object
-    private List<GameObject> ioArrowList = new List<GameObject>();
+    [SerializeField] private GameObject ioArrowObject = null;
 
-    // Confirmation Canvas Fields
-
-    // todo こういうtext-fieldは、最初からそのコンポーネントしか使わないことがわかっていれば、GameObject以外を使用しても良い。
-    [SerializeField] private TextMeshProUGUI confirmationMessageField = null; // todo assign in inspector
+    [SerializeField] private TextMeshProUGUI confirmationMessageField = null;
     [SerializeField] private Button confirmationButton = null;
-    [SerializeField] private Button backToEditButton = null; // todo make new and put instance in inspector
+    [SerializeField] private Button backToEditButton = null;
     [SerializeField] private Button finalizationButton = null;
-    // todo make new and add "finalize smart object" button in inspector
-    bool isConfirmed = false; // after-confirmed か before-confirmed かを知るため（back-to-edit の操作で可逆性あり）
     readonly string beforeConfirmMessage = "Ready to test the Smart Object?";
     readonly string afterConfirmMessage = "Do you want to keep editing or finalize?";
 
     [SerializeField] private GameObject menuCanvas = null;
     [SerializeField] private Button backToSceneButton = null;
     [SerializeField] private Button closeMenuButton = null;
-    private bool menuIsOpened = false;
 
     private GameObject environmentObject;
     private GameObject inputProps;
     private GameObject outputProps;
     private List<InputCard> inputInstanceList = new List<InputCard>();
     private List<OutputCard> outputInstanceList = new List<OutputCard>();
-
-    // statement field colors
-    readonly Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f); // focused
-    readonly Color LIGHT_BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 0.4f); // unfocused
-    readonly Color SHADED_BEIGE = new Color(0.7803f, 0.7568f, 0.7019f, 1.0f); // unfocused
-    // arrow colors
-    readonly Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f); // focused
-    readonly Color LIGHT_WHITE = new Color(1.0f, 1.0f, 1.0f, 0.4f); // unfocused
+    private List<GameObject> ioArrowList = new List<GameObject>();
+    bool isConfirmed = false; // to distinguish between before/after-confirmed
+    private bool menuIsOpened = false;
 
     const float VSHAMT = 0.5f; // vertical shift amount
+    readonly Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f); // statement-box focused
+    readonly Color LIGHT_BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 0.4f); // statement-box unfocused
+    readonly Color SHADED_BEIGE = new Color(0.7803f, 0.7568f, 0.7019f, 1.0f); // statement-box unfocused (not used)
+    readonly Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f); // arrow focused
+    readonly Color LIGHT_WHITE = new Color(1.0f, 1.0f, 1.0f, 0.4f); // arrow unfocused
+
 
     // for developmental use only
     private void DevelopmentPurposeAssign()
@@ -92,13 +82,13 @@ public class PrototypingSceneCore : MonoBehaviour
             + SmartObject.cardSelectionDict["output"] + "]");
     }
 
-    // Startの中は、なるべくメソッドで処理の塊をバッチ化する。（ボタンのAddListenerの塊とか）
+
+    // keep in mind DRY: Don't Repeat Yourself
     private void Start()
     {
-        DevelopmentPurposeAssign(); // make sure to delete after development
+        DevelopmentPurposeAssign(); // to delete after development
 
         DeactivateAllCardRepresentations();
-
         environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
 
         int idx = 0;
@@ -107,7 +97,7 @@ public class PrototypingSceneCore : MonoBehaviour
         inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
         inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
         inputInstanceList[idx].CardDescriptionSetup(
-            ref inputCardNameField, ref inputDescriptionField); // todo 参照型だから多分大丈夫だと思うけど、最初に生成したものが後に削除された場合、これらの要素が残るかを確認する
+            ref inputCardNameField, ref inputDescriptionField);
         inputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
 
@@ -164,6 +154,50 @@ public class PrototypingSceneCore : MonoBehaviour
 
 
 
+    // todo Startの中の処理と合わせて、リファクタの余地あり; ボタン登録も関数化可能(indexを引数に渡す)
+    private void AddInstanceToList()
+    {
+        inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
+        outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
+        int idx = inputInstanceList.Count - 1; // tail of updated list
+
+        // note that we are skipping CardDescriptionSetup(); this is only necessary in the first instance generated in Start()
+        int minInstanceID = AvailableMinInstanceID();
+
+        inputInstanceList[idx].CardStatementSetup(
+            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
+        outputInstanceList[idx].CardStatementSetup(
+            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
+
+        // 矢印 => インスタンスに付随する必要はない。instance.Countに応じて、個数と位置を調整する
+        AddIOArrow(); // must call this before "DepriveFocusFromOtherAndGrantToTargetInstances(idx);"
+        // todo eliminate these kind of dependencies on sequences
+
+        //GrantFocusToTargetInstances(idx);
+        //DepriveFocusFromOtherInstances(idx);
+        DepriveFocusFromOtherAndGrantToTargetInstances(idx);
+
+        // ボタンの登録　（一番初めのinstanceのボタン登録はStart()で個別にやる）
+        inputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
+            );
+        outputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
+            );
+        // どのインスタンスのボタンが押されたのかの情報が欲しい => TODO この方法(lambda expression)で実現できているのかの動作確認
+        // inputInstanceList[idx].InstanceID は最初にセットされた後は、書き換えられない想定だからユニークなインスタンスに紐ずく
+
+        ShiftStatementFields(); // 他人を押し上げる
+
+        // check for allawability of adding and removing instances
+        addInstanceButton.interactable = CheckInstanceListCapacity();
+        removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
+    }
+
+
+
     // Update() の中は必要最低限に留めて、発火を活用した方が効率的
     private void Update()
     {
@@ -208,6 +242,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private bool ConditionKeywordIsUnique(int focusedIdx)
     {
+        if (string.IsNullOrEmpty(inputInstanceList[focusedIdx].ConditionKeyword)) return true;
         for (int i = 0; i < inputInstanceList.Count; i++)
         {
             if (i == focusedIdx) continue;
@@ -232,47 +267,7 @@ public class PrototypingSceneCore : MonoBehaviour
         return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
     }
 
-    // todo Startの中の処理と合わせて、リファクタの余地あり; ボタン登録も関数化可能(indexを引数に渡す)
-    private void AddInstanceToList()
-    {
-        inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
-        outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
-        int idx = inputInstanceList.Count - 1; // tail of updated list
-
-        // note that we are skipping CardDescriptionSetup(); this is only necessary in the first instance generated in Start()
-        int minInstanceID = AvailableMinInstanceID();
-
-        inputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
-        outputInstanceList[idx].CardStatementSetup(
-            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
-
-        // 矢印 => インスタンスに付随する必要はない。instance.Countに応じて、個数と位置を調整する
-        AddIOArrow(); // must call this before "DepriveFocusFromOtherAndGrantToTargetInstances(idx);"
-        // todo eliminate these kind of dependencies on sequences
-
-        //GrantFocusToTargetInstances(idx);
-        //DepriveFocusFromOtherInstances(idx);
-        DepriveFocusFromOtherAndGrantToTargetInstances(idx);
-
-        // ボタンの登録　（一番初めのinstanceのボタン登録はStart()で個別にやる）
-        inputInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(inputInstanceList[idx].InstanceID); }
-            );
-        outputInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(outputInstanceList[idx].InstanceID); }
-            );
-        // どのインスタンスのボタンが押されたのかの情報が欲しい => TODO この方法(lambda expression)で実現できているのかの動作確認
-        // inputInstanceList[idx].InstanceID は最初にセットされた後は、書き換えられない想定だからユニークなインスタンスに紐ずく
-
-        ShiftStatementFields(); // 他人を押し上げる
-
-        // check for allawability of adding and removing instances
-        addInstanceButton.interactable = CheckInstanceListCapacity();
-        removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
-    }
+    
 
 
     // TODO 本当にこれで良いのかがわからない。つまり、idxの渡し方が

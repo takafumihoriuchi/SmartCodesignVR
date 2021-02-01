@@ -74,8 +74,8 @@ public class FireCard : InputCard
         else return false;
     }
 
-    private float UpdateMarkerDistance() {
-        return Vector3.Distance(environmentObject.transform.position, markerObj.transform.position);
+    private void UpdateMarkerDistance() {
+        markerDistance = Vector3.Distance(environmentObject.transform.position, markerObj.transform.position);
     }
 
     protected override void InitPropFields()
