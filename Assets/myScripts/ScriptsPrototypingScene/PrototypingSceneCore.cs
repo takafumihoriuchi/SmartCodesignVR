@@ -118,14 +118,14 @@ public class PrototypingSceneCore : MonoBehaviour
 
         if (isConfirmed)
         {
-            // reactions when input conditions are triggered
+            // reactions when input conditions are triggered (fired for one frame)
             for (int i = 0; i < inputInstanceList.Count; i++)
-            {
+                if (inputInstanceList[i].NegativeTriggerFlag)
+                    outputInstanceList[i].OutputBehaviourOnNegative();
+            // call negative trigger first, then call positive trigger
+            for (int i = 0; i < inputInstanceList.Count; i++)
                 if (inputInstanceList[i].PositiveTriggerFlag)
                     outputInstanceList[i].OutputBehaviourOnPositive();
-                else if (inputInstanceList[i].NegativeTriggerFlag)
-                    outputInstanceList[i].OutputBehaviourOnNegative();
-            }
         }
         else
         {
