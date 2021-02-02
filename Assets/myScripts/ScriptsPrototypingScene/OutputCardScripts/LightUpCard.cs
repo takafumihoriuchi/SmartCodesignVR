@@ -82,6 +82,8 @@ public class LightUpCard : OutputCard
     // when brush is rubbed on envObj
     void OnCollisionEnterBrushTip(Collision other)
     {
+        if (!isFocused) return; // exclude unfocused instances
+
         // nothing on brush
         if (!brushHasPaint && !brushHasWater) return;
 
@@ -113,15 +115,17 @@ public class LightUpCard : OutputCard
         }
     }
 
-
-    public override void OutputBehaviour()
+    // todo 相手の色を上書きしないように気を遣わなくてはいけない；
+    // 最初に自分のnegative、その後（もしあれば）相手のpositive
+    // todo PositiveとNegativeが切り替わったかは、set get の set で条件分岐で実現可能
+    public override void OutputBehaviourOnPositive()
     {
         ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
     }
     
     // TODO 複数インスタンスある時に、多分これだとピカピカ光っちゃう（他のとconflictしてスイッチングする）
     // LEDだからピカピカして欲しいならそれでもいいけど、点滅が早すぎてユーザーフレンドリーじゃないと思う
-    public override void OutputBehaviourNegative()
+    public override void OutputBehaviourOnNegative()
     {
         ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
     }

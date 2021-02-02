@@ -46,11 +46,12 @@ public class MakeSoundCard : OutputCard
     }
 
 
-
+    // todo OutputBehaviourOnNegativeでstopされるまではループさせる、など
     public override void OutputBehaviour()
     {
         if ((float)stopWatch.Elapsed.TotalSeconds >= clipDuration)
         {
+            // OutputBehaviourをトリガー生にした場合、コルーチンで1プレイサイクルを区切ることになる。
             soundRecorder.Stop();
             stopWatch.Reset();
             // Stopwatch.Reset: Stops time interval measurement and resets the elapsed time to zero.

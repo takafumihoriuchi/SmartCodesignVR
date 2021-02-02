@@ -95,8 +95,11 @@ public abstract class Card
 }
 
 
+
 public abstract class InputCard : Card
 {
+    protected override string GetIndexSubText() { return "input"; }
+
     protected int maxInstanceNum;
     public int MaxInstanceNum { set { } get { return maxInstanceNum; } }
 
@@ -108,13 +111,51 @@ public abstract class InputCard : Card
         get { return conditionKeyword; } }
     public readonly string ALREADY_EXISTS = "already exists";
 
-    [HideInInspector] public bool inputCondition = false;
+
+
+    private bool f2TOnThisFrame = false; // inCondPosTriggerFlg - inCondNegTriggerFlg
+    public bool F2TOnThisFrame
+    {
+        set {}
+        get {
+            if (f2TOnThisFrame)
+            {
+                f2TOnThisFrame = false;
+                return true;
+            }
+            else return false;
+        }
+    }
+    private bool t2FOnThisFrame = false;
+    public bool T2FOnThisFrame // trueの状態でgetされるとすぐにtrueを失ってしまうような変数
+    {
+        set {} // readonlyなプロパティにできる
+        get {
+            if (t2FOnThisFrame) {
+                t2FOnThisFrame = false;
+                return true;
+            }
+            else return false;
+        }
+    }
+    private bool inputCondition;
+    public bool InputCondition {
+        set { // only set from UpdateInputCondition()
+            if (!inputCondition && value)
+                f2TOnThisFrame = true;
+            else if (inputCondition && !value)
+                t2FOnThisFrame = true;
+            inputCondition = value;
+        }
+        get {
+            return inputCondition; // not used
+        }}
 
     public void UpdateInputCondition()
     {
         if (isConfirmed) {
             // to check continuously during test
-            inputCondition = inputEvalDeleDict[conditionKeyword]();
+            InputCondition = inputEvalDeleDict[conditionKeyword]();
         } else {
             BehaviourDuringPrototyping();
             canBeConfirmed = !(string.IsNullOrEmpty(conditionKeyword)
@@ -122,16 +163,12 @@ public abstract class InputCard : Card
         }
     }
 
-    protected override string GetIndexSubText() { return "input"; }
 }
 
 
 
 public abstract class OutputCard : Card
 {
-    public abstract void OutputBehaviour();
-    public abstract void OutputBehaviourNegative();
-
     public void UpdateOutputBehaviour()
     {
         if (isConfirmed) {
@@ -142,5 +179,7 @@ public abstract class OutputCard : Card
         }
     }
 
+    public abstract void OutputBehaviour();
+    public abstract void OutputBehaviourNegative();
     protected override string GetIndexSubText() { return "output"; }
 }
