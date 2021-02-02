@@ -70,13 +70,13 @@ public class PrototypingSceneCore : MonoBehaviour
     readonly Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f); // arrow focused
     readonly Color LIGHT_WHITE = new Color(1.0f, 1.0f, 1.0f, 0.4f); // arrow unfocused
 
-    [SerializeField] private GameObject editorEventSystem = null;
-    [SerializeField] private GameObject HMDEventSystem = null;
+    [SerializeField] private GameObject editorEventSystem = null; // for developmental use only
+    [SerializeField] private GameObject HMDEventSystem = null; // for developmental use only
 
     // for developmental use only
     private void DevelopmentPurposeSettings()
     {
-        bool onHMD = false;
+        bool onHMD = true;
         // set this value to the desired platform
 
         // for enabling button-clicks (editor use) or laser-pointer (HMD use)
@@ -93,8 +93,8 @@ public class PrototypingSceneCore : MonoBehaviour
         // card selection settings
         SmartObject.cardSelectionDict["environment"] = "TrashBin";
         SmartObject.cardSelectionDict["input"] = "Fire";
-        SmartObject.cardSelectionDict["output"] = "LightUp";
-        //SmartObject.cardSelectionDict["output"] = "MakeSound";
+        //SmartObject.cardSelectionDict["output"] = "LightUp";
+        SmartObject.cardSelectionDict["output"] = "MakeSound";
     }
 
 
