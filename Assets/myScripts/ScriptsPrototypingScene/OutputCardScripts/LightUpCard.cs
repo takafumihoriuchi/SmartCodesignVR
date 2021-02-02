@@ -66,32 +66,24 @@ public class LightUpCard : OutputCard
 
     // todo 相手の色を上書きしないように気を遣わなくてはいけない；
     // 最初に自分のnegative、その後（もしあれば）相手のpositive
-    public override void OutputBehaviourOnPositive()
-    {
+    public override void OutputBehaviourOnPositive() {
         ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
     }
 
-    public override void OutputBehaviourOnNegative()
-    {
+    public override void OutputBehaviourOnNegative() {
         ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
     }
 
-    protected override void OnFocusGranted()
-    {
+    protected override void OnFocusGranted() {
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
         eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
         // load colors
         ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
     }
 
-    protected override void OnFocusDeprived()
-    {
+    protected override void OnFocusDeprived() {
         eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
         eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
-        // save colors
-        // => already saved 'dynamically' during interaction
-        // reset colors
-        //ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
         // => こいつを消してしまえば、ロードした時にそのインスタンスの色に塗るだけだからうまくいく。
         // => 全てのインスタンスがfalseの時に色が残ってしまう
     }
@@ -103,22 +95,28 @@ public class LightUpCard : OutputCard
     void OnTriggerEnterBrushTip(Collider other)
     {
         string colliderName = other.transform.gameObject.name;
-        // check if triggered on paint bucket
-        if (colliderName == "LEDPaint")
+
+        if (colliderName == "LEDPaint" || colliderName == "water")
         {
-            brushHasPaint = true;
-            brushHasWater = false;
             brushTipRend.material = other.GetComponent<Renderer>().material;
-            return;
         }
-        // check if triggered on water bucket
-        if (colliderName == "water")
-        {
-            brushHasWater = true;
-            brushHasPaint = false;
-            brushTipRend.material = other.GetComponent<Renderer>().material;
-            return;
-        }
+
+        //// check if triggered on paint bucket
+        //if (colliderName == "LEDPaint")
+        //{
+        //    brushHasPaint = true;
+        //    brushHasWater = false;
+        //    brushTipRend.material = other.GetComponent<Renderer>().material;
+        //    return;
+        //}
+        //// check if triggered on water bucket
+        //if (colliderName == "water")
+        //{
+        //    brushHasWater = true;
+        //    brushHasPaint = false;
+        //    brushTipRend.material = other.GetComponent<Renderer>().material;
+        //    return;
+        //}
     }
 
 
@@ -128,11 +126,17 @@ public class LightUpCard : OutputCard
     void OnCollisionEnterBrushTip(Collision other)
     {
         // nothing on brush
-        if (!brushHasPaint && !brushHasWater) return;
+        //if (!brushHasPaint && !brushHasWater) return;
 
+        // reject if no paint/water is on the brush
+        if (brushTipRend.material == originalBrushMaterial) return;
+
+        // reject if the collided object is not a part of envObj
         int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
         if (partIdx == -1) return; // not found
         Renderer envPartRend = other.gameObject.GetComponent<Renderer>();
+
+        
 
         if (brushHasPaint) // then put color on envbj
         {
