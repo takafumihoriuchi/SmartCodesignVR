@@ -109,7 +109,6 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    // todo minimize computation in Update(); use trigger events when possible
     private void Update()
     {
         // basic updates for selected instance
@@ -117,37 +116,37 @@ public class PrototypingSceneCore : MonoBehaviour
         inputInstanceList[focusedIdx].UpdateInputCondition();
         outputInstanceList[focusedIdx].UpdateOutputBehaviour();
 
-        // Check if the selected keywords have no overlaps
-        if (!ConditionKeywordIsUnique(focusedIdx))
-            inputInstanceList[focusedIdx].ConditionKeyword
-                = inputInstanceList[focusedIdx].ALREADY_EXISTS;
-
-        // check if all instances has been set a value
-        bool isConfirmable = CheckConfirmability();
-        if (isConfirmable) confirmationButton.interactable = true;
-        else confirmationButton.interactable = false;
-
         if (isConfirmed)
         {
+            // reactions when input conditions are triggered
             for (int i = 0; i < inputInstanceList.Count; i++)
             {
-                if (inputInstanceList[i].F2TOnThisFrame)
-                    outputInstanceList[i].OutputBehaviourOnPositive(); // Update中は毎回呼ばれるのではなく、トリガーのように一回呼ばれる形式に変更した
-                else if (inputInstanceList[i].T2FOnThisFrame)
+                if (inputInstanceList[i].PositiveTriggerFlag)
+                    outputInstanceList[i].OutputBehaviourOnPositive();
+                else if (inputInstanceList[i].NegativeTriggerFlag)
                     outputInstanceList[i].OutputBehaviourOnNegative();
-                //if (inputInstanceList[i].InputCondition)
-                //    outputInstanceList[i].OutputBehaviour();
-                //else
-                //    outputInstanceList[i].OutputBehaviourNegative();
             }
         }
+        else
+        {
+            // Check if the selected keywords have no overlaps
+            if (!ConditionKeywordIsUnique(focusedIdx))
+                inputInstanceList[focusedIdx].ConditionKeyword
+                    = inputInstanceList[focusedIdx].ALREADY_EXISTS;
 
+            // check if all instances has been set a value
+            bool isConfirmable = CheckConfirmability();
+            if (isConfirmable) confirmationButton.interactable = true;
+            else confirmationButton.interactable = false;
+        }
+
+        // Oculus Touch Controller events
         if (OVRInput.GetDown(OVRInput.RawButton.Start))
         {
             if (!menuIsOpened) OpenMenu();
             else CloseMenu();
         }
-
+        
     }
 
 

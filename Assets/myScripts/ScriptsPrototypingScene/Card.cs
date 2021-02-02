@@ -113,49 +113,49 @@ public abstract class InputCard : Card
 
 
 
-    private bool f2TOnThisFrame = false; // inCondPosTriggerFlg - inCondNegTriggerFlg
-    public bool F2TOnThisFrame
-    {
-        set {}
+    // positive-negative-TriggerFlag:
+    // flags that loses it's "true" state when accessed from other class
+    private bool positiveTriggerFlag = false;
+    public bool PositiveTriggerFlag {
         get {
-            if (f2TOnThisFrame)
-            {
-                f2TOnThisFrame = false;
+            if (positiveTriggerFlag) {
+                positiveTriggerFlag = false;
                 return true;
-            }
-            else return false;
-        }
-    }
-    private bool t2FOnThisFrame = false;
-    public bool T2FOnThisFrame // trueの状態でgetされるとすぐにtrueを失ってしまうような変数
-    {
-        set {} // readonlyなプロパティにできる
-        get {
-            if (t2FOnThisFrame) {
-                t2FOnThisFrame = false;
-                return true;
-            }
-            else return false;
-        }
-    }
-    private bool inputCondition;
-    public bool InputCondition {
-        set { // only set from UpdateInputCondition()
-            if (!inputCondition && value)
-                f2TOnThisFrame = true;
-            else if (inputCondition && !value)
-                t2FOnThisFrame = true;
-            inputCondition = value;
-        }
-        get {
-            return inputCondition; // not used
+            } else return false;
         }}
+    private bool negativeTriggerFlag = false;
+    public bool NegativeTriggerFlag {
+        get {
+            if (negativeTriggerFlag) {
+                negativeTriggerFlag = false;
+                return true;
+            } else return false;
+        }}
+    //private bool inputCondition;
+    //private bool InputCondition {
+    //    set {
+    //        if (!inputCondition && value)
+    //            positiveTriggerFlag = true;
+    //        else if (inputCondition && !value)
+    //            negativeTriggerFlag = true;
+    //        inputCondition = value;
+    //    }
+    //    get {
+    //        return inputCondition; // not used
+    //    }}
+    private bool currentEval = false;
 
     public void UpdateInputCondition()
     {
         if (isConfirmed) {
             // to check continuously during test
-            InputCondition = inputEvalDeleDict[conditionKeyword]();
+            // InputCondition = inputEvalDeleDict[conditionKeyword]();
+
+            bool newEval = inputEvalDeleDict[conditionKeyword]();
+            if (!currentEval && newEval) positiveTriggerFlag = true;
+            else if (currentEval && !newEval) negativeTriggerFlag = true;
+            if (currentEval != newEval) currentEval = newEval;
+
         } else {
             BehaviourDuringPrototyping();
             canBeConfirmed = !(string.IsNullOrEmpty(conditionKeyword)
@@ -179,7 +179,7 @@ public abstract class OutputCard : Card
         }
     }
 
-    public abstract void OutputBehaviour();
-    public abstract void OutputBehaviourNegative();
+    public abstract void OutputBehaviourOnPositive();
+    public abstract void OutputBehaviourOnNegative();
     protected override string GetIndexSubText() { return "output"; }
 }

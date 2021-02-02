@@ -47,7 +47,7 @@ public class MakeSoundCard : OutputCard
 
 
     // todo OutputBehaviourOnNegativeでstopされるまではループさせる、など
-    public override void OutputBehaviour()
+    public override void OutputBehaviourOnPositive()
     {
         if ((float)stopWatch.Elapsed.TotalSeconds >= clipDuration)
         {
@@ -64,7 +64,7 @@ public class MakeSoundCard : OutputCard
     }
 
 
-    public override void OutputBehaviourNegative()
+    public override void OutputBehaviourOnNegative()
     {
         // Stop() when the inputCondition fails to hold true
         if (soundRecorder.isPlaying) soundRecorder.Stop();
