@@ -82,14 +82,20 @@ public class LightUpCard : OutputCard
 
     protected override void OnConfirm()
     {
-        if (!isFocused) return;
-        propObjects.SetActive(false);
+        if (isFocused)
+        {
+            propObjects.SetActive(false);
+            ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial); ;
+        }
     }
 
     protected override void OnBackToEdit()
     {
-        if (!isFocused) return;
-        propObjects.SetActive(true);
+        if (isFocused)
+        {
+            propObjects.SetActive(true);
+            ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial); ;
+        }
     }
 
 

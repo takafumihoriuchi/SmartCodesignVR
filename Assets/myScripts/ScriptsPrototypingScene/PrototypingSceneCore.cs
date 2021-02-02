@@ -116,6 +116,12 @@ public class PrototypingSceneCore : MonoBehaviour
         inputInstanceList[focusedIdx].UpdateInputCondition();
         outputInstanceList[focusedIdx].UpdateOutputBehaviour();
 
+        //for (int i = 0; i < inputInstanceList.Count; i++)
+        //{
+        //    inputInstanceList[i].UpdateInputCondition();
+        //    outputInstanceList[i].UpdateOutputBehaviour();
+        //}
+
         if (isConfirmed)
         {
             // reactions when input conditions are triggered (fired for one frame)
