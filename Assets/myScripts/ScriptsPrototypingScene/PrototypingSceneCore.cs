@@ -130,6 +130,7 @@ public class PrototypingSceneCore : MonoBehaviour
         else
         {
             // Check if the selected keywords have no overlaps
+            // todo ideally call from properties (set/get)
             if (!ConditionKeywordIsUnique(focusedIdx))
                 inputInstanceList[focusedIdx].ConditionKeyword
                     = inputInstanceList[focusedIdx].ALREADY_EXISTS;
@@ -312,7 +313,7 @@ public class PrototypingSceneCore : MonoBehaviour
             return true;
         for (int i = 0; i < inputInstanceList.Count; i++)
         {
-            if (i == focusedIdx) continue;
+            if (i == focusedIdx) continue; // skip itself
             if (inputInstanceList[i].ConditionKeyword
                 == inputInstanceList[focusedIdx].ConditionKeyword)
                 return false;
@@ -478,7 +479,7 @@ public class PrototypingSceneCore : MonoBehaviour
         for (int i = 0; i < ioArrowList.Count; i++)
         {
             if (inputInstanceList[RevIdx(i)].IsFocused) continue;
-            else ioArrowList[RevIdx(i)].GetComponent<Image>().color = color;
+            else ioArrowList[i].GetComponent<Image>().color = color;
         }
     }
 

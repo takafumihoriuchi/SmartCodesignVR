@@ -4,6 +4,9 @@ using UnityEngine;
 using EventBridge;
 using System;
 
+// Template for sub-classes of OutputCard:
+// - set/update variableTextTMP.SetText("")
+
 public class LightUpCard : OutputCard
 {
     IComponentEventHandler eventBridgeHandler;
@@ -18,6 +21,7 @@ public class LightUpCard : OutputCard
     Material[] originalEnvObjMaterial;
     Material[] edittedEnvObjMaterial;
 
+    // todo インスタンス間で共有できないから、別の手法の方が良い
     bool brushHasPaint = false;
     bool brushHasWater = false;
 
@@ -27,6 +31,7 @@ public class LightUpCard : OutputCard
     public LightUpCard()
     {
         cardName = "Light Up";
+
         descriptionText =
             "<i>I can light up LEDs in different colors.</i>\n" +
             "<b>Steps:</b>\n" +
@@ -35,6 +40,7 @@ public class LightUpCard : OutputCard
             "<b>3.</b> <indent=10%>Rub the paint on the object.</indent>\n" +
             "<b>*</b> Different parts can be set to different colors.\n" +
             "<b>*</b> Paint can be removed by putting \"water\" on the object.";
+
         contentText = "turn on LED lights in the colors of";
     }
 
@@ -53,23 +59,60 @@ public class LightUpCard : OutputCard
 
         // todo 参照渡しを意識して組み直す
         eventBridgeHandler = paintBrush.RequestEventHandlers();
+    }
+
+    // called every frame
+    protected override void BehaviourDuringPrototyping() { }
+
+    // todo 相手の色を上書きしないように気を遣わなくてはいけない；
+    // 最初に自分のnegative、その後（もしあれば）相手のpositive
+    public override void OutputBehaviourOnPositive()
+    {
+        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+    }
+
+    public override void OutputBehaviourOnNegative()
+    {
+        ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+    }
+
+    protected override void OnFocusGranted()
+    {
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
         eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
+        // load colors
+        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+    }
+
+    protected override void OnFocusDeprived()
+    {
+        eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
+        eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
+        // save colors
+        // => already saved 'dynamically' during interaction
+        // reset colors
+        //ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+        // => こいつを消してしまえば、ロードした時にそのインスタンスの色に塗るだけだからうまくいく。
+        // => 全てのインスタンスがfalseの時に色が残ってしまう
     }
 
 
     // when brush is dipped in the buckets
+    // independent from other instances
+    // c.f. "eventBridgeHandler" is instance independent
     void OnTriggerEnterBrushTip(Collider other)
     {
         string colliderName = other.transform.gameObject.name;
-        if (colliderName == "LEDPaint") // check if triggered on paint bucket
+        // check if triggered on paint bucket
+        if (colliderName == "LEDPaint")
         {
             brushHasPaint = true;
             brushHasWater = false;
             brushTipRend.material = other.GetComponent<Renderer>().material;
             return;
         }
-        if (colliderName == "water") // check if triggered on water bucket
+        // check if triggered on water bucket
+        if (colliderName == "water")
         {
             brushHasWater = true;
             brushHasPaint = false;
@@ -80,10 +123,10 @@ public class LightUpCard : OutputCard
 
 
     // when brush is rubbed on envObj
+    // independent from other instances
+    // c.f. "eventBridgeHandler" is instance independent
     void OnCollisionEnterBrushTip(Collision other)
     {
-        if (!isFocused) return; // exclude unfocused instances
-
         // nothing on brush
         if (!brushHasPaint && !brushHasWater) return;
 
@@ -115,20 +158,21 @@ public class LightUpCard : OutputCard
         }
     }
 
-    // todo 相手の色を上書きしないように気を遣わなくてはいけない；
-    // 最初に自分のnegative、その後（もしあれば）相手のpositive
-    // todo PositiveとNegativeが切り替わったかは、set get の set で条件分岐で実現可能
-    public override void OutputBehaviourOnPositive()
+
+    protected override void OnConfirm()
     {
-        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+        if (!isFocused) return;
+        // hide props from the focused instance
+        propObjects.SetActive(false);
     }
-    
-    // TODO 複数インスタンスある時に、多分これだとピカピカ光っちゃう（他のとconflictしてスイッチングする）
-    // LEDだからピカピカして欲しいならそれでもいいけど、点滅が早すぎてユーザーフレンドリーじゃないと思う
-    public override void OutputBehaviourOnNegative()
+
+    protected override void OnBackToEdit()
     {
-        ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+        if (!isFocused) return;
+        // show props from the focused instance
+        propObjects.SetActive(true);
     }
+
 
     // objArr.Length and matArr.Length should be the same
     void ApplyMaterial(ref GameObject[] objArr, Material[] matArr)
@@ -136,16 +180,9 @@ public class LightUpCard : OutputCard
         int nParts = objArr.Length;
         for (int i = 0; i < nParts; i++)
         {
-            objArr[i].GetComponent<Renderer>().material
-                = matArr[i];
+            objArr[i].GetComponent<Renderer>().material = matArr[i];
         }
     }
-
-    protected override void BehaviourDuringPrototyping()
-    {
-        // all processes are taken care in the trigger-events
-    }
-
 
     GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
     {
@@ -165,54 +202,6 @@ public class LightUpCard : OutputCard
         return matArr;
     }
 
-
-    // TODO 要検討；propsが複製なのか参照なのかで変わってくる
-    // TODO 参照の場合、今の実装だとまずいことになるから、
-    // （他のインスタンスで変更した色がこのインスタンスでも変更されてしまう）
-    // （つまり、TriggerEnterなどを+=,-=しても、他のインスタンスでつけたらこっちでもつけたのと同じことになってしまう）
-    // その場合は、SetActivateする前に、インスタンスごとにinstantiate()で自前のを用意して、
-    // それをSetActivate()したのちに、Focusが移るたびに、SetActiveをtrueにしたりfalseにしたりする
-
-    protected override void OnFocusGranted()
-    {
-        // load colors
-        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
-    }
-    protected override void OnFocusDeprived()
-    {
-        // save colors
-        // => already saved 'dynamically' during interaction
-        // reset colors
-        //ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
-        // => こいつを消してしまえば、ロードした時にそのインスタンスの色に塗るだけだからうまくいく。
-    }
-
-    protected override void OnConfirm()
-    {
-        // propsを隠したい
-
-        if (isFocused)
-        {
-            eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
-            eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
-        }
-
-        return;
-    }
-    protected override void OnBackToEdit()
-    {
-        // propsを再登場させたい
-
-        // todo propsをreferenceとして受け取るということで、全体を再検討する。
-        // （referenceの方が無駄が少ない）
-        if (isFocused)
-        {
-            eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
-            eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
-        }
-
-        return;
-    }
 
 }
 

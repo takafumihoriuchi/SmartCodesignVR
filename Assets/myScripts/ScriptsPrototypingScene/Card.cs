@@ -15,6 +15,8 @@ public abstract class Card
     protected TextMeshProUGUI descriptionField;
     protected TextMeshProUGUI indexTextTMP;
     protected TextMeshProUGUI contentTextTMP;
+
+    // to be updated in each specific card-class
     protected TextMeshProUGUI variableTextTMP;
 
     protected string cardName;
@@ -33,8 +35,8 @@ public abstract class Card
 
     protected bool isFocused;
     public bool IsFocused {
-        set { isFocused = value;
-            if (isFocused) OnFocusGranted();
+        set { isFocused = value; // first set to new focus-state
+            if (isFocused) OnFocusGranted(); // then call methods
             else OnFocusDeprived(); }
         get { return isFocused; }}
 
@@ -105,10 +107,12 @@ public abstract class InputCard : Card
 
     public delegate bool InputEvaluationDelegate();
     public Dictionary<string, InputEvaluationDelegate> inputEvalDeleDict;
+
     protected string conditionKeyword = string.Empty;
     public string ConditionKeyword {
         set { conditionKeyword = value; variableTextTMP.SetText(conditionKeyword); }
         get { return conditionKeyword; } }
+
     public readonly string ALREADY_EXISTS = "already exists";
 
     // positive-negative-TriggerFlag:
@@ -121,6 +125,7 @@ public abstract class InputCard : Card
                 return true;
             } else return false;
         }}
+
     private bool negativeTriggerFlag = false;
     public bool NegativeTriggerFlag {
         get {
@@ -129,6 +134,7 @@ public abstract class InputCard : Card
                 return true;
             } else return false;
         }}
+
     private bool currentEval = false;
 
     public void UpdateInputCondition()
