@@ -155,7 +155,8 @@ public class PrototypingSceneCore : MonoBehaviour
         inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
         outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
         ioArrowList.Add(CreateIOArrow());
-        int idx = inputInstanceList.Count - 1; // tail of updated list; call after adding new instance
+        int idx = inputInstanceList.Count - 1;
+        // get tail of updated list; call after adding new instance
         int minInstanceID = AvailableMinInstanceID();
         inputInstanceList[idx].CardStatementSetup(
             ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);

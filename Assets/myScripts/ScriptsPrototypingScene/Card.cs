@@ -50,11 +50,11 @@ public abstract class Card
     protected abstract void OnFocusGranted();
     protected abstract void OnFocusDeprived();
 
-    protected abstract string GetIndexSubText();
+    protected abstract string GetCardType();
     // index text string is used for determining
     // which statement-field-button was selected
     private string GetIndexText() {
-        return "<u>" + GetIndexSubText() + " #"
+        return "<u>" + GetCardType() + " #"
             + (instanceID + 1).ToString() + "</u>";}
 
     // only necessary for the first card instance
@@ -98,7 +98,7 @@ public abstract class Card
 
 public abstract class InputCard : Card
 {
-    protected override string GetIndexSubText() { return "input"; }
+    protected override string GetCardType() { return "input"; }
 
     protected int maxInstanceNum;
     public int MaxInstanceNum { set { } get { return maxInstanceNum; } }
@@ -151,6 +151,8 @@ public abstract class InputCard : Card
 
 public abstract class OutputCard : Card
 {
+    protected override string GetCardType() { return "output"; }
+
     public void UpdateOutputBehaviour()
     {
         if (isConfirmed) {
@@ -163,5 +165,4 @@ public abstract class OutputCard : Card
 
     public abstract void OutputBehaviourOnPositive();
     public abstract void OutputBehaviourOnNegative();
-    protected override string GetIndexSubText() { return "output"; }
 }
