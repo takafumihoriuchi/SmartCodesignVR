@@ -21,12 +21,12 @@ public class SendCard : OutputCard
 
     }
 
-    public override void OutputBehaviour()
+    public override void OutputBehaviourOnPositive()
     {
 
     }
 
-    public override void OutputBehaviourNegative()
+    public override void OutputBehaviourOnNegative()
     {
 
     }

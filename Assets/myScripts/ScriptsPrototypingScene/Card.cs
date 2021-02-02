@@ -111,8 +111,6 @@ public abstract class InputCard : Card
         get { return conditionKeyword; } }
     public readonly string ALREADY_EXISTS = "already exists";
 
-
-
     // positive-negative-TriggerFlag:
     // flags that loses it's "true" state when accessed from other class
     private bool positiveTriggerFlag = false;
@@ -131,31 +129,15 @@ public abstract class InputCard : Card
                 return true;
             } else return false;
         }}
-    //private bool inputCondition;
-    //private bool InputCondition {
-    //    set {
-    //        if (!inputCondition && value)
-    //            positiveTriggerFlag = true;
-    //        else if (inputCondition && !value)
-    //            negativeTriggerFlag = true;
-    //        inputCondition = value;
-    //    }
-    //    get {
-    //        return inputCondition; // not used
-    //    }}
     private bool currentEval = false;
 
     public void UpdateInputCondition()
     {
         if (isConfirmed) {
-            // to check continuously during test
-            // InputCondition = inputEvalDeleDict[conditionKeyword]();
-
             bool newEval = inputEvalDeleDict[conditionKeyword]();
             if (!currentEval && newEval) positiveTriggerFlag = true;
             else if (currentEval && !newEval) negativeTriggerFlag = true;
             if (currentEval != newEval) currentEval = newEval;
-
         } else {
             BehaviourDuringPrototyping();
             canBeConfirmed = !(string.IsNullOrEmpty(conditionKeyword)

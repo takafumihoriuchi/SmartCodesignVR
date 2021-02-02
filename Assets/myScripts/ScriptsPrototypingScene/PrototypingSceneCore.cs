@@ -157,87 +157,23 @@ public class PrototypingSceneCore : MonoBehaviour
         ioArrowList.Add(CreateIOArrow());
         int idx = inputInstanceList.Count - 1; // tail of updated list; call after adding new instance
         int minInstanceID = AvailableMinInstanceID();
-        inputInstanceList[idx].CardStatementSetup(ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
-        outputInstanceList[idx].CardStatementSetup(ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
+        inputInstanceList[idx].CardStatementSetup(
+            ref environmentObject, ref inputProps, ref inputStatementFieldGroup, minInstanceID);
+        outputInstanceList[idx].CardStatementSetup(
+            ref environmentObject, ref outputProps, ref outputStatementFieldGroup, minInstanceID);
 
         ShiftFocusToTargetInstances(idx);
         ShiftFocusToTargetIOArrow(idx);
         ShiftStatementFieldPositions();
 
-        inputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
-        outputInstanceList[idx].StatementFieldGroup.GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
+        inputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
+        outputInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
 
         // check for allawability of adding and removing instances
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = !(inputInstanceList.Count <= 1);
-    }
-
-
-    private void StatementFieldOnClick()
-    {
-        // get "instance-index" from "statement-field-button-label"
-        string statementIdText = EventSystem.current.currentSelectedGameObject.transform.Find("IndexText").gameObject.GetComponent<TMP_Text>().text;
-        string extrudedIdText = Regex.Replace(statementIdText, @"[^0-9]", "");
-        int extrudedId = int.Parse(extrudedIdText);
-        int instanceID = extrudedId - 1;
-        int instanceIdx = GetInstanceListIndexFromInstanceID(instanceID);
-        ShiftFocusToTargetInstances(instanceIdx);
-        ShiftFocusToTargetIOArrow(instanceIdx);
-    }
-
-
-    private int AvailableMinInstanceID()
-    {
-        int idCandidate = 0;
-        for (int i = 0; i < inputInstanceList.Count; i++)
-        {
-            if (inputInstanceList[i].InstanceID == -1) continue; // skip itself (set to initial value)
-            if (idCandidate == inputInstanceList[i].InstanceID) idCandidate++;
-        }
-        return idCandidate;
-    }
-
-
-    private bool ConditionKeywordIsUnique(int focusedIdx)
-    {
-        if (string.IsNullOrEmpty(inputInstanceList[focusedIdx].ConditionKeyword)) return true;
-        for (int i = 0; i < inputInstanceList.Count; i++)
-        {
-            if (i == focusedIdx) continue;
-            if (inputInstanceList[i].ConditionKeyword
-                == inputInstanceList[focusedIdx].ConditionKeyword) return false;
-        }
-        return true;
-    }
-
-
-    private int GetFocusedInstanceIndex()
-    {
-        for (int i = 0; i < inputInstanceList.Count; i++)
-        {
-            if (inputInstanceList[i].IsFocused) return i;
-        }
-        return -1;
-    }
-
-
-    private bool CheckInstanceListCapacity()
-    {
-        return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
-    }
-
-
-    private void ShiftStatementFieldPositions()
-    {
-        Vector3 inputBasePosition = inputStatementFieldGroup.transform.localPosition;
-        Vector3 outputBasePosition = outputStatementFieldGroup.transform.localPosition;
-        int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++)
-        {
-            Vector3 verticalShiftAmount = new Vector3(0, VSHAMT * (instanceCount - 1 - i), 0);
-            inputInstanceList[i].StatementFieldGroup.transform.localPosition = inputBasePosition + verticalShiftAmount;
-            outputInstanceList[i].StatementFieldGroup.transform.localPosition = outputBasePosition + verticalShiftAmount;
-        }
     }
 
 
@@ -265,94 +201,18 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    // returns position adjusted io-arrow gameObject
-    private GameObject CreateIOArrow()
+    // Statement-Field-Box OnClick
+    private void StatementFieldOnClick()
     {
-        GameObject newArrow = Instantiate(ioArrowObject, ioArrowObject.transform.parent);
-        newArrow.transform.localPosition += new Vector3(0, VSHAMT * (ioArrowList.Count), 0);
-        newArrow.SetActive(true);
-        return newArrow;
-    }
-
-    
-    // remove the top-most arrow
-    private void ReduceIOArrow()
-    {
-        int idx = ioArrowList.Count - 1;
-        Destroy(ioArrowList[idx]);
-        ioArrowList.RemoveAt(idx);
-    }
-
-
-    private void GrantFocusToTargetInstances(int targetIdx)
-    {
-        SetIOInstanceFocusState(targetIdx, true);
-        SetIOStatementFieldColor(targetIdx, BEIGE);
-    }
-
-
-    private void ShiftFocusToTargetInstances(int targetIdx)
-    {
-        int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++)
-        {
-            if (i == targetIdx)
-            {
-                SetIOInstanceFocusState(targetIdx, true);
-                SetIOStatementFieldColor(targetIdx, BEIGE);
-            }
-            else
-            {
-                SetIOInstanceFocusState(i, false);
-                SetIOStatementFieldColor(i, LIGHT_BEIGE);
-            }
-        }
-    }
-
-
-    // parameter int:idx is passed assuming the use with IOInstance index order
-    // set optional parameter to 'true' if calling with real index
-    private void ShiftFocusToTargetIOArrow(int idx, bool realIndex=false)
-    {
-        if (!realIndex) idx = RevIdx(idx);
-        for (int i = 0; i < ioArrowList.Count;  i++)
-        {
-            if (i == idx) ioArrowList[i].GetComponent<Image>().color = WHITE;
-            else ioArrowList[i].GetComponent<Image>().color = LIGHT_WHITE;
-        }
-        
-    }
-
-    private int RevIdx(int idx)
-    {
-        return ioArrowList.Count - 1 - idx;
-    }
-
-
-    private void SetIOInstanceFocusState(int idx, bool tf)
-    {
-        inputInstanceList[idx].IsFocused = tf;
-        outputInstanceList[idx].IsFocused = tf;
-    }
-
-
-    private void SetIOStatementFieldColor(int idx, Color color)
-    {
-        inputInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color = color;
-        outputInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color = color;
-    }
-
-
-    private bool CheckConfirmability()
-    {
-        bool bflag = true;
-        int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++)
-        {
-            bflag &= inputInstanceList[i].CanBeConfirmed;
-            bflag &= outputInstanceList[i].CanBeConfirmed;
-        }
-        return bflag;
+        // get "instance-index" from "statement-field-button-label"
+        string statementIdText = EventSystem.current.currentSelectedGameObject.
+            transform.Find("IndexText").gameObject.GetComponent<TMP_Text>().text;
+        string extrudedIdText = Regex.Replace(statementIdText, @"[^0-9]", "");
+        int extrudedId = int.Parse(extrudedIdText);
+        int instanceID = extrudedId - 1;
+        int instanceIdx = GetInstanceListIndexFromInstanceID(instanceID);
+        ShiftFocusToTargetInstances(instanceIdx);
+        ShiftFocusToTargetIOArrow(instanceIdx);
     }
 
 
@@ -362,7 +222,8 @@ public class PrototypingSceneCore : MonoBehaviour
         isConfirmed = true;
 
         int instanceCount = inputInstanceList.Count;
-        for (int i = 0; i < instanceCount; i++) {
+        for (int i = 0; i < instanceCount; i++)
+        {
             inputInstanceList[i].IsConfirmed = true;
             outputInstanceList[i].IsConfirmed = true;
         }
@@ -381,6 +242,19 @@ public class PrototypingSceneCore : MonoBehaviour
         ChangeStatementFieldInteractability(false);
         ChangeUnfocusedStatementFieldColors(BEIGE);
         ChangeUnfocusedArrowColors(WHITE);
+    }
+
+
+    // Finalization Button OnClick
+    private void FinalizeSmartObject()
+    {
+        // todo pack smart object information data and pass to next scene
+        // => CardSelectionMediator class に新しいフィールドを用意する
+        // Smart Object を記述するのに何が必要かを考える
+        // （environment object, input-delegate, output-behaviour, props, ...）
+        // delegateのdictionaryと、選択されているキーワードのリスト(<=新しく作成する)も渡す
+        Debug.Log("Moving to InteractionScene");
+        // SceneManager.LoadScene(3); // InteractionScene
     }
 
 
@@ -413,6 +287,162 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
+    private int AvailableMinInstanceID()
+    {
+        int idCandidate = 0;
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            if (inputInstanceList[i].InstanceID == -1) continue; // skip itself (set to initial value)
+            if (idCandidate == inputInstanceList[i].InstanceID) idCandidate++;
+        }
+        return idCandidate;
+    }
+
+
+    private bool CheckInstanceListCapacity()
+    {
+        return inputInstanceList.Count < inputInstanceList[0].MaxInstanceNum;
+    }
+
+
+    private bool ConditionKeywordIsUnique(int focusedIdx)
+    {
+        if (string.IsNullOrEmpty(inputInstanceList[focusedIdx].ConditionKeyword))
+            return true;
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            if (i == focusedIdx) continue;
+            if (inputInstanceList[i].ConditionKeyword
+                == inputInstanceList[focusedIdx].ConditionKeyword)
+                return false;
+        }
+        return true;
+    }
+
+
+    private int GetFocusedInstanceIndex()
+    {
+        for (int i = 0; i < inputInstanceList.Count; i++)
+        {
+            if (inputInstanceList[i].IsFocused) return i;
+        }
+        return -1;
+    }
+
+
+    private void GrantFocusToTargetInstances(int targetIdx)
+    {
+        SetIOInstanceFocusState(targetIdx, true);
+        SetIOStatementFieldColor(targetIdx, BEIGE);
+    }
+
+
+    private void ShiftFocusToTargetInstances(int targetIdx)
+    {
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            if (i == targetIdx)
+            {
+                SetIOInstanceFocusState(targetIdx, true);
+                SetIOStatementFieldColor(targetIdx, BEIGE);
+            }
+            else
+            {
+                SetIOInstanceFocusState(i, false);
+                SetIOStatementFieldColor(i, LIGHT_BEIGE);
+            }
+        }
+    }
+
+
+    private void SetIOInstanceFocusState(int idx, bool tf)
+    {
+        inputInstanceList[idx].IsFocused = tf;
+        outputInstanceList[idx].IsFocused = tf;
+    }
+
+
+    private void ShiftStatementFieldPositions()
+    {
+        Vector3 inputBasePosition = inputStatementFieldGroup.transform.localPosition;
+        Vector3 outputBasePosition = outputStatementFieldGroup.transform.localPosition;
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            Vector3 verticalShiftAmount = new Vector3(0, VSHAMT * (instanceCount - 1 - i), 0);
+            inputInstanceList[i].StatementFieldGroup.transform.localPosition
+                = inputBasePosition + verticalShiftAmount;
+            outputInstanceList[i].StatementFieldGroup.transform.localPosition
+                = outputBasePosition + verticalShiftAmount;
+        }
+    }
+
+
+    // returns position adjusted io-arrow gameObject
+    private GameObject CreateIOArrow()
+    {
+        GameObject newArrow = Instantiate(ioArrowObject, ioArrowObject.transform.parent);
+        newArrow.transform.localPosition += new Vector3(0, VSHAMT * (ioArrowList.Count), 0);
+        newArrow.SetActive(true);
+        return newArrow;
+    }
+
+
+    // remove the top-most arrow
+    private void ReduceIOArrow()
+    {
+        int idx = ioArrowList.Count - 1;
+        Destroy(ioArrowList[idx]);
+        ioArrowList.RemoveAt(idx);
+    }
+
+
+    // parameter int:idx is passed assuming the use with IOInstance index order
+    // set optional parameter to 'true' if calling with real index
+    private void ShiftFocusToTargetIOArrow(int idx, bool realIndex=false)
+    {
+        if (!realIndex) idx = RevIdx(idx);
+        for (int i = 0; i < ioArrowList.Count;  i++)
+        {
+            if (i == idx) ioArrowList[i].GetComponent<Image>().color = WHITE;
+            else ioArrowList[i].GetComponent<Image>().color = LIGHT_WHITE;
+        }
+        
+    }
+
+
+    private int RevIdx(int idx)
+    {
+        return ioArrowList.Count - 1 - idx;
+    }
+
+
+    private bool CheckConfirmability()
+    {
+        bool bflag = true;
+        int instanceCount = inputInstanceList.Count;
+        for (int i = 0; i < instanceCount; i++)
+        {
+            bflag &= inputInstanceList[i].CanBeConfirmed;
+            bflag &= outputInstanceList[i].CanBeConfirmed;
+        }
+        return bflag;
+    }
+
+
+    // returns index in Instance List 
+    // returns -1 when not found in Instance List
+    private int GetInstanceListIndexFromInstanceID(int id)
+    {
+        for (int idx = 0; idx < inputInstanceList.Count; idx++)
+        {
+            if (inputInstanceList[idx].InstanceID == id) return idx;
+        }
+        return -1;
+    }
+
+
     private void ChangeStatementFieldInteractability(bool tf)
     {
         for (int i = 0; i < inputInstanceList.Count; i++)
@@ -435,6 +465,13 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
+    private void SetIOStatementFieldColor(int idx, Color color)
+    {
+        inputInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color = color;
+        outputInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color = color;
+    }
+
+
     private void ChangeUnfocusedArrowColors(Color color)
     {
         for (int i = 0; i < ioArrowList.Count; i++)
@@ -442,18 +479,6 @@ public class PrototypingSceneCore : MonoBehaviour
             if (inputInstanceList[RevIdx(i)].IsFocused) continue;
             else ioArrowList[RevIdx(i)].GetComponent<Image>().color = color;
         }
-    }
-
-
-    // Finalization Button OnClick
-    private void FinalizeSmartObject()
-    {
-        // todo pack smart object information data and pass to next scene
-        // => CardSelectionMediator class に新しいフィールドを用意する
-        // Smart Object を記述するのに何が必要かを考える（environment object, input-delegate, output-behaviour, props, ...）
-        // delegateのdictionaryと、選択されているキーワードのリスト(<=新しく作成する)も渡す
-        Debug.Log("Moving to InteractionScene");
-        // SceneManager.LoadScene(3); // InteractionScene
     }
 
 
@@ -527,34 +552,6 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
-    // safety measure for preventing human errors
-    private void ActivateTaggedObjects()
-    {
-        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("ActivateOnLoad");
-        foreach (GameObject obj in taggedObjects) obj.SetActive(true);
-    }
-
-
-    // safety measure for preventing human errors
-    private void DeactivateTaggedObjects()
-    {
-        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("DeactivateOnLoad");
-        foreach (GameObject obj in taggedObjects) obj.SetActive(false);
-    }
-
-
-    // returns index in Instance List 
-    // returns -1 when not found in Instance List
-    private int GetInstanceListIndexFromInstanceID(int id)
-    {
-        for (int idx = 0; idx < inputInstanceList.Count; idx++)
-        {
-            if (inputInstanceList[idx].InstanceID == id) return idx;
-        }
-        return -1;
-    }
-
-
     private void OpenMenu()
     {
         menuIsOpened = true;
@@ -569,9 +566,26 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
+    // OnClick of a button in Menu Canvas
     private void LoadCardSelectionScene()
     {
         SceneManager.LoadScene(1); // CardSelectionScene
+    }
+
+
+    // safety measure for preventing human errors
+    private void ActivateTaggedObjects()
+    {
+        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("ActivateOnLoad");
+        foreach (GameObject obj in taggedObjects) obj.SetActive(true);
+    }
+
+
+    // safety measure for preventing human errors
+    private void DeactivateTaggedObjects()
+    {
+        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("DeactivateOnLoad");
+        foreach (GameObject obj in taggedObjects) obj.SetActive(false);
     }
 
 
