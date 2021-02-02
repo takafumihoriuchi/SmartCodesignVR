@@ -135,14 +135,16 @@ public class LightUpCard : OutputCard
         if (partIdx == -1) return; // not found
         Renderer envPartRend = other.gameObject.GetComponent<Renderer>();
 
-        if (brushTipRend.material == waterMaterial)
+        if (brushTipRend.sharedMaterial.name.Contains(waterMaterial.name))
         {
+            Debug.Log("is water-material");
             envPartRend.material = originalEnvObjMaterial[partIdx];
             edittedEnvObjMaterial[partIdx] = originalEnvObjMaterial[partIdx];
             brushTipRend.material = originalBrushMaterial;
         }
         else // paint
         {
+            Debug.Log("current material is: " + brushTipRend.material);
             envPartRend.material = brushTipRend.material;
             edittedEnvObjMaterial[partIdx] = brushTipRend.material;
         }
