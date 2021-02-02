@@ -1,8 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
+
 
 public class FireCard : InputCard
 {
@@ -132,22 +131,14 @@ public class FireCard : InputCard
     }
 
 
-    // todo 床に描画してるSpriteが参照型で全て同じものなのか、別物なのか、
-    // それによって次の4つのメソッドの処理は変わる
-    // 現状の下のメソッドでは「コピーが複数存在する」と考えて実装している。
-    // TODO => 参照の方が都合がいいから、参照型で実装する。そういうふうに実装する。
-    // => 現状では、propをrefで受け取っているから、参照になっている。 todo 要対応
-    // 現状では完全に参照だ
     protected override void OnFocusGranted()
     {
         SetStrataOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
         return;
     }
+
     protected override void OnFocusDeprived()
     {
-        // 他のインスタンスの色spriteと干渉しちゃうから、offにする（alphaを0にする）
-        // => 現状ではrefで受け取っているから、正確にはこれは必要ない処理
-        // SetStrataOpacity(0.0f, 0.0f, 0.0f, 0.0f);
         return;
     }
 
@@ -155,11 +146,11 @@ public class FireCard : InputCard
     {
         if (isFocused) SetStrataOpacity(0.0f, 0.0f, 0.0f, 0.0f);
     }
+
     protected override void OnBackToEdit()
     {
         if (isFocused) SetStrataOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
     }
-    // 参照渡しを念頭に置いて設計すればこれらメソッドは要らないかもしれない
     
 
 }

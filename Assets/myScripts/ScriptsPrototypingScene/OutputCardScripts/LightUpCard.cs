@@ -85,7 +85,6 @@ public class LightUpCard : OutputCard
         if (isFocused)
         {
             propObjects.SetActive(false);
-            ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial); ;
         }
     }
 
@@ -94,7 +93,7 @@ public class LightUpCard : OutputCard
         if (isFocused)
         {
             propObjects.SetActive(true);
-            ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial); ;
+            ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
         }
     }
 

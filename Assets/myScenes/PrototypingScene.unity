@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 1789875}
   m_Layer: 0
   m_Name: DescriptionCanvas
-  m_TagString: Untagged
+  m_TagString: ObjectWithRaycaster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -256,7 +256,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2650446
 Transform:
   m_ObjectHideFlags: 0
@@ -9050,7 +9050,7 @@ GameObject:
   - component: {fileID: 414750447}
   m_Layer: 0
   m_Name: StatementCanvas
-  m_TagString: Untagged
+  m_TagString: ObjectWithRaycaster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9381,7 +9381,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &429708267
 Transform:
   m_ObjectHideFlags: 0
@@ -10307,6 +10307,12 @@ Transform:
   m_Father: {fileID: 1132578715}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &480155146 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1732808951507650, guid: a9d2de84afb308a4796cc671d3432b4d,
+    type: 3}
+  m_PrefabInstance: {fileID: 792375518}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &485322814
 GameObject:
   m_ObjectHideFlags: 0
@@ -19686,7 +19692,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1732808951507650, guid: a9d2de84afb308a4796cc671d3432b4d, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4584207525423032, guid: a9d2de84afb308a4796cc671d3432b4d, type: 3}
       propertyPath: m_LocalScale.x
@@ -23023,7 +23029,7 @@ GameObject:
   - component: {fileID: 920599259}
   m_Layer: 0
   m_Name: StatementCanvas
-  m_TagString: Untagged
+  m_TagString: ObjectWithRaycaster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27946,7 +27952,7 @@ GameObject:
   - component: {fileID: 1113996768}
   m_Layer: 0
   m_Name: DescriptionCanvas
-  m_TagString: Untagged
+  m_TagString: ObjectWithRaycaster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -28950,7 +28956,7 @@ GameObject:
   - component: {fileID: 1156718640}
   m_Layer: 0
   m_Name: ConfirmationCanvas
-  m_TagString: Untagged
+  m_TagString: ObjectWithRaycaster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36004,6 +36010,8 @@ MonoBehaviour:
   menuCanvas: {fileID: 1620759698}
   backToSceneButton: {fileID: 1958442298}
   closeMenuButton: {fileID: 183275434}
+  editorEventSystem: {fileID: 1524788192}
+  HMDEventSystem: {fileID: 480155146}
 --- !u!1 &1460587719
 GameObject:
   m_ObjectHideFlags: 0
@@ -42307,7 +42315,7 @@ GameObject:
   - component: {fileID: 1723601374}
   m_Layer: 0
   m_Name: IOArrowCanvas
-  m_TagString: Untagged
+  m_TagString: ObjectWithRaycaster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46356,7 +46364,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 58d5de216f3044415a42e2a6e258862f,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58d5de216f3044415a42e2a6e258862f,
         type: 3}
@@ -46376,17 +46384,17 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 58d5de216f3044415a42e2a6e258862f,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.005
+      value: 0.004
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58d5de216f3044415a42e2a6e258862f,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.005
+      value: 0.004
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 58d5de216f3044415a42e2a6e258862f,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.005
+      value: 0.004
       objectReference: {fileID: 0}
     - target: {fileID: -3855335175272487014, guid: 58d5de216f3044415a42e2a6e258862f,
         type: 3}

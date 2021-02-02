@@ -112,7 +112,7 @@ public abstract class InputCard : Card
         set { conditionKeyword = value; variableTextTMP.SetText(conditionKeyword); }
         get { return conditionKeyword; } }
 
-    public readonly string ALREADY_EXISTS = "already exists";
+    public readonly string ALREADY_EXISTS = "<color=\"red\">already exists</color>";
 
     // positive-negative-TriggerFlag:
     // flags that loses it's "true" state when accessed from other class

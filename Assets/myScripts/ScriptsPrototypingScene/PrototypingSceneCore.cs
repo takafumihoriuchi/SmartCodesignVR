@@ -70,12 +70,39 @@ public class PrototypingSceneCore : MonoBehaviour
     readonly Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f); // arrow focused
     readonly Color LIGHT_WHITE = new Color(1.0f, 1.0f, 1.0f, 0.4f); // arrow unfocused
 
+    [SerializeField] private GameObject editorEventSystem = null;
+    [SerializeField] private GameObject HMDEventSystem = null;
+
+    // for developmental use only
+    private void DevelopmentPurposeSettings()
+    {
+        bool onHMD = false;
+        // set this value to the desired platform
+
+        // for enabling button-clicks (editor use) or laser-pointer (HMD use)
+        HMDEventSystem.SetActive(onHMD);
+        editorEventSystem.SetActive(!onHMD);
+        GameObject[] objectsWithRaycaster
+            = GameObject.FindGameObjectsWithTag("ObjectWithRaycaster");
+        foreach (GameObject obj in objectsWithRaycaster)
+        {
+            obj.GetComponent<OVRRaycaster>().enabled = onHMD;
+            obj.GetComponent<GraphicRaycaster>().enabled = !onHMD;
+        }
+
+        // card selection settings
+        SmartObject.cardSelectionDict["environment"] = "TrashBin";
+        SmartObject.cardSelectionDict["input"] = "Fire";
+        SmartObject.cardSelectionDict["output"] = "LightUp";
+        //SmartObject.cardSelectionDict["output"] = "MakeSound";
+    }
+
 
     // keep in mind DRY: Don't Repeat Yourself
     private void Start()
     {
         // to delete after development
-        DevelopmentPurposeAssign();
+        DevelopmentPurposeSettings();
 
         // instance preparation
         DeactivateTaggedObjects();
@@ -137,7 +164,7 @@ public class PrototypingSceneCore : MonoBehaviour
             for (int i = 0; i < inputInstanceList.Count; i++)
                 if (inputInstanceList[i].NegativeTriggerFlag)
                     outputInstanceList[i].OutputBehaviourOnNegative();
-            // call negative trigger first, then call positive trigger
+            // all positive triggers are called after all negative triggers
             for (int i = 0; i < inputInstanceList.Count; i++)
                 if (inputInstanceList[i].PositiveTriggerFlag)
                     outputInstanceList[i].OutputBehaviourOnPositive();
@@ -592,18 +619,5 @@ public class PrototypingSceneCore : MonoBehaviour
         foreach (GameObject obj in taggedObjects) obj.SetActive(false);
     }
 
-
-    // for developmental use only
-    private void DevelopmentPurposeAssign()
-    {
-        SmartObject.cardSelectionDict["environment"] = "TrashBin";
-        SmartObject.cardSelectionDict["input"] = "Fire";
-        SmartObject.cardSelectionDict["output"] = "LightUp";
-
-        Debug.Log("[env, in, out] = ["
-            + SmartObject.cardSelectionDict["environment"] + ", "
-            + SmartObject.cardSelectionDict["input"] + ", "
-            + SmartObject.cardSelectionDict["output"] + "]");
-    }
 
 }

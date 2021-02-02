@@ -6,6 +6,7 @@ TagManager:
   tags:
   - DeactivateOnLoad
   - ActivateOnLoad
+  - ObjectWithRaycaster
   layers:
   - Default
   - TransparentFX

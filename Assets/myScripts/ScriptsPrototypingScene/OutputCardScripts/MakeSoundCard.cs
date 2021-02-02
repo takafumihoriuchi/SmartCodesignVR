@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using System.Diagnostics;
+
 
 public class MakeSoundCard : OutputCard
 {
@@ -25,8 +24,8 @@ public class MakeSoundCard : OutputCard
 
     public MakeSoundCard()
     {
-        // executed before gameobjects are passed to this class instance
         cardName = "Make Sound";
+
         descriptionText =
             "<i>I can produce sound or play music.</i>\n" +
             "<b>Steps:</b>\n" +
@@ -35,14 +34,26 @@ public class MakeSoundCard : OutputCard
             "<b>3.</b> <indent=10%>Release A-button to finish recording.</indent>\n" +
             "<b>4.</b> <indent=10%>Check recorded sound by pressing X-button.</indent>\n" +
             "Sound can be re-recorded by following the same steps.";
+
         contentText = "play the recorded sound.";
     }
+
 
     protected override void InitPropFields()
     {
         micPropModel = propObjects.transform.Find("microphone").gameObject;
         originalScale = micPropModel.transform.localScale;
         targetScale = Vector3.Scale(originalScale, expansionScale);
+    }
+
+
+    protected override void OnFocusGranted() { return; }
+    protected override void OnFocusDeprived() { return; }
+    protected override void OnConfirm() {
+        if (isFocused) propObjects.SetActive(false);
+    }
+    protected override void OnBackToEdit() {
+        if (isFocused) propObjects.SetActive(true);
     }
 
 
@@ -66,20 +77,27 @@ public class MakeSoundCard : OutputCard
 
     public override void OutputBehaviourOnNegative()
     {
-        // Stop() when the inputCondition fails to hold true
         if (soundRecorder.isPlaying) soundRecorder.Stop();
     }
 
-    // only called from core when isFocused is true
+
     public override void BehaviourDuringPrototyping()
     {
+        if (!isFocused) return; // process only for focused instance
+
         if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed) {
-            if (OVRInput.GetDown(OVRInput.RawButton.A)) StartRecording();
-            if (OVRInput.GetUp(OVRInput.RawButton.A))　SaveRecording();
+            // GetKeyxxx is for development purpose only 
+            if (OVRInput.GetDown(OVRInput.RawButton.A)
+                || Input.GetKeyDown(KeyCode.A))
+                StartRecording();
+            if (OVRInput.GetUp(OVRInput.RawButton.A)
+                || Input.GetKeyUp(KeyCode.A))
+                SaveRecording();
         }
 
-        if (OVRInput.GetDown(OVRInput.RawButton.X)) soundRecorder.Play();
-        // todo design the UX for this interaction
+        if (OVRInput.GetDown(OVRInput.RawButton.X)
+            || Input.GetKeyDown(KeyCode.Z))
+            soundRecorder.Play();
 
         MicrophoneAnimation();
     }
@@ -90,9 +108,10 @@ public class MakeSoundCard : OutputCard
         soundRecorder = environmentObject.GetComponent<AudioSource>();
         stopWatch.Start();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
-        variableTextTMP.SetText("[recording...]");
+        variableTextTMP.SetText("recording");
         isRecording = true;
     }
+
 
     private void SaveRecording()
     {
@@ -100,9 +119,10 @@ public class MakeSoundCard : OutputCard
         stopWatch.Stop();
         clipDuration = (float)stopWatch.Elapsed.TotalSeconds;
         stopWatch.Reset();
-        variableTextTMP.SetText("[recorded]");
+        variableTextTMP.SetText("recorded");
         isRecording = false;
     }
+
 
     private void MicrophoneAnimation()
     {
@@ -131,31 +151,23 @@ public class MakeSoundCard : OutputCard
         }
     }
 
-    // このクラスについては、OnFocusedで行う操作は特にない；動作はカードごとに違う。
-    // todo propsが全て同じものなのか、別物なのか、
-    // それによって次の4つのメソッドの処理は変わる
-    protected override void OnFocusGranted() { return; }
-    protected override void OnFocusDeprived() { return; }
-    protected override void OnConfirm() { return; }
-    protected override void OnBackToEdit() { return; }
 
 }
 
-/* 
+
+/* Quest2 Microphone Information
+ * 
  * int minFreq, maxFreq;
  * foreach (var device in Microphone.devices) {
  *      Debug.Log("Name: " + device);
  *      Microphone.GetDeviceCaps(device, out minFreq, out maxFreq);
  *      Debug.Log("minFreq: " + minFreq + ", maxFreq: " + maxFreq);
  * }
- * 
  * >>
- * 
  * Name: Android audio input
  * minFreq: 16000, maxFreq:16000
  * Name: Android camcorder input
  * minFreq: 16000, maxFreq:16000
  * Name: Android voice recognition input
  * minFreq: 16000, maxFreq:16000
- * 
  */
