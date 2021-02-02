@@ -71,7 +71,7 @@ public class MakeSoundCard : OutputCard
     }
 
     // only called from core when isFocused is true
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
         if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed) {
             if (OVRInput.GetDown(OVRInput.RawButton.A)) StartRecording();

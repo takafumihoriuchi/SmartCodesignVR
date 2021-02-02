@@ -17,7 +17,7 @@ public class SpeedCard : InputCard
 
     }
 
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
 
     }

@@ -31,7 +31,7 @@ public class SendCard : OutputCard
 
     }
 
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
 
     }

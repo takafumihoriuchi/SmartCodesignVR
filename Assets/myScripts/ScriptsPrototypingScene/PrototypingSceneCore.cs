@@ -111,30 +111,13 @@ public class PrototypingSceneCore : MonoBehaviour
 
     private void Update()
     {
-        // basic updates for selected instance
-        int focusedIdx = GetFocusedInstanceIndex();
-        inputInstanceList[focusedIdx].UpdateInputCondition();
-        outputInstanceList[focusedIdx].UpdateOutputBehaviour();
 
-        //for (int i = 0; i < inputInstanceList.Count; i++)
-        //{
-        //    inputInstanceList[i].UpdateInputCondition();
-        //    outputInstanceList[i].UpdateOutputBehaviour();
-        //}
+        if (!isConfirmed) // during prototyping
+        {
+            int focusedIdx = GetFocusedInstanceIndex();
+            inputInstanceList[focusedIdx].BehaviourDuringPrototyping();
+            outputInstanceList[focusedIdx].BehaviourDuringPrototyping();
 
-        if (isConfirmed)
-        {
-            // reactions when input conditions are triggered (fired for one frame)
-            for (int i = 0; i < inputInstanceList.Count; i++)
-                if (inputInstanceList[i].NegativeTriggerFlag)
-                    outputInstanceList[i].OutputBehaviourOnNegative();
-            // call negative trigger first, then call positive trigger
-            for (int i = 0; i < inputInstanceList.Count; i++)
-                if (inputInstanceList[i].PositiveTriggerFlag)
-                    outputInstanceList[i].OutputBehaviourOnPositive();
-        }
-        else
-        {
             // Check if the selected keywords have no overlaps
             // todo ideally call from properties (set/get)
             if (!ConditionKeywordIsUnique(focusedIdx))
@@ -145,6 +128,19 @@ public class PrototypingSceneCore : MonoBehaviour
             bool isConfirmable = CheckConfirmability();
             if (isConfirmable) confirmationButton.interactable = true;
             else confirmationButton.interactable = false;
+        }
+        else // during testing
+        {
+            for (int i = 0; i < inputInstanceList.Count; i++)
+                inputInstanceList[i].UpdateInputCondition();
+            // reactions when input conditions are triggered (fired for one frame)
+            for (int i = 0; i < inputInstanceList.Count; i++)
+                if (inputInstanceList[i].NegativeTriggerFlag)
+                    outputInstanceList[i].OutputBehaviourOnNegative();
+            // call negative trigger first, then call positive trigger
+            for (int i = 0; i < inputInstanceList.Count; i++)
+                if (inputInstanceList[i].PositiveTriggerFlag)
+                    outputInstanceList[i].OutputBehaviourOnPositive();
         }
 
         // Oculus Touch Controller events

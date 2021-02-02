@@ -104,7 +104,7 @@ public class LightUpCard : OutputCard
     /// </summary>
 
     // called every frame
-    protected override void BehaviourDuringPrototyping() { }
+    public override void BehaviourDuringPrototyping() { }
 
     protected override void OnFocusGranted() {
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;

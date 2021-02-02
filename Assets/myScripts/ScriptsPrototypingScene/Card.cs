@@ -41,11 +41,10 @@ public abstract class Card
         get { return isFocused; }}
 
     protected bool canBeConfirmed = false;
-    public bool CanBeConfirmed {
-        set { } get { return canBeConfirmed; } }
+    public abstract bool CanBeConfirmed { get; }
 
     protected abstract void InitPropFields();
-    protected abstract void BehaviourDuringPrototyping();
+    public abstract void BehaviourDuringPrototyping();
 
     protected abstract void OnConfirm();
     protected abstract void OnBackToEdit();
@@ -139,15 +138,17 @@ public abstract class InputCard : Card
 
     public void UpdateInputCondition()
     {
-        if (isConfirmed) {
-            bool newEval = inputEvalDeleDict[conditionKeyword]();
-            if (!currentEval && newEval) positiveTriggerFlag = true;
-            else if (currentEval && !newEval) negativeTriggerFlag = true;
-            if (currentEval != newEval) currentEval = newEval;
-        } else {
-            BehaviourDuringPrototyping();
-            canBeConfirmed = !(string.IsNullOrEmpty(conditionKeyword)
+        bool newEval = inputEvalDeleDict[conditionKeyword]();
+        if (!currentEval && newEval) positiveTriggerFlag = true;
+        else if (currentEval && !newEval) negativeTriggerFlag = true;
+        if (currentEval != newEval) currentEval = newEval;
+    }
+
+    public override bool CanBeConfirmed
+    {
+        get { canBeConfirmed = !(string.IsNullOrEmpty(conditionKeyword)
                 || conditionKeyword == ALREADY_EXISTS);
+            return canBeConfirmed;
         }
     }
 
@@ -159,15 +160,9 @@ public abstract class OutputCard : Card
 {
     protected override string GetCardType() { return "output"; }
 
-    public void UpdateOutputBehaviour()
-    {
-        if (isConfirmed) {
-            return;
-        } else {
-            BehaviourDuringPrototyping();
+    public override bool CanBeConfirmed { get {
             canBeConfirmed = !string.IsNullOrEmpty(variableTextTMP.text);
-        }
-    }
+            return canBeConfirmed; }}
 
     public abstract void OutputBehaviourOnPositive();
     public abstract void OutputBehaviourOnNegative();

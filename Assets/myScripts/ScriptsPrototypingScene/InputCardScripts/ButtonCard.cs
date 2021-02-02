@@ -17,7 +17,7 @@ public class ButtonCard : InputCard
         
     }
 
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
 
     }

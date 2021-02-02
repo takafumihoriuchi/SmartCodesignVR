@@ -30,7 +30,7 @@ public class VibrateCard : OutputCard
 
     }
 
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
 
     }

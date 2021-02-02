@@ -17,7 +17,7 @@ public class SoundCard : InputCard
 
     }
 
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
 
     }

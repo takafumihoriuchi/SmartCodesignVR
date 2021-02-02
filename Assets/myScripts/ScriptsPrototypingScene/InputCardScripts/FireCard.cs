@@ -90,7 +90,7 @@ public class FireCard : InputCard
         SetStrataOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
     }
 
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
         UpdateMarkerDistance();
 

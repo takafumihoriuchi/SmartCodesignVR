@@ -20,7 +20,7 @@ public class WeatherCard : InputCard
 
     }
 
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
 
     }

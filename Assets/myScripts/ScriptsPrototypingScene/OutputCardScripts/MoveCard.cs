@@ -27,7 +27,7 @@ public class MoveCard : OutputCard
 
     }
 
-    protected override void BehaviourDuringPrototyping()
+    public override void BehaviourDuringPrototyping()
     {
 
     }
