@@ -16,10 +16,10 @@ public class MakeSoundCard : OutputCard
     private Vector3 originalScale;
     private Vector3 targetScale;
     private Vector3 updatedScale;
+    private bool isInAction = false;
 
     readonly Vector3 expansionScale = new Vector3(1.1f, 1.1f, 1.1f);
     const float SPEED = 7.0f;
-
 
 
     public MakeSoundCard()
@@ -57,27 +57,51 @@ public class MakeSoundCard : OutputCard
     }
 
 
-    // todo OutputBehaviourOnNegativeでstopされるまではループさせる、など
+
     public override void OutputBehaviourOnPositive()
     {
-        if ((float)stopWatch.Elapsed.TotalSeconds >= clipDuration)
-        {
-            // OutputBehaviourをトリガー生にした場合、コルーチンで1プレイサイクルを区切ることになる。
-            soundRecorder.Stop();
-            stopWatch.Reset();
-            // Stopwatch.Reset: Stops time interval measurement and resets the elapsed time to zero.
-        }
-        if (!soundRecorder.isPlaying)
-        {
-            soundRecorder.Play();
-            stopWatch.Start();
-        }
+        //if ((float)stopWatch.Elapsed.TotalSeconds >= clipDuration)
+        //{
+        //    // OutputBehaviourをトリガー生にした場合、コルーチンで1プレイサイクルを区切ることになる。
+        //    soundRecorder.Stop();
+        //    stopWatch.Reset();
+        //    // Stopwatch.Reset: Stops time interval measurement and resets the elapsed time to zero.
+        //}
+        //if (!soundRecorder.isPlaying)
+        //{
+        //    soundRecorder.Play();
+        //    stopWatch.Start();
+        //}
+
+        isInAction = true;
     }
 
 
     public override void OutputBehaviourOnNegative()
     {
-        if (soundRecorder.isPlaying) soundRecorder.Stop();
+        //if (soundRecorder.isPlaying) soundRecorder.Stop();
+
+        isInAction = false;
+    }
+
+    public void MonoBehaviourReceiver() {
+        UnityEngine.Debug.Log("in MonoBehaviourReceiver()");
+        CoroutineHandler.StartStaticCoroutine(SoundPlayLoop());
+    }
+
+    private IEnumerator SoundPlayLoop()
+    {
+        UnityEngine.Debug.Log("in SoundPlayLoop()");
+        while (true)
+        {
+            UnityEngine.Debug.Log("Waiting");
+            yield return new WaitUntil(() => isInAction == true);
+            UnityEngine.Debug.Log("Playing");
+            soundRecorder.Play();
+            yield return new WaitForSecondsRealtime(clipDuration);
+            UnityEngine.Debug.Log("Stopping");
+            soundRecorder.Stop();
+        }
     }
 
 
@@ -85,7 +109,7 @@ public class MakeSoundCard : OutputCard
     {
         if (!isFocused) return; // process only for focused instance
 
-        if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed) {
+        if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed || Input.GetKey(KeyCode.Z)) {
             // GetKeyxxx is for development purpose only 
             if (OVRInput.GetDown(OVRInput.RawButton.A)
                 || Input.GetKeyDown(KeyCode.A))
@@ -96,7 +120,7 @@ public class MakeSoundCard : OutputCard
         }
 
         if (OVRInput.GetDown(OVRInput.RawButton.X)
-            || Input.GetKeyDown(KeyCode.Z))
+            || Input.GetKeyDown(KeyCode.X))
             soundRecorder.Play();
 
         MicrophoneAnimation();
@@ -118,7 +142,7 @@ public class MakeSoundCard : OutputCard
         Microphone.End("");
         stopWatch.Stop();
         clipDuration = (float)stopWatch.Elapsed.TotalSeconds;
-        stopWatch.Reset();
+        //stopWatch.Reset();
         variableTextTMP.SetText("recorded");
         isRecording = false;
     }
@@ -153,6 +177,52 @@ public class MakeSoundCard : OutputCard
 
 
 }
+
+
+
+
+public class MonoBehaviourPasser : MonoBehaviour
+{
+    void Start()
+    {
+        UnityEngine.Debug.Log("starting Start() in MonoBehaviourPasser");
+        MakeSoundCard soundPlayRoutine = new MakeSoundCard();
+        soundPlayRoutine.MonoBehaviourReceiver();
+    }
+}
+
+
+
+public class CoroutineHandler : MonoBehaviour
+{
+    static protected CoroutineHandler m_Instance;
+    static public CoroutineHandler instance
+    {
+        get
+        {
+            if (m_Instance == null)
+            {
+                GameObject o = new GameObject("CoroutineHandler");
+                DontDestroyOnLoad(o);
+                m_Instance = o.AddComponent<CoroutineHandler>();
+            }
+
+            return m_Instance;
+        }
+    }
+
+    public void OnDisable()
+    {
+        if (m_Instance)
+            Destroy(m_Instance.gameObject);
+    }
+
+    static public Coroutine StartStaticCoroutine(IEnumerator coroutine)
+    {
+        return instance.StartCoroutine(coroutine);
+    }
+}
+
 
 
 /* Quest2 Microphone Information

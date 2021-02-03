@@ -93,8 +93,8 @@ public class PrototypingSceneCore : MonoBehaviour
         // card selection settings
         SmartObject.cardSelectionDict["environment"] = "TrashBin";
         SmartObject.cardSelectionDict["input"] = "Fire";
-        SmartObject.cardSelectionDict["output"] = "LightUp";
-        //SmartObject.cardSelectionDict["output"] = "MakeSound";
+        //SmartObject.cardSelectionDict["output"] = "LightUp";
+        SmartObject.cardSelectionDict["output"] = "MakeSound";
     }
 
 
@@ -165,7 +165,6 @@ public class PrototypingSceneCore : MonoBehaviour
                 if (inputInstanceList[i].NegativeTriggerFlag)
                 {
                     outputInstanceList[i].OutputBehaviourOnNegative();
-                    // set color back when statement is not in effect
                     SetIOStatementFieldColor(i, BEIGE);
                 }
             // all positive triggers are called after all negative triggers
@@ -173,7 +172,6 @@ public class PrototypingSceneCore : MonoBehaviour
                 if (inputInstanceList[i].PositiveTriggerFlag)
                 {
                     outputInstanceList[i].OutputBehaviourOnPositive();
-                    // make darker when statement has effect
                     SetIOStatementFieldColor(i, POP_BEIGE);
                 }
         }
