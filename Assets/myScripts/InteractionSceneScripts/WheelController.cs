@@ -28,7 +28,6 @@ public class WheelController : MonoBehaviour
     private void Start()
     {
         //VehicleRigidBody = Vehicle.GetComponent<Rigidbody>();
-
     }
 
     void Update()
@@ -39,35 +38,29 @@ public class WheelController : MonoBehaviour
 
         //TurnVehicle();
 
-        
-        
         currentWheelRotation = transform.localRotation.eulerAngles.y;
         if (currentWheelRotation > 45 && currentWheelRotation < 180)
-           // currentWheelRotation = 45;
-        this.gameObject.transform.localRotation = Quaternion.Euler(0, 45, 0);
+            // currentWheelRotation = 45;
+            this.gameObject.transform.localRotation = Quaternion.Euler(0, 45, 0);
         if (currentWheelRotation < 315 && currentWheelRotation >= 180)
             //  currentWheelRotation = 315;
-        this.gameObject.transform.localRotation = Quaternion.Euler(0, 315, 0);
-
-
+            this.gameObject.transform.localRotation = Quaternion.Euler(0, 315, 0);
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("PlayerHand"))
+        if (other.CompareTag("PlayerHand"))
         {
-            if(rightHandOnWheel == false && OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch))
+            if (rightHandOnWheel == false && OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch))
             {
                 PlaceHandOnWheel(ref rightHand, ref rightHandOriginalParent, ref rightHandOnWheel);
 
             }
-
             if (leftHandOnWheel == false && OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch))
             {
                 PlaceHandOnWheel(ref rightHand, ref rightHandOriginalParent, ref leftHandOnWheel);
             }
         }
-
     }
 
     private void PlaceHandOnWheel(ref GameObject hand, ref Transform originalParent, ref bool handOnWheel)
@@ -87,7 +80,6 @@ public class WheelController : MonoBehaviour
                     bestSnapp = snappPosition;
                 }
             }
-
         }
         originalParent = hand.transform.parent;
 
@@ -99,7 +91,7 @@ public class WheelController : MonoBehaviour
 
     private void ConvertHandRotationToSteeringWheelRotation()
     {
-        if(rightHandOnWheel == true && leftHandOnWheel == false)
+        if (rightHandOnWheel == true && leftHandOnWheel == false)
         {
             Quaternion newRot = Quaternion.Euler(0, rightHandOriginalParent.transform.rotation.eulerAngles.y, 0);
             directionalObject.localRotation = newRot;
@@ -111,7 +103,7 @@ public class WheelController : MonoBehaviour
             directionalObject.localRotation = newRot;
             transform.parent = directionalObject;
         }
-        else if(rightHandOnWheel == true && leftHandOnWheel == true)
+        else if (rightHandOnWheel == true && leftHandOnWheel == true)
         {
             Quaternion newRotLeft = Quaternion.Euler(0, leftHandOriginalParent.transform.rotation.eulerAngles.y, 0);
             Quaternion newRotRight = Quaternion.Euler(0, leftHandOriginalParent.transform.rotation.eulerAngles.y, 0);
@@ -130,19 +122,17 @@ public class WheelController : MonoBehaviour
             rightHand.transform.rotation = rightHandOriginalParent.rotation;
             rightHandOnWheel = false;
         }
-        if(leftHandOnWheel == true && OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch))
+        if (leftHandOnWheel == true && OVRInput.GetDown(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch))
         {
             leftHand.transform.parent = leftHandOriginalParent;
             leftHand.transform.position = leftHandOriginalParent.position;
             leftHand.transform.rotation = leftHandOriginalParent.rotation;
             leftHandOnWheel = false;
         }
-
-        if(leftHandOnWheel == false && rightHandOnWheel == false)
+        if (leftHandOnWheel == false && rightHandOnWheel == false)
         {
             transform.parent = transform.root;
         }
-
     }
 
 }

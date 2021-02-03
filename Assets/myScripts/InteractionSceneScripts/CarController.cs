@@ -32,7 +32,7 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform rearLeftWheelTransform;
     [SerializeField] private Transform rearRightWheelTransform;
 
-   
+
     private void FixedUpdate()
     {
         GetInput();
@@ -45,10 +45,11 @@ public class CarController : MonoBehaviour
     private void GetInput()
     {
         horizontalInput = SteeringWheel.GetComponent<WheelController>().currentWheelRotation;
-        accelerationInput =OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger); //Input.GetAxis(VERTICAL);
-       // isBreaking = Input.GetKey(KeyCode.Space);
-       reverseInput = OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger); //Input.GetAxis(VERTICAL);
+        accelerationInput = OVRInput.Get(OVRInput.Axis1D.SecondaryIndexTrigger); //Input.GetAxis(VERTICAL);
+                                                                                 // isBreaking = Input.GetKey(KeyCode.Space);
+        reverseInput = OVRInput.Get(OVRInput.Axis1D.PrimaryIndexTrigger); //Input.GetAxis(VERTICAL);
     }
+
 
     private void HandleMotor()
     {
@@ -56,17 +57,17 @@ public class CarController : MonoBehaviour
         {
             frontLeftWheelCollider.motorTorque = accelerationInput * motorForce;
             frontRightWheelCollider.motorTorque = accelerationInput * motorForce;
-        } 
-        else if(reverseInput > 0 && carEnterReference.inCar == true)
+        }
+        else if (reverseInput > 0 && carEnterReference.inCar == true)
         {
             frontLeftWheelCollider.motorTorque = -reverseInput * motorForce;
             frontRightWheelCollider.motorTorque = -reverseInput * motorForce;
         }
 
-
         //currentbreakForce = isBreaking ? breakForce : 0f;
         ApplyBreaking();
     }
+
 
     private void ApplyBreaking()
     {
@@ -76,14 +77,16 @@ public class CarController : MonoBehaviour
         rearRightWheelCollider.brakeTorque = currentbreakForce;
     }
 
+
     private void HandleSteering()
     {
         currentSteerAngle = horizontalInput;
-   
+
 
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
     }
+
 
     private void UpdateWheels()
     {
@@ -93,12 +96,14 @@ public class CarController : MonoBehaviour
         UpdateSingleWheel(rearLeftWheelCollider, rearLeftWheelTransform);
     }
 
+
     private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform)
     {
         Vector3 pos;
-        Quaternion rot; 
+        Quaternion rot;
         wheelCollider.GetWorldPose(out pos, out rot);
         wheelTransform.rotation = rot;
         wheelTransform.position = pos;
     }
+
 }
