@@ -1,24 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Diagnostics;
 
 
 public class MakeSoundCard : OutputCard
 {
     private GameObject micPropModel;
     private AudioSource soundRecorder;
-    private Stopwatch stopWatch = new Stopwatch();
-    private float clipDuration;
     private bool isRecording = false;
     private bool isExpanding = true;
     private float progress = 0.0f;
     private Vector3 originalScale;
     private Vector3 targetScale;
     private Vector3 updatedScale;
-    //private IEnumerator soundPlayerCoroutine;
-    private MonoBehaviour mb;
-    //private bool isActive = false;
 
     readonly Vector3 expansionScale = new Vector3(1.1f, 1.1f, 1.1f);
     const float SPEED = 7.0f;
@@ -52,60 +46,15 @@ public class MakeSoundCard : OutputCard
     protected override void OnFocusGranted() { return; }
     protected override void OnFocusDeprived() { return; }
     protected override void OnConfirm() {
-        if (isFocused) propObjects.SetActive(false);
-    }
+        if (isFocused) propObjects.SetActive(false); }
     protected override void OnBackToEdit() {
-        if (isFocused) propObjects.SetActive(true);
+        if (isFocused) propObjects.SetActive(true); }
+
+    public override void OutputBehaviourOnPositive() {
+        soundRecorder.Play();
     }
-
-
-
-    public override void OutputBehaviourOnPositive()
-    {
-        //if ((float)stopWatch.Elapsed.TotalSeconds >= clipDuration)
-        //{
-        //    // OutputBehaviourをトリガー生にした場合、コルーチンで1プレイサイクルを区切ることになる。
-        //    soundRecorder.Stop();
-        //    stopWatch.Reset();
-        //    // Stopwatch.Reset: Stops time interval measurement and resets the elapsed time to zero.
-        //}
-        //if (!soundRecorder.isPlaying)
-        //{
-        //    soundRecorder.Play();
-        //    stopWatch.Start();
-        //}
-
-        //soundPlayerCoroutine = SoundPlayLoop();
-        //mb.StartCoroutine(soundPlayerCoroutine);
-        mb.StartCoroutine(SoundPlayLoop());
-        //isActive = true;
-    }
-
-
-    public override void OutputBehaviourOnNegative()
-    {
-        //if (soundRecorder.isPlaying) soundRecorder.Stop();
-        //mb.StopCoroutine(soundPlayerCoroutine);
-        mb.StopCoroutine(SoundPlayLoop());
-        //isActive = false;
-    }
-
-    public void MonoBehaviourReceiver(MonoBehaviour mb)
-    {
-        this.mb = mb;
-        //mb.StartCoroutine(SoundPlayLoop());
-    }
-
-    private IEnumerator SoundPlayLoop()
-    {
-        while (true)
-        {
-            UnityEngine.Debug.Log("in the while loop");
-            //yield return new WaitUntil(() => isActive == true);
-            soundRecorder.Play();
-            yield return new WaitForSecondsRealtime(clipDuration);
-            soundRecorder.Stop();
-        }
+    public override void OutputBehaviourOnNegative() {
+        if (soundRecorder.isPlaying) soundRecorder.Stop();
     }
 
 
@@ -134,7 +83,6 @@ public class MakeSoundCard : OutputCard
     private void StartRecording()
     {
         soundRecorder = environmentObject.GetComponent<AudioSource>();
-        stopWatch.Start();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
         variableTextTMP.SetText("recording");
         isRecording = true;
@@ -144,9 +92,6 @@ public class MakeSoundCard : OutputCard
     private void SaveRecording()
     {
         Microphone.End("");
-        stopWatch.Stop();
-        clipDuration = (float)stopWatch.Elapsed.TotalSeconds;
-        //stopWatch.Reset();
         variableTextTMP.SetText("recorded");
         isRecording = false;
     }
@@ -183,11 +128,8 @@ public class MakeSoundCard : OutputCard
 }
 
 
-
-
-
-
-/* Quest2 Microphone Information
+/* 
+ * Quest2 Microphone Information
  * 
  * int minFreq, maxFreq;
  * foreach (var device in Microphone.devices) {
