@@ -66,7 +66,7 @@ public class PrototypingSceneCore : MonoBehaviour
     const float VSHAMT = 0.5f; // vertical shift amount
     readonly Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f); // statement-box focused
     readonly Color LIGHT_BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 0.4f); // statement-box unfocused
-    readonly Color SHADED_BEIGE = new Color(0.7803f, 0.7568f, 0.7019f, 1.0f); // statement-box unfocused (not used)
+    readonly Color POP_BEIGE = new Color(1.0f, 0.9210f, 0.7405f, 1.0f); // statement-box in effect
     readonly Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f); // arrow focused
     readonly Color LIGHT_WHITE = new Color(1.0f, 1.0f, 1.0f, 0.4f); // arrow unfocused
 
@@ -76,7 +76,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // for developmental use only
     private void DevelopmentPurposeSettings()
     {
-        bool onHMD = true;
+        bool onHMD = false;
         // set this value to the desired platform
 
         // for enabling button-clicks (editor use) or laser-pointer (HMD use)
@@ -93,8 +93,8 @@ public class PrototypingSceneCore : MonoBehaviour
         // card selection settings
         SmartObject.cardSelectionDict["environment"] = "TrashBin";
         SmartObject.cardSelectionDict["input"] = "Fire";
-        //SmartObject.cardSelectionDict["output"] = "LightUp";
-        SmartObject.cardSelectionDict["output"] = "MakeSound";
+        SmartObject.cardSelectionDict["output"] = "LightUp";
+        //SmartObject.cardSelectionDict["output"] = "MakeSound";
     }
 
 
@@ -163,11 +163,19 @@ public class PrototypingSceneCore : MonoBehaviour
             // reactions when input conditions are triggered (fired for one frame)
             for (int i = 0; i < inputInstanceList.Count; i++)
                 if (inputInstanceList[i].NegativeTriggerFlag)
+                {
                     outputInstanceList[i].OutputBehaviourOnNegative();
+                    // set color back when statement is not in effect
+                    SetIOStatementFieldColor(i, BEIGE);
+                }
             // all positive triggers are called after all negative triggers
             for (int i = 0; i < inputInstanceList.Count; i++)
                 if (inputInstanceList[i].PositiveTriggerFlag)
+                {
                     outputInstanceList[i].OutputBehaviourOnPositive();
+                    // make darker when statement has effect
+                    SetIOStatementFieldColor(i, POP_BEIGE);
+                }
         }
 
         // Oculus Touch Controller events
