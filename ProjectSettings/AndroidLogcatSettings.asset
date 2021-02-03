@@ -3,7 +3,7 @@
     "m_SelectedPackage": {
         "deviceId": "1WMHH8173V0386",
         "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-        "processId": 19056,
+        "processId": 22200,
         "exited": false
     },
     "m_SelectedPriority": 0,
@@ -90,6 +90,12 @@
             "deviceId": "1WMHH8173V0386",
             "name": "com.TakafumiHoriuchi.SmartCodesignVR",
             "processId": 19056,
+            "exited": false
+        },
+        {
+            "deviceId": "1WMHH8173V0386",
+            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
+            "processId": 22200,
             "exited": false
         }
     ],
