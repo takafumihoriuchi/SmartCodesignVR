@@ -16,7 +16,9 @@ public class MakeSoundCard : OutputCard
     private Vector3 originalScale;
     private Vector3 targetScale;
     private Vector3 updatedScale;
-    private bool isInAction = false;
+    //private IEnumerator soundPlayerCoroutine;
+    private MonoBehaviour mb;
+    //private bool isActive = false;
 
     readonly Vector3 expansionScale = new Vector3(1.1f, 1.1f, 1.1f);
     const float SPEED = 7.0f;
@@ -73,33 +75,35 @@ public class MakeSoundCard : OutputCard
         //    stopWatch.Start();
         //}
 
-        isInAction = true;
+        //soundPlayerCoroutine = SoundPlayLoop();
+        //mb.StartCoroutine(soundPlayerCoroutine);
+        mb.StartCoroutine(SoundPlayLoop());
+        //isActive = true;
     }
 
 
     public override void OutputBehaviourOnNegative()
     {
         //if (soundRecorder.isPlaying) soundRecorder.Stop();
-
-        isInAction = false;
+        //mb.StopCoroutine(soundPlayerCoroutine);
+        mb.StopCoroutine(SoundPlayLoop());
+        //isActive = false;
     }
 
-    public void MonoBehaviourReceiver() {
-        UnityEngine.Debug.Log("in MonoBehaviourReceiver()");
-        CoroutineHandler.StartStaticCoroutine(SoundPlayLoop());
+    public void MonoBehaviourReceiver(MonoBehaviour mb)
+    {
+        this.mb = mb;
+        //mb.StartCoroutine(SoundPlayLoop());
     }
 
     private IEnumerator SoundPlayLoop()
     {
-        UnityEngine.Debug.Log("in SoundPlayLoop()");
         while (true)
         {
-            UnityEngine.Debug.Log("Waiting");
-            yield return new WaitUntil(() => isInAction == true);
-            UnityEngine.Debug.Log("Playing");
+            UnityEngine.Debug.Log("in the while loop");
+            //yield return new WaitUntil(() => isActive == true);
             soundRecorder.Play();
             yield return new WaitForSecondsRealtime(clipDuration);
-            UnityEngine.Debug.Log("Stopping");
             soundRecorder.Stop();
         }
     }
@@ -180,48 +184,6 @@ public class MakeSoundCard : OutputCard
 
 
 
-
-public class MonoBehaviourPasser : MonoBehaviour
-{
-    void Start()
-    {
-        UnityEngine.Debug.Log("starting Start() in MonoBehaviourPasser");
-        MakeSoundCard soundPlayRoutine = new MakeSoundCard();
-        soundPlayRoutine.MonoBehaviourReceiver();
-    }
-}
-
-
-
-public class CoroutineHandler : MonoBehaviour
-{
-    static protected CoroutineHandler m_Instance;
-    static public CoroutineHandler instance
-    {
-        get
-        {
-            if (m_Instance == null)
-            {
-                GameObject o = new GameObject("CoroutineHandler");
-                DontDestroyOnLoad(o);
-                m_Instance = o.AddComponent<CoroutineHandler>();
-            }
-
-            return m_Instance;
-        }
-    }
-
-    public void OnDisable()
-    {
-        if (m_Instance)
-            Destroy(m_Instance.gameObject);
-    }
-
-    static public Coroutine StartStaticCoroutine(IEnumerator coroutine)
-    {
-        return instance.StartCoroutine(coroutine);
-    }
-}
 
 
 
