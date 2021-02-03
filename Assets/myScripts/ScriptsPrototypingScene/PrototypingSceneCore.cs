@@ -76,7 +76,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // for developmental use only
     private void DevelopmentPurposeSettings()
     {
-        bool onHMD = true;
+        bool onHMD = false;
         // set this value to the desired platform
 
         // for enabling button-clicks (editor use) or laser-pointer (HMD use)

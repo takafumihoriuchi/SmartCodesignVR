@@ -11,9 +11,12 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/myScenes/CardSelectionScene.unity
     guid: ab10b022f8cef440c92cf4eb7641944e
-  - enabled: 1
+  - enabled: 0
     path: Assets/myScenes/PrototypingScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/myScenes/InteractionScene.unity
+    guid: b88abed51b2d2454abab3ce71c0b5875
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 00e53c1d0118b4205b2144419a3f7f11,
       type: 2}
