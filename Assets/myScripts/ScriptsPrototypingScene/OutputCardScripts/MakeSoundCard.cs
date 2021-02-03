@@ -82,7 +82,7 @@ public class MakeSoundCard : OutputCard
 
     private void StartRecording()
     {
-        soundRecorder = environmentObject.GetComponent<AudioSource>();
+        soundRecorder = environmentObject.AddComponent<AudioSource>();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
         variableTextTMP.SetText("recording");
         isRecording = true;
