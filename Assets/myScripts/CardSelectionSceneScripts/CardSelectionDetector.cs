@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using EventBridge;
 
-public class CardSelectionDetector : MonoBehaviour
+public class CardSelectionDetector
 {
     const float DRAG_L = 20f;
     const float DRAG_S = 1f;

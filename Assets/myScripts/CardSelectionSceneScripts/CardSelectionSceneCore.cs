@@ -66,7 +66,8 @@ public class CardSelectionSceneCore : MonoBehaviour
             diveVoice.Stop();
             playedDiveVoice = false;
         }
-        if (diveVoiceFinished) {
+        if (diveVoiceFinished
+            || (diveVoiceReady && OVRInput.GetDown(OVRInput.RawButton.A))) {
             MoveToNextScene();
         }
 
