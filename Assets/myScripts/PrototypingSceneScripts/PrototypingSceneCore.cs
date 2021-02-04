@@ -76,7 +76,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // for developmental use only
     private void DevelopmentPurposeSettings()
     {
-        bool onHMD = false;
+        bool onHMD = true;
         // set this value to the desired platform
 
         // for enabling button-clicks (editor use) or laser-pointer (HMD use)
@@ -93,8 +93,8 @@ public class PrototypingSceneCore : MonoBehaviour
         // card selection settings
         SmartObject.cardSelectionDict["environment"] = "TrashBin";
         SmartObject.cardSelectionDict["input"] = "Fire";
-        //SmartObject.cardSelectionDict["output"] = "LightUp";
-        SmartObject.cardSelectionDict["output"] = "MakeSound";
+        SmartObject.cardSelectionDict["output"] = "LightUp";
+        //SmartObject.cardSelectionDict["output"] = "MakeSound";
     }
 
 

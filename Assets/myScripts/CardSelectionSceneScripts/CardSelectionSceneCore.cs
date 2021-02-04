@@ -67,7 +67,7 @@ public class CardSelectionSceneCore : MonoBehaviour
             playedDiveVoice = false;
         }
         if (diveVoiceFinished
-            || (diveVoiceReady && OVRInput.GetDown(OVRInput.RawButton.A))) {
+            || (playedDiveVoice && OVRInput.GetDown(OVRInput.RawButton.A))) {
             MoveToNextScene();
         }
 
@@ -85,6 +85,7 @@ public class CardSelectionSceneCore : MonoBehaviour
     }
 
     // for passing selection-infromation to next scene
+    // todo in SmartObject class, making a dictionary <string, bool> is safer
     private void RecordSelectedCardsAsString()
     {
         SmartObject.cardSelectionDict["environment"]
