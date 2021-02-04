@@ -154,3 +154,9 @@ public class FireCard : InputCard
     
 
 }
+
+
+/*
+ * 3D model for "markerObj (= fire)" was downloaded from:
+ * https://poly.google.com/view/ceW6BDy5SAu
+ */
