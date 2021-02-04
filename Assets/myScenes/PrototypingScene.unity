@@ -9428,15 +9428,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2015248, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_BackGroundColor.r
-      value: 0.8867924
+      value: 0.9150943
       objectReference: {fileID: 0}
     - target: {fileID: 2015248, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_BackGroundColor.g
-      value: 0.8867924
+      value: 0.9150943
       objectReference: {fileID: 0}
     - target: {fileID: 2015248, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_BackGroundColor.b
-      value: 0.8867924
+      value: 0.9150943
       objectReference: {fileID: 0}
     - target: {fileID: 2015248, guid: ce816f2e6abb0504092c23ed9b970dfd, type: 3}
       propertyPath: m_BackGroundColor.a
@@ -22979,7 +22979,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: d956e5923fbfe48c3b4e93dd5ea03080,
         type: 3}
       propertyPath: m_Name
-      value: Ladder_01
+      value: Ladder
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d956e5923fbfe48c3b4e93dd5ea03080, type: 3}
@@ -30345,7 +30345,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1144510303
 Transform:
   m_ObjectHideFlags: 0
