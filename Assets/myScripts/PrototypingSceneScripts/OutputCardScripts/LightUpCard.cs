@@ -142,14 +142,12 @@ public class LightUpCard : OutputCard
 
         if (brushTipRend.sharedMaterial.name.Contains(waterMaterial.name))
         {
-            Debug.Log("is water-material");
             envPartRend.material = originalEnvObjMaterial[partIdx];
             edittedEnvObjMaterial[partIdx] = originalEnvObjMaterial[partIdx];
             brushTipRend.material = originalBrushMaterial;
         }
         else // paint
         {
-            Debug.Log("current material is: " + brushTipRend.material);
             envPartRend.material = brushTipRend.material;
             edittedEnvObjMaterial[partIdx] = brushTipRend.material;
         }
