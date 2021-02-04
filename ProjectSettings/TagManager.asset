@@ -7,11 +7,6 @@ TagManager:
   - DeactivateOnLoad
   - ActivateOnLoad
   - ObjectWithRaycaster
-  - ButtonActivator
-  - trajectory
-  - SmartObjectTrashcan
-  - ball
-  - Interact
   layers:
   - Default
   - TransparentFX

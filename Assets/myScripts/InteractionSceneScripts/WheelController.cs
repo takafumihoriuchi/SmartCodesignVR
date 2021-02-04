@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// attached to TukTuk/SteeringWheel
+// Component<Wheel Collider> attached to TukTuk/Wheels/WheelColliders/(wheel objects x4)
 public class WheelController : MonoBehaviour
 {
     //RightHand

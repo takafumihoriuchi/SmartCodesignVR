@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// attached to TukTuk/SnapLocation
 public class SnapToLocation : MonoBehaviour
 {
     public bool grabbed;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// attached to tmpObject
 public class SnapObject : MonoBehaviour
 {
     public GameObject SnapLocation;

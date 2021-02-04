@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// attached to OVRPlaerController/.../RightHandAnchor
 public class CarEnter : MonoBehaviour
 {
     public GameObject car;

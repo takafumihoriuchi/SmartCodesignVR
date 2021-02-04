@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// attached to TukTuk
 public class CarController : MonoBehaviour
 {
     private const string HORIZONTAL = "Horizontal";
