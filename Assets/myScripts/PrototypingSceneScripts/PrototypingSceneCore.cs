@@ -78,7 +78,7 @@ public class PrototypingSceneCore : MonoBehaviour
     private void DevelopmentPurposeSettings()
     {
         // set this value to the desired platform
-        bool onHMD = false;
+        bool onHMD = true;
 
         // for enabling button-clicks (editor use) or laser-pointer (HMD use)
         HMDEventSystem.SetActive(onHMD);
@@ -93,7 +93,7 @@ public class PrototypingSceneCore : MonoBehaviour
 
         // environment choise
         //SmartObject.cardSelectionDict["environment"] = "TrashBin";
-        SmartObject.cardSelectionDict["environment"] = "Tree";
+        //SmartObject.cardSelectionDict["environment"] = "Tree";
         //SmartObject.cardSelectionDict["environment"] = "StreetLight";
         //SmartObject.cardSelectionDict["environment"] = "StreetSign";
         //SmartObject.cardSelectionDict["environment"] = "Bridge";
@@ -298,7 +298,7 @@ public class PrototypingSceneCore : MonoBehaviour
         // （environment object, input-delegate, output-behaviour, props, ...）
         // delegateのdictionaryと、選択されているキーワードのリスト(<=新しく作成する)も渡す
         Debug.Log("Moving to InteractionScene");
-        // SceneManager.LoadScene(3); // InteractionScene
+        SceneManager.LoadScene(3); // InteractionScene
     }
 
 
