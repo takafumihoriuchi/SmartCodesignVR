@@ -76,8 +76,8 @@ public class PrototypingSceneCore : MonoBehaviour
     // for developmental use only
     private void DevelopmentPurposeSettings()
     {
-        bool onHMD = true;
         // set this value to the desired platform
+        bool onHMD = false;
 
         // for enabling button-clicks (editor use) or laser-pointer (HMD use)
         HMDEventSystem.SetActive(onHMD);
@@ -90,9 +90,15 @@ public class PrototypingSceneCore : MonoBehaviour
             obj.GetComponent<GraphicRaycaster>().enabled = !onHMD;
         }
 
-        // card selection settings
-        SmartObject.cardSelectionDict["environment"] = "TrashBin";
+        // environment choise
+        //SmartObject.cardSelectionDict["environment"] = "TrashBin";
+        //SmartObject.cardSelectionDict["environment"] = "Tree";
+        //SmartObject.cardSelectionDict["environment"] = "StreetLight";
+        //SmartObject.cardSelectionDict["environment"] = "StreetSign";
+        SmartObject.cardSelectionDict["environment"] = "Bridge";
+        // input choice
         SmartObject.cardSelectionDict["input"] = "Fire";
+        // output choise
         SmartObject.cardSelectionDict["output"] = "LightUp";
         //SmartObject.cardSelectionDict["output"] = "MakeSound";
     }
