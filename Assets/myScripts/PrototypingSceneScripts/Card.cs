@@ -104,6 +104,7 @@ public abstract class InputCard : Card
     protected int maxInstanceNum;
     public int MaxInstanceNum { set { } get { return maxInstanceNum; } }
 
+    // set "public" to enable exporting SmartObject to the next scene
     public delegate bool InputEvaluationDelegate();
     public Dictionary<string, InputEvaluationDelegate> inputEvalDeleDict;
 

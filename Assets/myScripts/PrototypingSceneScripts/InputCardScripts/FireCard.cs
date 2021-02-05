@@ -52,22 +52,22 @@ public class FireCard : InputCard
         };
     }
 
-    private bool DetectDistanceVeryClose() {
+    public bool DetectDistanceVeryClose() {
         UpdateMarkerDistance();
         if (markerDistance < BOUNDARY_XSS) return true;
         else return false;
     }
-    private bool DetectDistanceClose() {
+    public bool DetectDistanceClose() {
         UpdateMarkerDistance();
         if (markerDistance >= BOUNDARY_XSS && markerDistance <= BOUNDARY_SM) return true;
         else return false;
     }
-    private bool DetectDistanceMiddle() {
+    public bool DetectDistanceMiddle() {
         UpdateMarkerDistance();
         if (markerDistance >= BOUNDARY_SM && markerDistance <= BOUNDARY_ML) return true;
         else return false;
     }
-    private bool DetectDistanceFarAway() {
+    public bool DetectDistanceFarAway() {
         UpdateMarkerDistance();
         if (markerDistance > BOUNDARY_ML) return true;
         else return false;
@@ -100,24 +100,23 @@ public class FireCard : InputCard
             if (DetectDistanceVeryClose())
             {
                 SetStrataOpacity(ALPHA_HIGH, ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
-                conditionKeyword = VERY_CLOSE; 
+                ConditionKeyword = VERY_CLOSE; 
             }
             else if (DetectDistanceClose())
             {
                 SetStrataOpacity(ALPHA_LOW, ALPHA_HIGH, ALPHA_LOW, ALPHA_LOW);
-                conditionKeyword = CLOSE;
+                ConditionKeyword = CLOSE;
             }
             else if (DetectDistanceMiddle())
             {
                 SetStrataOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_HIGH, ALPHA_LOW);
-                conditionKeyword = MIDDLE;
+                ConditionKeyword = MIDDLE;
             }
             else if (DetectDistanceFarAway())
             {
                 SetStrataOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW, ALPHA_HIGH);
-                conditionKeyword = FAR_AWAY;
+                ConditionKeyword = FAR_AWAY;
             }
-            variableTextTMP.SetText(conditionKeyword);
         }
     }
 
