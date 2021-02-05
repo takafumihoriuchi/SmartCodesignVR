@@ -105,8 +105,8 @@ public class PrototypingSceneCore : MonoBehaviour
         DevelopmentPurposeSettings();
 
         // instance preparation
-        DeactivateTaggedObjects();
-        ActivateTaggedObjects();
+        SetActiveStateByTag("DeactivateOnLoad", false);
+        SetActiveStateByTag("ActivateOnLoad", true);
         environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
         inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
         outputProps = GetOutPropsByName(SmartObject.cardSelectionDict["output"]);
@@ -611,18 +611,10 @@ public class PrototypingSceneCore : MonoBehaviour
 
 
     // safety measure for preventing human errors
-    private void ActivateTaggedObjects()
+    private void SetActiveStateByTag(string tag, bool state)
     {
-        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("ActivateOnLoad");
-        foreach (GameObject obj in taggedObjects) obj.SetActive(true);
-    }
-
-
-    // safety measure for preventing human errors
-    private void DeactivateTaggedObjects()
-    {
-        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag("DeactivateOnLoad");
-        foreach (GameObject obj in taggedObjects) obj.SetActive(false);
+        GameObject[] taggedObjects = GameObject.FindGameObjectsWithTag(tag);
+        foreach (GameObject obj in taggedObjects) obj.SetActive(state);
     }
 
 
