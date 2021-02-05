@@ -27,11 +27,20 @@ public class WeatherCard : InputCard
 
     private GameObject[] modelArr = new GameObject[N];
     private GameObject[] rayArr = new GameObject[N];
-    private bool sunnyIsComing;
-    private bool cloudyIsComing;
-    private bool rainyIsComing;
-    private bool thunderstormyIsComing;
-    private bool snowyIsComing;
+
+    private bool isSunnyNow;
+    private bool isCloudyNow;
+    private bool isRainyNow;
+    private bool isThunderstormyNow;
+    private bool isSnowyNow;
+
+    private bool wasSunnyPrevFrame;
+    private bool wasCloudyPrevFrame;
+    private bool wasRainyPrevFrame;
+    private bool wasThunderstormyPrevFrame;
+    private bool wasSnowyPrevFrame;
+
+    // todo weather-indexを使った配列でリファクタできる。
 
     readonly string SUNNY = "be sunny";
     readonly string CLOUDY = "be cloudy";
@@ -55,36 +64,56 @@ public class WeatherCard : InputCard
 
         inputEvalDeleDict = new Dictionary<string, InputEvaluationDelegate>
         {
-            {SUNNY, hoge0},
-            {CLOUDY, hoge1},
-            {RAINY, hoge2},
-            {THUNDERSTORMY, hoge3},
-            {SNOWY, hoge4}
+            {SUNNY, SunnyForecast},
+            {CLOUDY, CloudyForecast},
+            {RAINY, RainyForecast},
+            {THUNDERSTORMY, ThunderstormyForecast},
+            {SNOWY, SnowyForecast}
         };
     }
 
     // xxxTriggerStayを更新するときと、ConditionKeywordを更新するときとでは、マルチインスタンスの扱いが異なる
     // TODO trueに変化させるのは簡単。falseに戻すのに一工夫必要。
-    public bool hoge0()
+    public bool SunnyForecast()
     {
+        // constantly updates current weather with one-frame delay
         SetRay(modelArr[SUNNY_IDX], rayArr[SUNNY_IDX]);
-        return sunnyIsStay;
+        bool tmp = wasSunnyPrevFrame;
+        wasSunnyPrevFrame = isSunnyNow;
+        isSunnyNow = false;
+        return tmp;
     }
-    public bool hoge1()
+    public bool CloudyForecast()
     {
         SetRay(modelArr[CLOUDY_IDX], rayArr[CLOUDY_IDX]);
+        bool tmp = wasCloudyPrevFrame;
+        wasCloudyPrevFrame = isCloudyNow;
+        isCloudyNow = false;
+        return tmp;
     }
-    public bool hoge2()
+    public bool RainyForecast()
     {
         SetRay(modelArr[RAINY_IDX], rayArr[RAINY_IDX]);
+        bool tmp = wasRainyPrevFrame;
+        wasRainyPrevFrame = isRainyNow;
+        isRainyNow = false;
+        return tmp;
     }
-    public bool hoge3()
+    public bool ThunderstormyForecast()
     {
         SetRay(modelArr[THUNDERSTORMY_IDX], rayArr[THUNDERSTORMY_IDX]);
+        bool tmp = wasThunderstormyPrevFrame;
+        wasThunderstormyPrevFrame = isThunderstormyNow;
+        isThunderstormyNow = false;
+        return tmp;
     }
-    public bool hoge4()
+    public bool SnowyForecast()
     {
         SetRay(modelArr[SNOWY_IDX], rayArr[SNOWY_IDX]);
+        bool tmp = wasSnowyPrevFrame;
+        wasSnowyPrevFrame = isSnowyNow;
+        isSnowyNow = false;
+        return tmp;
     }
 
     protected override void InitPropFields()
@@ -173,32 +202,48 @@ public class WeatherCard : InputCard
         }
     }
 
+    //
 
-    //private void sunnyTriggerExit(Collider other)
-    //{
-    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-    //        sunnyIsComing = false;
-    //}
-    //private void cloudyTriggerExit(Collider other)
-    //{
-    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-    //        cloudyIsComing = false;
-    //}
-    //private void rainyTriggerExit(Collider other)
-    //{
-    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-    //        rainyIsComing = false;
-    //}
-    //private void thunderstormyTriggerExit(Collider other)
-    //{
-    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-    //        thunderstormyIsComing = false;
-    //}
-    //private void snowyTriggerExit(Collider other)
-    //{
-    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-    //        snowyIsComing = false;
-    //}
+    private void sunnyTriggerStay(Collider other)
+    {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            wasSunnyPrevFrame = isSunnyNow;
+            isSunnyNow = true;
+        }
+    }
+    private void cloudyTriggerStay(Collider other)
+    {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            wasCloudyPrevFrame = isCloudyNow;
+            isCloudyNow = true;
+        }
+    }
+    private void rainyTriggerStay(Collider other)
+    {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            wasRainyPrevFrame = isRainyNow;
+            isRainyNow = true;
+        }
+    }
+    private void thunderstormyTriggerStay(Collider other)
+    {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            wasThunderstormyPrevFrame = isThunderstormyNow;
+            isThunderstormyNow = true;
+        }
+    }
+    private void snowyTriggerStay(Collider other)
+    {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            wasSnowyPrevFrame = isSnowyNow;
+            isSnowyNow = true;
+        }
+    }
 
 
     protected override void OnFocusGranted()
@@ -220,18 +265,18 @@ public class WeatherCard : InputCard
     }
 
     protected override void OnConfirm() {
-        //sunnyEventHandler.TriggerStay += sunnyTriggerStay;
-        //cloudyEventHandler.TriggerStay += cloudyTriggerStay;
-        //rainyEventHandler.TriggerStay += rainyTriggerStay;
-        //thunderstormyEventHandler.TriggerStay += thunderstormyTriggerStay;
-        //snowyEventHandler.TriggerStay += snowyTriggerStay;
+        sunnyEventHandler.TriggerStay += sunnyTriggerStay;
+        cloudyEventHandler.TriggerStay += cloudyTriggerStay;
+        rainyEventHandler.TriggerStay += rainyTriggerStay;
+        thunderstormyEventHandler.TriggerStay += thunderstormyTriggerStay;
+        snowyEventHandler.TriggerStay += snowyTriggerStay;
     }
     protected override void OnBackToEdit() {
-        //sunnyEventHandler.TriggerStay -= sunnyTriggerStay;
-        //cloudyEventHandler.TriggerStay -= cloudyTriggerStay;
-        //rainyEventHandler.TriggerStay -= rainyTriggerStay;
-        //thunderstormyEventHandler.TriggerStay -= thunderstormyTriggerStay;
-        //snowyEventHandler.TriggerStay -= snowyTriggerStay;
+        sunnyEventHandler.TriggerStay -= sunnyTriggerStay;
+        cloudyEventHandler.TriggerStay -= cloudyTriggerStay;
+        rainyEventHandler.TriggerStay -= rainyTriggerStay;
+        thunderstormyEventHandler.TriggerStay -= thunderstormyTriggerStay;
+        snowyEventHandler.TriggerStay -= snowyTriggerStay;
     }
 
 
