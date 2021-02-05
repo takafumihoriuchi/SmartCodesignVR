@@ -15,8 +15,6 @@ public abstract class Card
     protected TextMeshProUGUI descriptionField;
     protected TextMeshProUGUI indexTextTMP;
     protected TextMeshProUGUI contentTextTMP;
-
-    // to be updated in each specific card-class
     protected TextMeshProUGUI variableTextTMP;
 
     protected string cardName;
@@ -42,6 +40,12 @@ public abstract class Card
 
     protected bool canBeConfirmed = false;
     public abstract bool CanBeConfirmed { get; }
+
+    protected string conditionKeyword = string.Empty;
+    public string ConditionKeyword {
+        set { conditionKeyword = value;
+            variableTextTMP.SetText(conditionKeyword); }
+        get { return conditionKeyword; }}
 
     protected abstract void InitPropFields();
     public abstract void BehaviourDuringPrototyping();
@@ -107,11 +111,6 @@ public abstract class InputCard : Card
     // set "public" to enable exporting SmartObject to the next scene
     public delegate bool InputEvaluationDelegate();
     public Dictionary<string, InputEvaluationDelegate> inputEvalDeleDict;
-
-    protected string conditionKeyword = string.Empty;
-    public string ConditionKeyword {
-        set { conditionKeyword = value; variableTextTMP.SetText(conditionKeyword); }
-        get { return conditionKeyword; } }
 
     public readonly string ALREADY_EXISTS = "<color=\"red\">already exists</color>";
 

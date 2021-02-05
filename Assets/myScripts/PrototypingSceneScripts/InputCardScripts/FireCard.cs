@@ -77,6 +77,7 @@ public class FireCard : InputCard
         markerDistance = Vector3.Distance(environmentObject.transform.position, markerObj.transform.position);
     }
 
+
     protected override void InitPropFields()
     {
         markerObj = propObjects.transform.Find("marker").gameObject;

@@ -152,7 +152,7 @@ public class LightUpCard : OutputCard
             edittedEnvObjMaterial[partIdx] = brushTipRend.material;
         }
 
-        if (ObjectHasPaintedParts()) variableTextTMP.SetText("painted");
+        if (ObjectHasPaintedParts()) ConditionKeyword = "painted";
         else variableTextTMP.SetText(string.Empty);
     }
 

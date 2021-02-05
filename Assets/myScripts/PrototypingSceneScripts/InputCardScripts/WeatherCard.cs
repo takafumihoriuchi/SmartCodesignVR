@@ -2,14 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 using EventBridge;
+using System;
 
 // task in each input-cards:
 // - define inputEvalDeleDict
 // - assign ConditionKeyword (e.g. ConditionKeyword = RAINY;)
 public class WeatherCard : InputCard
 {
-    private GameObject[] weatherObjArr;
-    private GameObject[] weatherRayArr;
+    Component[] envPartsComponent;
+    GameObject[] envPartsGameObject;
+
+    const int N = 5;
+    const int SUNNY_IDX = 0;
+    const int CLOUDY_IDX = 1;
+    const int RAINY_IDX = 2;
+    const int THUNDERSTORMY_IDX = 3;
+    const int SNOWY_IDX = 4;
+
+    IComponentEventHandler sunnyEventHandler;
+    IComponentEventHandler cloudyEventHandler;
+    IComponentEventHandler rainyEventHandler;
+    IComponentEventHandler thunderstormyEventHandler;
+    IComponentEventHandler snowyEventHandler;
+
+    private GameObject[] modelArr = new GameObject[N];
+    private GameObject[] rayArr = new GameObject[N];
+    private bool sunnyIsComing;
+    private bool cloudyIsComing;
+    private bool rainyIsComing;
+    private bool thunderstormyIsComing;
+    private bool snowyIsComing;
 
     readonly string SUNNY = "be sunny";
     readonly string CLOUDY = "be cloudy";
@@ -41,66 +63,195 @@ public class WeatherCard : InputCard
         };
     }
 
-    public bool hoge0() // どうしてこれはprivateなのか
+    // xxxTriggerStayを更新するときと、ConditionKeywordを更新するときとでは、マルチインスタンスの扱いが異なる
+    // TODO trueに変化させるのは簡単。falseに戻すのに一工夫必要。
+    public bool hoge0()
     {
-        
+        SetRay(modelArr[SUNNY_IDX], rayArr[SUNNY_IDX]);
+        return sunnyIsStay;
     }
     public bool hoge1()
     {
-
+        SetRay(modelArr[CLOUDY_IDX], rayArr[CLOUDY_IDX]);
     }
     public bool hoge2()
     {
-
+        SetRay(modelArr[RAINY_IDX], rayArr[RAINY_IDX]);
     }
     public bool hoge3()
     {
-
+        SetRay(modelArr[THUNDERSTORMY_IDX], rayArr[THUNDERSTORMY_IDX]);
     }
     public bool hoge4()
     {
-
+        SetRay(modelArr[SNOWY_IDX], rayArr[SNOWY_IDX]);
     }
 
     protected override void InitPropFields()
     {
+        modelArr[SUNNY_IDX] = propObjects.transform.Find("sunny/model").gameObject;
+        modelArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy/model").gameObject;
+        modelArr[RAINY_IDX] = propObjects.transform.Find("rainy/model").gameObject;
+        modelArr[THUNDERSTORMY_IDX] = propObjects.transform.Find("thunderstormy/model").gameObject;
+        modelArr[SNOWY_IDX] = propObjects.transform.Find("snowy/model").gameObject;
 
+        rayArr[SUNNY_IDX] = propObjects.transform.Find("sunny/ray").gameObject;
+        rayArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy/ray").gameObject;
+        rayArr[RAINY_IDX] = propObjects.transform.Find("rainy/ray").gameObject;
+        rayArr[THUNDERSTORMY_IDX] = propObjects.transform.Find("thunderstormy/ray").gameObject;
+        rayArr[SNOWY_IDX] = propObjects.transform.Find("snowy/ray").gameObject;
+
+        // each ray has its own trigger detector
+        sunnyEventHandler = rayArr[SUNNY_IDX].RequestEventHandlers();
+        cloudyEventHandler = rayArr[CLOUDY_IDX].RequestEventHandlers();
+        rainyEventHandler = rayArr[RAINY_IDX].RequestEventHandlers();
+        thunderstormyEventHandler = rayArr[THUNDERSTORMY_IDX].RequestEventHandlers();
+        snowyEventHandler = rayArr[SNOWY_IDX].RequestEventHandlers();
+
+        for (int i = 0; i < N; i++) {
+            // deactivate ray on start
+            SetRayMeshRenderer(rayArr[i], false);
+            SetRayMeshCollider(rayArr[i], false);
+        }
+
+        envPartsComponent = environmentObject.GetComponentsInChildren<Rigidbody>(true);
+        envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
+    }
+
+    private void SetRayMeshRenderer(GameObject ray, bool state) {
+        if (ray.GetComponent<MeshRenderer>().enabled != state)
+            ray.GetComponent<MeshRenderer>().enabled = state;
+    }
+
+    private void SetRayMeshCollider(GameObject ray, bool state) {
+        if (ray.GetComponent<MeshCollider>().enabled != state)
+            ray.GetComponent<MeshCollider>().enabled = state;
+    }
+
+    // activate ray if grabbed
+    private void SetRay(GameObject model, GameObject ray)
+    {
+        bool isGrabbed = model.GetComponent<OVRGrabbable>().isGrabbed;
+        SetRayMeshRenderer(ray, isGrabbed);
+        SetRayMeshCollider(ray, isGrabbed);
     }
 
     public override void BehaviourDuringPrototyping()
     {
+        for (int i = 0; i < N; i++) { SetRay(modelArr[i], rayArr[i]); }
 
     }
 
+    private void sunnyTriggerEnter(Collider other) {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            ConditionKeyword = SUNNY;
+        }
+    }
+    private void cloudyTriggerEnter(Collider other) {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            ConditionKeyword = CLOUDY;
+        }
+    }
+    private void rainyTriggerEnter(Collider other) {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            ConditionKeyword = RAINY;
+        }
+    }
+    private void thunderstormyTriggerEnter(Collider other) {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            ConditionKeyword = THUNDERSTORMY;
+        }
+    }
+    private void snowyTriggerEnter(Collider other) {
+        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+        {
+            ConditionKeyword = SNOWY;
+        }
+    }
+
+
+    //private void sunnyTriggerExit(Collider other)
+    //{
+    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+    //        sunnyIsComing = false;
+    //}
+    //private void cloudyTriggerExit(Collider other)
+    //{
+    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+    //        cloudyIsComing = false;
+    //}
+    //private void rainyTriggerExit(Collider other)
+    //{
+    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+    //        rainyIsComing = false;
+    //}
+    //private void thunderstormyTriggerExit(Collider other)
+    //{
+    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+    //        thunderstormyIsComing = false;
+    //}
+    //private void snowyTriggerExit(Collider other)
+    //{
+    //    if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
+    //        snowyIsComing = false;
+    //}
+
+
     protected override void OnFocusGranted()
     {
-
+        sunnyEventHandler.TriggerEnter += sunnyTriggerEnter;
+        cloudyEventHandler.TriggerEnter += cloudyTriggerEnter;
+        rainyEventHandler.TriggerEnter += rainyTriggerEnter;
+        thunderstormyEventHandler.TriggerEnter += thunderstormyTriggerEnter;
+        snowyEventHandler.TriggerEnter += snowyTriggerEnter;
     }
 
     protected override void OnFocusDeprived()
     {
-
+        sunnyEventHandler.TriggerEnter -= sunnyTriggerEnter;
+        cloudyEventHandler.TriggerEnter -= cloudyTriggerEnter;
+        rainyEventHandler.TriggerEnter -= rainyTriggerEnter;
+        thunderstormyEventHandler.TriggerEnter -= thunderstormyTriggerEnter;
+        snowyEventHandler.TriggerEnter -= snowyTriggerEnter;
     }
 
-    protected override void OnConfirm()
-    {
-        // 使っていないpropはSetActive(false)
+    protected override void OnConfirm() {
+        //sunnyEventHandler.TriggerStay += sunnyTriggerStay;
+        //cloudyEventHandler.TriggerStay += cloudyTriggerStay;
+        //rainyEventHandler.TriggerStay += rainyTriggerStay;
+        //thunderstormyEventHandler.TriggerStay += thunderstormyTriggerStay;
+        //snowyEventHandler.TriggerStay += snowyTriggerStay;
+    }
+    protected override void OnBackToEdit() {
+        //sunnyEventHandler.TriggerStay -= sunnyTriggerStay;
+        //cloudyEventHandler.TriggerStay -= cloudyTriggerStay;
+        //rainyEventHandler.TriggerStay -= rainyTriggerStay;
+        //thunderstormyEventHandler.TriggerStay -= thunderstormyTriggerStay;
+        //snowyEventHandler.TriggerStay -= snowyTriggerStay;
     }
 
-    protected override void OnBackToEdit()
+
+    GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
     {
-        // 全ての（または隠した）propsをSetActive(true)
+        GameObject[] objArr = new GameObject[compArr.Length];
+        int len = compArr.Length;
+        for (int i = 0; i < len; i++)
+            objArr[i] = compArr[i].gameObject;
+        return objArr;
     }
 
 }
 
-/*
+
+/* 
  * 3D models
  * - sun: https://poly.google.com/view/8atTd-V-X7i
- * - raindrop: https://poly.google.com/view/fMyBNkWqMC
+ * - raindrop: https://poly.google.com/view/fMyBNkWqMC-
  * - cloud: https://poly.google.com/view/fRmb17kTurm
  * - lightning: https://poly.google.com/view/7I1IhiE7O8s
  * - snowman: http://blog.sunday-model.net/article/178647073.html
- * 
- * 
  */

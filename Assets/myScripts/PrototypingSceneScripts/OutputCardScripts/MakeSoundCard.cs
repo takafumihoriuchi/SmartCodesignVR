@@ -62,7 +62,8 @@ public class MakeSoundCard : OutputCard
     {
         if (!isFocused) return; // process only for focused instance
 
-        if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed || Input.GetKey(KeyCode.Z)) {
+        if (micPropModel.transform.GetComponent<OVRGrabbable>().isGrabbed
+            || Input.GetKey(KeyCode.Z)) {
             // GetKeyxxx is for development purpose only 
             if (OVRInput.GetDown(OVRInput.RawButton.A)
                 || Input.GetKeyDown(KeyCode.A))
@@ -84,7 +85,7 @@ public class MakeSoundCard : OutputCard
     {
         soundRecorder = environmentObject.AddComponent<AudioSource>();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
-        variableTextTMP.SetText("recording");
+        ConditionKeyword = "recording";
         isRecording = true;
     }
 
@@ -92,7 +93,7 @@ public class MakeSoundCard : OutputCard
     private void SaveRecording()
     {
         Microphone.End("");
-        variableTextTMP.SetText("recorded");
+        ConditionKeyword = "recorded";
         isRecording = false;
     }
 
