@@ -66,8 +66,8 @@ public class PrototypingSceneCore : MonoBehaviour
     const float VSHAMT = 0.5f; // vertical shift amount
     readonly Color BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 1.0f); // statement-box focused
     readonly Color LIGHT_BEIGE = new Color(0.9803f, 0.9568f, 0.9019f, 0.6f); // statement-box unfocused
-    //readonly Color POP_BEIGE = new Color(1.0f, 0.9210f, 0.7405f, 1.0f); // statement-box in effect
-    readonly Color POP_BEIGE = new Color(1.0f, 0.7783f, 0.8330f, 1.0f); // statement-box in effect
+    readonly Color POP_BEIGE = new Color(1.0f, 0.9210f, 0.7405f, 1.0f); // statement-box in effect
+    //readonly Color POP_BEIGE = new Color(1.0f, 0.7783f, 0.8330f, 1.0f); // statement-box in effect (pinkish)
     readonly Color WHITE = new Color(1.0f, 1.0f, 1.0f, 1.0f); // arrow focused
     readonly Color LIGHT_WHITE = new Color(1.0f, 1.0f, 1.0f, 0.4f); // arrow unfocused
 
