@@ -81,6 +81,7 @@ public class WeatherCard : InputCard
         bool tmp = wasSunnyPrevFrame;
         wasSunnyPrevFrame = isSunnyNow;
         isSunnyNow = false;
+        Debug.Log("isSunnyNow: " + isSunnyNow + ", wasSunnyPrevFrame:" + wasSunnyPrevFrame);
         return tmp;
     }
     public bool CloudyForecast()
@@ -121,18 +122,17 @@ public class WeatherCard : InputCard
         envPartsComponent = environmentObject.GetComponentsInChildren<Rigidbody>(true);
         envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
 
-        // TODO 階層を修正する
-        modelArr[SUNNY_IDX] = propObjects.transform.Find("sunny/model").gameObject;
-        modelArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy/model").gameObject;
-        modelArr[RAINY_IDX] = propObjects.transform.Find("rainy/model").gameObject;
-        modelArr[THUNDERSTORMY_IDX] = propObjects.transform.Find("thunderstormy/model").gameObject;
-        modelArr[SNOWY_IDX] = propObjects.transform.Find("snowy/model").gameObject;
+        modelArr[SUNNY_IDX] = propObjects.transform.Find("sunny").gameObject;
+        modelArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy").gameObject;
+        modelArr[RAINY_IDX] = propObjects.transform.Find("rainy").gameObject;
+        modelArr[THUNDERSTORMY_IDX] = propObjects.transform.Find("thunderstormy").gameObject;
+        modelArr[SNOWY_IDX] = propObjects.transform.Find("snowy").gameObject;
 
-        rayArr[SUNNY_IDX] = propObjects.transform.Find("sunny/model/ray").gameObject;
-        rayArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy/model/ray").gameObject;
-        rayArr[RAINY_IDX] = propObjects.transform.Find("rainy/model/ray").gameObject;
-        rayArr[THUNDERSTORMY_IDX] = propObjects.transform.Find("thunderstormy/model/ray").gameObject;
-        rayArr[SNOWY_IDX] = propObjects.transform.Find("snowy/model/ray").gameObject;
+        rayArr[SUNNY_IDX] = propObjects.transform.Find("sunny/ray").gameObject;
+        rayArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy/ray").gameObject;
+        rayArr[RAINY_IDX] = propObjects.transform.Find("rainy/ray").gameObject;
+        rayArr[THUNDERSTORMY_IDX] = propObjects.transform.Find("thunderstormy/ray").gameObject;
+        rayArr[SNOWY_IDX] = propObjects.transform.Find("snowy/ray").gameObject;
 
         // each ray has its own trigger detector
         sunnyEventHandler = rayArr[SUNNY_IDX].RequestEventHandlers();
@@ -211,6 +211,7 @@ public class WeatherCard : InputCard
             wasSunnyPrevFrame = isSunnyNow;
             isSunnyNow = true;
         }
+        Debug.Log("isSunnyNow: " + isSunnyNow + ", wasSunnyPrevFrame:" + wasSunnyPrevFrame);
     }
     private void cloudyTriggerStay(Collider other)
     {
