@@ -13,44 +13,28 @@ public class WeatherCard : InputCard
     GameObject[] envPartsGameObject;
 
     const int N = 5;
+
     const int SUNNY_IDX = 0;
     const int CLOUDY_IDX = 1;
     const int RAINY_IDX = 2;
-    const int THUNDERSTORMY_IDX = 3;
+    const int STORMY_IDX = 3;
     const int SNOWY_IDX = 4;
 
-    IComponentEventHandler sunnyEventHandler;
-    IComponentEventHandler cloudyEventHandler;
-    IComponentEventHandler rainyEventHandler;
-    IComponentEventHandler thunderstormyEventHandler;
-    IComponentEventHandler snowyEventHandler;
+    readonly string SUNNY_STR = "be sunny";
+    readonly string CLOUDY_STR = "be cloudy";
+    readonly string RAINY_STR = "rain";
+    readonly string STORMY_STR = "be a storm";
+    readonly string SNOWY_STR = "snow";
 
-    private GameObject[] modelArr = new GameObject[N];
-    private GameObject[] rayArr = new GameObject[N];
-
-    private bool isSunnyNow;
-    private bool isCloudyNow;
-    private bool isRainyNow;
-    private bool isThunderstormyNow;
-    private bool isSnowyNow;
-
-    private bool wasSunnyPrevFrame;
-    private bool wasCloudyPrevFrame;
-    private bool wasRainyPrevFrame;
-    private bool wasThunderstormyPrevFrame;
-    private bool wasSnowyPrevFrame;
-
-    // todo weather-indexを使った配列でリファクタできる。
-
-    readonly string SUNNY = "be sunny";
-    readonly string CLOUDY = "be cloudy";
-    readonly string RAINY = "rain";
-    readonly string THUNDERSTORMY = "be a storm";
-    readonly string SNOWY = "snow";
+    IComponentEventHandler[] weatherEventHandler = new IComponentEventHandler[N];
+    GameObject[] weatherObjGrp = new GameObject[N];
+    GameObject[] weatherRay = new GameObject[N];
+    bool[] isXxxCurrentFrame = new bool[N];
+    bool[] wasXxxPrevFrame = new bool[N];
 
     public WeatherCard()
     {
-        maxInstanceNum = 5; // sunny, cloudy, rainy, snowy, thunderstormy
+        maxInstanceNum = N;
 
         cardName = "Weather";
 
@@ -64,222 +48,198 @@ public class WeatherCard : InputCard
 
         inputEvalDeleDict = new Dictionary<string, InputEvaluationDelegate>
         {
-            {SUNNY, SunnyForecast},
-            {CLOUDY, CloudyForecast},
-            {RAINY, RainyForecast},
-            {THUNDERSTORMY, ThunderstormyForecast},
-            {SNOWY, SnowyForecast}
+            {SUNNY_STR, SunnyForecast},
+            {CLOUDY_STR, CloudyForecast},
+            {RAINY_STR, RainyForecast},
+            {STORMY_STR, StormyForecast},
+            {SNOWY_STR, SnowyForecast}
         };
     }
 
-    // xxxTriggerStayを更新するときと、ConditionKeywordを更新するときとでは、マルチインスタンスの扱いが異なる
-    // TODO trueに変化させるのは簡単。falseに戻すのに一工夫必要。
+    // constantly updates current weather with one-frame delay
     public bool SunnyForecast()
     {
-        // constantly updates current weather with one-frame delay
-        SetRay(modelArr[SUNNY_IDX], rayArr[SUNNY_IDX]);
-        bool tmp = wasSunnyPrevFrame;
-        wasSunnyPrevFrame = isSunnyNow;
-        isSunnyNow = false;
-        Debug.Log("isSunnyNow: " + isSunnyNow + ", wasSunnyPrevFrame:" + wasSunnyPrevFrame);
+        SetGrabbedWeatherRayAll();
+        bool tmp = wasXxxPrevFrame[SUNNY_IDX];
+        UpdateWeatherWithFalse(SUNNY_IDX);
         return tmp;
     }
     public bool CloudyForecast()
     {
-        SetRay(modelArr[CLOUDY_IDX], rayArr[CLOUDY_IDX]);
-        bool tmp = wasCloudyPrevFrame;
-        wasCloudyPrevFrame = isCloudyNow;
-        isCloudyNow = false;
+        SetGrabbedWeatherRayAll();
+        bool tmp = wasXxxPrevFrame[CLOUDY_IDX];
+        UpdateWeatherWithFalse(CLOUDY_IDX);
         return tmp;
     }
     public bool RainyForecast()
     {
-        SetRay(modelArr[RAINY_IDX], rayArr[RAINY_IDX]);
-        bool tmp = wasRainyPrevFrame;
-        wasRainyPrevFrame = isRainyNow;
-        isRainyNow = false;
+        SetGrabbedWeatherRayAll();
+        bool tmp = wasXxxPrevFrame[RAINY_IDX];
+        UpdateWeatherWithFalse(RAINY_IDX);
         return tmp;
     }
-    public bool ThunderstormyForecast()
+    public bool StormyForecast()
     {
-        SetRay(modelArr[THUNDERSTORMY_IDX], rayArr[THUNDERSTORMY_IDX]);
-        bool tmp = wasThunderstormyPrevFrame;
-        wasThunderstormyPrevFrame = isThunderstormyNow;
-        isThunderstormyNow = false;
+        SetGrabbedWeatherRayAll();
+        bool tmp = wasXxxPrevFrame[STORMY_IDX];
+        UpdateWeatherWithFalse(STORMY_IDX);
         return tmp;
     }
     public bool SnowyForecast()
     {
-        SetRay(modelArr[SNOWY_IDX], rayArr[SNOWY_IDX]);
-        bool tmp = wasSnowyPrevFrame;
-        wasSnowyPrevFrame = isSnowyNow;
-        isSnowyNow = false;
+        SetGrabbedWeatherRayAll();
+        bool tmp = wasXxxPrevFrame[SNOWY_IDX];
+        UpdateWeatherWithFalse(SNOWY_IDX);
         return tmp;
     }
+
 
     protected override void InitPropFields()
     {
         envPartsComponent = environmentObject.GetComponentsInChildren<Rigidbody>(true);
         envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
 
-        modelArr[SUNNY_IDX] = propObjects.transform.Find("sunny").gameObject;
-        modelArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy").gameObject;
-        modelArr[RAINY_IDX] = propObjects.transform.Find("rainy").gameObject;
-        modelArr[THUNDERSTORMY_IDX] = propObjects.transform.Find("thunderstormy").gameObject;
-        modelArr[SNOWY_IDX] = propObjects.transform.Find("snowy").gameObject;
+        string[] objGrpPath = new string[N] { "sunny", "cloudy", "rainy", "stormy", "snowy" };
+        string[] rayPath = new string[N] { "sunny/ray", "cloudy/ray", "rainy/ray", "stormy/ray", "snowy/ray" };
 
-        rayArr[SUNNY_IDX] = propObjects.transform.Find("sunny/ray").gameObject;
-        rayArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy/ray").gameObject;
-        rayArr[RAINY_IDX] = propObjects.transform.Find("rainy/ray").gameObject;
-        rayArr[THUNDERSTORMY_IDX] = propObjects.transform.Find("thunderstormy/ray").gameObject;
-        rayArr[SNOWY_IDX] = propObjects.transform.Find("snowy/ray").gameObject;
-
-        // each ray has its own trigger detector
-        sunnyEventHandler = rayArr[SUNNY_IDX].RequestEventHandlers();
-        cloudyEventHandler = rayArr[CLOUDY_IDX].RequestEventHandlers();
-        rainyEventHandler = rayArr[RAINY_IDX].RequestEventHandlers();
-        thunderstormyEventHandler = rayArr[THUNDERSTORMY_IDX].RequestEventHandlers();
-        snowyEventHandler = rayArr[SNOWY_IDX].RequestEventHandlers();
-
-        for (int i = 0; i < N; i++) {
+        for (int i = 0; i < N; i++)
+        {
+            weatherObjGrp[i] = propObjects.transform.Find(objGrpPath[i]).gameObject;
+            weatherRay[i] = propObjects.transform.Find(rayPath[i]).gameObject;
+            weatherEventHandler[i] = weatherRay[i].RequestEventHandlers();
             // deactivate ray on start
-            SetRayMeshRenderer(rayArr[i], false);
-            SetRayMeshCollider(rayArr[i], false);
+            SetRayMeshRenderer(weatherRay[i], false);
+            SetRayMeshCollider(weatherRay[i], false);
         }
     }
 
-    private void SetRayMeshRenderer(GameObject ray, bool state) {
-        if (ray.GetComponent<MeshRenderer>().enabled != state)
-            ray.GetComponent<MeshRenderer>().enabled = state;
-    }
-
-    private void SetRayMeshCollider(GameObject ray, bool state) {
-        if (ray.GetComponent<MeshCollider>().enabled != state)
-            ray.GetComponent<MeshCollider>().enabled = state;
-    }
-
-    // activate ray if grabbed
-    private void SetRay(GameObject model, GameObject ray)
-    {
-        bool isGrabbed = model.GetComponent<OVRGrabbable>().isGrabbed;
-        SetRayMeshRenderer(ray, isGrabbed);
-        SetRayMeshCollider(ray, isGrabbed);
-    }
 
     public override void BehaviourDuringPrototyping()
     {
-        for (int i = 0; i < N; i++) { SetRay(modelArr[i], rayArr[i]); }
-    }
-
-    private void sunnyTriggerEnter(Collider other) {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            ConditionKeyword = SUNNY;
-        }
-    }
-    private void cloudyTriggerEnter(Collider other) {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            ConditionKeyword = CLOUDY;
-        }
-    }
-    private void rainyTriggerEnter(Collider other) {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            ConditionKeyword = RAINY;
-        }
-    }
-    private void thunderstormyTriggerEnter(Collider other) {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            ConditionKeyword = THUNDERSTORMY;
-        }
-    }
-    private void snowyTriggerEnter(Collider other) {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            ConditionKeyword = SNOWY;
-        }
-    }
-
-    //
-
-    private void sunnyTriggerStay(Collider other)
-    {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            wasSunnyPrevFrame = isSunnyNow;
-            isSunnyNow = true;
-        }
-        Debug.Log("isSunnyNow: " + isSunnyNow + ", wasSunnyPrevFrame:" + wasSunnyPrevFrame);
-    }
-    private void cloudyTriggerStay(Collider other)
-    {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            wasCloudyPrevFrame = isCloudyNow;
-            isCloudyNow = true;
-        }
-    }
-    private void rainyTriggerStay(Collider other)
-    {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            wasRainyPrevFrame = isRainyNow;
-            isRainyNow = true;
-        }
-    }
-    private void thunderstormyTriggerStay(Collider other)
-    {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            wasThunderstormyPrevFrame = isThunderstormyNow;
-            isThunderstormyNow = true;
-        }
-    }
-    private void snowyTriggerStay(Collider other)
-    {
-        if (Array.IndexOf(envPartsGameObject, other.transform.gameObject) != -1)
-        {
-            wasSnowyPrevFrame = isSnowyNow;
-            isSnowyNow = true;
-        }
+        for (int i = 0; i < N; i++)
+            SetGrabbedWeatherRay(weatherObjGrp[i], weatherRay[i]);
     }
 
 
     protected override void OnFocusGranted()
     {
-        sunnyEventHandler.TriggerEnter += sunnyTriggerEnter;
-        cloudyEventHandler.TriggerEnter += cloudyTriggerEnter;
-        rainyEventHandler.TriggerEnter += rainyTriggerEnter;
-        thunderstormyEventHandler.TriggerEnter += thunderstormyTriggerEnter;
-        snowyEventHandler.TriggerEnter += snowyTriggerEnter;
+        weatherEventHandler[SUNNY_IDX].TriggerEnter += sunnyTriggerEnter;
+        weatherEventHandler[CLOUDY_IDX].TriggerEnter += cloudyTriggerEnter;
+        weatherEventHandler[RAINY_IDX].TriggerEnter += rainyTriggerEnter;
+        weatherEventHandler[STORMY_IDX].TriggerEnter += stormyTriggerEnter;
+        weatherEventHandler[SNOWY_IDX].TriggerEnter += snowyTriggerEnter;
     }
 
     protected override void OnFocusDeprived()
     {
-        sunnyEventHandler.TriggerEnter -= sunnyTriggerEnter;
-        cloudyEventHandler.TriggerEnter -= cloudyTriggerEnter;
-        rainyEventHandler.TriggerEnter -= rainyTriggerEnter;
-        thunderstormyEventHandler.TriggerEnter -= thunderstormyTriggerEnter;
-        snowyEventHandler.TriggerEnter -= snowyTriggerEnter;
+        weatherEventHandler[SUNNY_IDX].TriggerEnter -= sunnyTriggerEnter;
+        weatherEventHandler[CLOUDY_IDX].TriggerEnter -= cloudyTriggerEnter;
+        weatherEventHandler[RAINY_IDX].TriggerEnter -= rainyTriggerEnter;
+        weatherEventHandler[STORMY_IDX].TriggerEnter -= stormyTriggerEnter;
+        weatherEventHandler[SNOWY_IDX].TriggerEnter -= snowyTriggerEnter;
     }
 
-    protected override void OnConfirm() {
-        sunnyEventHandler.TriggerStay += sunnyTriggerStay;
-        cloudyEventHandler.TriggerStay += cloudyTriggerStay;
-        rainyEventHandler.TriggerStay += rainyTriggerStay;
-        thunderstormyEventHandler.TriggerStay += thunderstormyTriggerStay;
-        snowyEventHandler.TriggerStay += snowyTriggerStay;
+    protected override void OnConfirm()
+    {
+        weatherEventHandler[SUNNY_IDX].TriggerStay += sunnyTriggerStay;
+        weatherEventHandler[CLOUDY_IDX].TriggerStay += cloudyTriggerStay;
+        weatherEventHandler[RAINY_IDX].TriggerStay += rainyTriggerStay;
+        weatherEventHandler[STORMY_IDX].TriggerStay += stormyTriggerStay;
+        weatherEventHandler[SNOWY_IDX].TriggerStay += snowyTriggerStay;
     }
-    protected override void OnBackToEdit() {
-        sunnyEventHandler.TriggerStay -= sunnyTriggerStay;
-        cloudyEventHandler.TriggerStay -= cloudyTriggerStay;
-        rainyEventHandler.TriggerStay -= rainyTriggerStay;
-        thunderstormyEventHandler.TriggerStay -= thunderstormyTriggerStay;
-        snowyEventHandler.TriggerStay -= snowyTriggerStay;
+    protected override void OnBackToEdit()
+    {
+        weatherEventHandler[SUNNY_IDX].TriggerStay -= sunnyTriggerStay;
+        weatherEventHandler[CLOUDY_IDX].TriggerStay -= cloudyTriggerStay;
+        weatherEventHandler[RAINY_IDX].TriggerStay -= rainyTriggerStay;
+        weatherEventHandler[STORMY_IDX].TriggerStay -= stormyTriggerStay;
+        weatherEventHandler[SNOWY_IDX].TriggerStay -= snowyTriggerStay;
     }
 
+
+    void sunnyTriggerEnter(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            ConditionKeyword = SUNNY_STR;
+    }
+    void cloudyTriggerEnter(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            ConditionKeyword = CLOUDY_STR;
+    }
+    void rainyTriggerEnter(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            ConditionKeyword = RAINY_STR;
+    }
+    void stormyTriggerEnter(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            ConditionKeyword = STORMY_STR;
+    }
+    void snowyTriggerEnter(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            ConditionKeyword = SNOWY_STR;
+    }
+
+    void sunnyTriggerStay(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            UpdateWeatherWithTrue(SUNNY_IDX);
+    }
+    void cloudyTriggerStay(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            UpdateWeatherWithTrue(CLOUDY_IDX);
+    }
+    void rainyTriggerStay(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            UpdateWeatherWithTrue(RAINY_IDX);
+    }
+    void stormyTriggerStay(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            UpdateWeatherWithTrue(STORMY_IDX);
+    }
+    void snowyTriggerStay(Collider other) {
+        if (IsEnvObj(other.transform.gameObject))
+            UpdateWeatherWithTrue(SNOWY_IDX);
+    }
+
+    void UpdateWeatherWithTrue(int weatherIdx)
+    {
+        wasXxxPrevFrame[weatherIdx] = isXxxCurrentFrame[weatherIdx];
+        isXxxCurrentFrame[weatherIdx] = true;
+    }
+
+    void UpdateWeatherWithFalse(int weatherIdx)
+    {
+        wasXxxPrevFrame[weatherIdx] = isXxxCurrentFrame[weatherIdx];
+        isXxxCurrentFrame[weatherIdx] = false;
+    }
+
+    // activate ray if grabbed
+    void SetGrabbedWeatherRay(GameObject objGrp, GameObject ray)
+    {
+        bool isGrabbed = objGrp.GetComponent<OVRGrabbable>().isGrabbed;
+        SetRayMeshRenderer(ray, isGrabbed);
+        SetRayMeshCollider(ray, isGrabbed);
+    }
+
+    void SetGrabbedWeatherRayAll()
+    {
+        for (int i = 0; i < N; i++)
+        {
+            bool isGrabbed = weatherObjGrp[i].GetComponent<OVRGrabbable>().isGrabbed;
+            SetRayMeshRenderer(weatherRay[i], isGrabbed);
+            SetRayMeshCollider(weatherRay[i], isGrabbed);
+        }
+    }
+
+    void SetRayMeshRenderer(GameObject ray, bool state)
+    {
+        if (ray.GetComponent<MeshRenderer>().enabled != state)
+            ray.GetComponent<MeshRenderer>().enabled = state;
+    }
+
+    void SetRayMeshCollider(GameObject ray, bool state)
+    {
+        if (ray.GetComponent<MeshCollider>().enabled != state)
+            ray.GetComponent<MeshCollider>().enabled = state;
+    }
 
     GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
     {
@@ -288,6 +248,11 @@ public class WeatherCard : InputCard
         for (int i = 0; i < len; i++)
             objArr[i] = compArr[i].gameObject;
         return objArr;
+    }
+
+    bool IsEnvObj(GameObject obj)
+    {
+        return (Array.IndexOf(envPartsGameObject, obj) != -1);
     }
 
 }
