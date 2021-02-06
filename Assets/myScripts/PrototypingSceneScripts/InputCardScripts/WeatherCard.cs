@@ -148,13 +148,12 @@ public class WeatherCard : InputCard
             weatherEventHandler[RAINY_IDX].TriggerEnter -= rainyTriggerEnter;
             weatherEventHandler[STORMY_IDX].TriggerEnter -= stormyTriggerEnter;
             weatherEventHandler[SNOWY_IDX].TriggerEnter -= snowyTriggerEnter;
-
-            weatherEventHandler[SUNNY_IDX].TriggerStay += sunnyTriggerStay;
-            weatherEventHandler[CLOUDY_IDX].TriggerStay += cloudyTriggerStay;
-            weatherEventHandler[RAINY_IDX].TriggerStay += rainyTriggerStay;
-            weatherEventHandler[STORMY_IDX].TriggerStay += stormyTriggerStay;
-            weatherEventHandler[SNOWY_IDX].TriggerStay += snowyTriggerStay;
         }
+        weatherEventHandler[SUNNY_IDX].TriggerStay += sunnyTriggerStay;
+        weatherEventHandler[CLOUDY_IDX].TriggerStay += cloudyTriggerStay;
+        weatherEventHandler[RAINY_IDX].TriggerStay += rainyTriggerStay;
+        weatherEventHandler[STORMY_IDX].TriggerStay += stormyTriggerStay;
+        weatherEventHandler[SNOWY_IDX].TriggerStay += snowyTriggerStay;
     }
     protected override void OnBackToEdit()
     {
@@ -165,13 +164,12 @@ public class WeatherCard : InputCard
             weatherEventHandler[RAINY_IDX].TriggerEnter += rainyTriggerEnter;
             weatherEventHandler[STORMY_IDX].TriggerEnter += stormyTriggerEnter;
             weatherEventHandler[SNOWY_IDX].TriggerEnter += snowyTriggerEnter;
-
-            weatherEventHandler[SUNNY_IDX].TriggerStay -= sunnyTriggerStay;
-            weatherEventHandler[CLOUDY_IDX].TriggerStay -= cloudyTriggerStay;
-            weatherEventHandler[RAINY_IDX].TriggerStay -= rainyTriggerStay;
-            weatherEventHandler[STORMY_IDX].TriggerStay -= stormyTriggerStay;
-            weatherEventHandler[SNOWY_IDX].TriggerStay -= snowyTriggerStay;
         }
+        weatherEventHandler[SUNNY_IDX].TriggerStay -= sunnyTriggerStay;
+        weatherEventHandler[CLOUDY_IDX].TriggerStay -= cloudyTriggerStay;
+        weatherEventHandler[RAINY_IDX].TriggerStay -= rainyTriggerStay;
+        weatherEventHandler[STORMY_IDX].TriggerStay -= stormyTriggerStay;
+        weatherEventHandler[SNOWY_IDX].TriggerStay -= snowyTriggerStay;
     }
 
 
