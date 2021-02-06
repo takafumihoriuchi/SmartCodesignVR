@@ -118,6 +118,9 @@ public class WeatherCard : InputCard
 
     protected override void InitPropFields()
     {
+        envPartsComponent = environmentObject.GetComponentsInChildren<Rigidbody>(true);
+        envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
+
         modelArr[SUNNY_IDX] = propObjects.transform.Find("sunny/model").gameObject;
         modelArr[CLOUDY_IDX] = propObjects.transform.Find("cloudy/model").gameObject;
         modelArr[RAINY_IDX] = propObjects.transform.Find("rainy/model").gameObject;
@@ -142,9 +145,6 @@ public class WeatherCard : InputCard
             SetRayMeshRenderer(rayArr[i], false);
             SetRayMeshCollider(rayArr[i], false);
         }
-
-        envPartsComponent = environmentObject.GetComponentsInChildren<Rigidbody>(true);
-        envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
     }
 
     private void SetRayMeshRenderer(GameObject ray, bool state) {
@@ -168,7 +168,6 @@ public class WeatherCard : InputCard
     public override void BehaviourDuringPrototyping()
     {
         for (int i = 0; i < N; i++) { SetRay(modelArr[i], rayArr[i]); }
-
     }
 
     private void sunnyTriggerEnter(Collider other) {

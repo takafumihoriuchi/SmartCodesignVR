@@ -1,113 +1,17 @@
 {
     "m_SelectedDeviceId": "1WMHH8173V0386",
     "m_SelectedPackage": {
-        "deviceId": "1WMHH8173V0386",
-        "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-        "processId": 23906,
+        "deviceId": "",
+        "name": "",
+        "processId": 0,
         "exited": false
     },
     "m_SelectedPriority": 0,
     "m_KnownPackagesForSerialization": [
         {
             "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 18970,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 21923,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 25829,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 3819,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 7335,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
             "name": "com.oculus.vrshell",
             "processId": 2712,
-            "exited": false
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 9545,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 21943,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 28743,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 30158,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 5831,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 10335,
-            "exited": false
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 14473,
-            "exited": false
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 19056,
-            "exited": false
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 22200,
-            "exited": false
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 11640,
-            "exited": true
-        },
-        {
-            "deviceId": "1WMHH8173V0386",
-            "name": "com.TakafumiHoriuchi.SmartCodesignVR",
-            "processId": 12284,
             "exited": false
         },
         {
@@ -120,25 +24,25 @@
             "deviceId": "1WMHH8173V0386",
             "name": "com.TakafumiHoriuchi.SmartCodesignVR",
             "processId": 16450,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "1WMHH8173V0386",
             "name": "com.TakafumiHoriuchi.SmartCodesignVR",
             "processId": 17813,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "1WMHH8173V0386",
             "name": "com.TakafumiHoriuchi.SmartCodesignVR",
             "processId": 20643,
-            "exited": false
+            "exited": true
         },
         {
             "deviceId": "1WMHH8173V0386",
             "name": "com.TakafumiHoriuchi.SmartCodesignVR",
             "processId": 23906,
-            "exited": false
+            "exited": true
         }
     ],
     "m_Tags": {

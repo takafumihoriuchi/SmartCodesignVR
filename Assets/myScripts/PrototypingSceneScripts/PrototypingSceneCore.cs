@@ -77,8 +77,9 @@ public class PrototypingSceneCore : MonoBehaviour
     // for developmental use only
     private void DevelopmentPurposeSettings()
     {
-        // set this value to the desired platform
-        bool onHMD = true;
+        bool isQuest2 = OVRManager.systemHeadsetType == OVRManager.SystemHeadsetType.Oculus_Quest_2;
+        Debug.Log("isQuest2: " + isQuest2);
+        bool onHMD = isQuest2;
 
         // for enabling button-clicks (editor use) or laser-pointer (HMD use)
         HMDEventSystem.SetActive(onHMD);
@@ -91,17 +92,24 @@ public class PrototypingSceneCore : MonoBehaviour
             obj.GetComponent<GraphicRaycaster>().enabled = !onHMD;
         }
 
-        // environment choise
-        //SmartObject.cardSelectionDict["environment"] = "TrashBin";
-        //SmartObject.cardSelectionDict["environment"] = "Tree";
-        //SmartObject.cardSelectionDict["environment"] = "StreetLight";
-        //SmartObject.cardSelectionDict["environment"] = "StreetSign";
-        //SmartObject.cardSelectionDict["environment"] = "Bridge";
-        // input choice
-        //SmartObject.cardSelectionDict["input"] = "Fire";
-        // output choise
-        //SmartObject.cardSelectionDict["output"] = "LightUp";
-        //SmartObject.cardSelectionDict["output"] = "MakeSound";
+        bool isPlayTest = SmartObject.cardSelectionDict["environment"] == null;
+        if (isPlayTest)
+        {
+            // environment
+            SmartObject.cardSelectionDict["environment"] = "TrashBin";
+            //SmartObject.cardSelectionDict["environment"] = "Tree";
+            //SmartObject.cardSelectionDict["environment"] = "StreetLight";
+            //SmartObject.cardSelectionDict["environment"] = "StreetSign";
+            //SmartObject.cardSelectionDict["environment"] = "Bridge";
+
+            // input
+            //SmartObject.cardSelectionDict["input"] = "Fire";
+            SmartObject.cardSelectionDict["input"] = "Weather";
+
+            // output
+            SmartObject.cardSelectionDict["output"] = "LightUp";
+            //SmartObject.cardSelectionDict["output"] = "MakeSound";
+        }
     }
 
 
