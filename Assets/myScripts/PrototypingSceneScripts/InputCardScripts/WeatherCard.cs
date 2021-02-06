@@ -110,17 +110,14 @@ public class WeatherCard : InputCard
             weatherRay[i] = propObjects.transform.Find(rayPath[i]).gameObject;
             weatherEventHandler[i] = weatherRay[i].RequestEventHandlers();
             weatherSound[i] = weatherObjGrp[i].GetComponent<AudioSource>();
-            // deactivate ray on start
-            SetRayMeshRenderer(weatherRay[i], false);
-            SetRayMeshCollider(weatherRay[i], false);
+            weatherRay[i].SetActive(false);
         }
     }
 
 
     public override void BehaviourDuringPrototyping()
     {
-        for (int i = 0; i < N; i++)
-            SetGrabbedWeatherRay(weatherObjGrp[i], weatherRay[i]);
+        SetGrabbedWeatherRayAll();
     }
 
 
@@ -214,36 +211,15 @@ public class WeatherCard : InputCard
         isXxxCurrentFrame[weatherIdx] = false;
     }
 
-    // activate ray if grabbed
-    void SetGrabbedWeatherRay(GameObject objGrp, GameObject ray)
-    {
-        bool isGrabbed = objGrp.GetComponent<OVRGrabbable>().isGrabbed;
-        SetRayMeshRenderer(ray, isGrabbed);
-        SetRayMeshCollider(ray, isGrabbed);
-    }
-
     void SetGrabbedWeatherRayAll()
     {
         for (int i = 0; i < N; i++)
         {
             bool isGrabbed = weatherObjGrp[i].GetComponent<OVRGrabbable>().isGrabbed;
-            SetRayMeshRenderer(weatherRay[i], isGrabbed);
-            SetRayMeshCollider(weatherRay[i], isGrabbed);
+            weatherRay[i].SetActive(isGrabbed);
             if (isGrabbed && !weatherSound[i].isPlaying) weatherSound[i].Play();
             else if (!isGrabbed && weatherSound[i].isPlaying) weatherSound[i].Stop();
         }
-    }
-
-    void SetRayMeshRenderer(GameObject ray, bool state)
-    {
-        if (ray.GetComponent<MeshRenderer>().enabled != state)
-            ray.GetComponent<MeshRenderer>().enabled = state;
-    }
-
-    void SetRayMeshCollider(GameObject ray, bool state)
-    {
-        if (ray.GetComponent<MeshCollider>().enabled != state)
-            ray.GetComponent<MeshCollider>().enabled = state;
     }
 
     GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
