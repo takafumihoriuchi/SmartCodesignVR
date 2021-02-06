@@ -11,6 +11,7 @@ public class FireCard : InputCard
     private SpriteRenderer spriteOuterCore;
     private SpriteRenderer spriteMantle;
     private SpriteRenderer spriteCrust;
+    private AudioSource fireSound;
 
     private float markerDistance;
     private bool markerIsGrabbed = false;
@@ -54,21 +55,29 @@ public class FireCard : InputCard
 
     public bool DetectDistanceVeryClose() {
         UpdateMarkerDistance();
+        UpdateGrabStatus();
+        PlaySoundIfGrabbed();
         if (markerDistance < BOUNDARY_XSS) return true;
         else return false;
     }
     public bool DetectDistanceClose() {
         UpdateMarkerDistance();
+        UpdateGrabStatus();
+        PlaySoundIfGrabbed();
         if (markerDistance >= BOUNDARY_XSS && markerDistance <= BOUNDARY_SM) return true;
         else return false;
     }
     public bool DetectDistanceMiddle() {
         UpdateMarkerDistance();
+        UpdateGrabStatus();
+        PlaySoundIfGrabbed();
         if (markerDistance >= BOUNDARY_SM && markerDistance <= BOUNDARY_ML) return true;
         else return false;
     }
     public bool DetectDistanceFarAway() {
         UpdateMarkerDistance();
+        UpdateGrabStatus();
+        PlaySoundIfGrabbed();
         if (markerDistance > BOUNDARY_ML) return true;
         else return false;
     }
@@ -76,11 +85,19 @@ public class FireCard : InputCard
     private void UpdateMarkerDistance() {
         markerDistance = Vector3.Distance(environmentObject.transform.position, markerObj.transform.position);
     }
+    private void UpdateGrabStatus() {
+        markerIsGrabbed = markerObj.transform.GetComponent<OVRGrabbable>().isGrabbed;
+    }
+    private void PlaySoundIfGrabbed() {
+        if (markerIsGrabbed && !fireSound.isPlaying) fireSound.Play();
+        else if (!markerIsGrabbed && fireSound.isPlaying) fireSound.Stop();
+    }
 
 
     protected override void InitPropFields()
     {
         markerObj = propObjects.transform.Find("marker").gameObject;
+        fireSound = markerObj.GetComponent<AudioSource>();
 
         spriteInnerCore = propObjects.transform.Find("floorCanvas/distanceInnerCore").gameObject.GetComponent<SpriteRenderer>();
         spriteOuterCore = propObjects.transform.Find("floorCanvas/distanceOuterCore").gameObject.GetComponent<SpriteRenderer>();
@@ -93,8 +110,8 @@ public class FireCard : InputCard
     public override void BehaviourDuringPrototyping()
     {
         UpdateMarkerDistance();
-
-        markerIsGrabbed = markerObj.transform.GetComponent<OVRGrabbable>().isGrabbed;
+        UpdateGrabStatus();
+        PlaySoundIfGrabbed();
 
         if (markerIsGrabbed || Input.GetKey(KeyCode.Z)) // 'Z' is for development purpose only
         {

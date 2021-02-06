@@ -31,6 +31,8 @@ public class WeatherCard : InputCard
     GameObject[] weatherRay = new GameObject[N];
     bool[] isXxxCurrentFrame = new bool[N];
     bool[] wasXxxPrevFrame = new bool[N];
+    AudioSource[] weatherSound = new AudioSource[N];
+
 
     public WeatherCard()
     {
@@ -107,6 +109,7 @@ public class WeatherCard : InputCard
             weatherObjGrp[i] = propObjects.transform.Find(objGrpPath[i]).gameObject;
             weatherRay[i] = propObjects.transform.Find(rayPath[i]).gameObject;
             weatherEventHandler[i] = weatherRay[i].RequestEventHandlers();
+            weatherSound[i] = weatherObjGrp[i].GetComponent<AudioSource>();
             // deactivate ray on start
             SetRayMeshRenderer(weatherRay[i], false);
             SetRayMeshCollider(weatherRay[i], false);
@@ -226,6 +229,8 @@ public class WeatherCard : InputCard
             bool isGrabbed = weatherObjGrp[i].GetComponent<OVRGrabbable>().isGrabbed;
             SetRayMeshRenderer(weatherRay[i], isGrabbed);
             SetRayMeshCollider(weatherRay[i], isGrabbed);
+            if (isGrabbed && !weatherSound[i].isPlaying) weatherSound[i].Play();
+            else if (!isGrabbed && weatherSound[i].isPlaying) weatherSound[i].Stop();
         }
     }
 
