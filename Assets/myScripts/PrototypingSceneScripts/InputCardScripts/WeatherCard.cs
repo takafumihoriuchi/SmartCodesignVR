@@ -43,7 +43,7 @@ public class WeatherCard : InputCard
         descriptionText = "<i>I can get information about the weather forecast.</i>\n"
             + "<b>Steps:</b>\n"
             + "<b>1.</b> <indent=10%>Grab the weather representative by holding the controller trigger.</indent>\n"
-            + "<b>2.</b> <indent=10%>Bring the weather close to the object so that the object enters the ray.</indent>\n"
+            + "<b>2.</b> <indent=10%>Project the ray to the object.</indent>\n"
             + "Maximum number of instances: 5";
 
         contentText = "When it is about to";

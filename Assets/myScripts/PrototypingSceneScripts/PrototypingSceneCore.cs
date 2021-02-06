@@ -74,6 +74,8 @@ public class PrototypingSceneCore : MonoBehaviour
     [SerializeField] private GameObject editorEventSystem = null; // for developmental use only
     [SerializeField] private GameObject HMDEventSystem = null; // for developmental use only
 
+    private AudioSource clickSound;
+
     // for developmental use only
     private void DevelopmentPurposeSettings()
     {
@@ -134,6 +136,7 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstanceList[0].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
         confirmationMessageField.SetText(beforeConfirmMessage);
+        clickSound = editorEventSystem.GetComponent<AudioSource>();
 
         // button settings
         addInstanceButton.onClick.AddListener(AddInstanceToList);
@@ -256,6 +259,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // Statement-Field-Box OnClick
     private void StatementFieldOnClick()
     {
+        clickSound.Play();
         // get "instance-index" from "statement-field-button-label"
         string statementIdText = EventSystem.current.currentSelectedGameObject.
             transform.Find("IndexText").gameObject.GetComponent<TMP_Text>().text;
@@ -271,6 +275,8 @@ public class PrototypingSceneCore : MonoBehaviour
     // Confirmation Button OnClick
     private void ConfirmSmartObject()
     {
+        clickSound.Play();
+
         isConfirmed = true;
 
         int instanceCount = inputInstanceList.Count;
@@ -300,6 +306,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // Finalization Button OnClick
     private void FinalizeSmartObject()
     {
+        clickSound.Play();
         // todo pack smart object information data and pass to next scene
         // => CardSelectionMediator class に新しいフィールドを用意する
         // Smart Object を記述するのに何が必要かを考える
@@ -313,6 +320,8 @@ public class PrototypingSceneCore : MonoBehaviour
     // Back-To-Edit Button OnClick
     private void GoBackToEditMode()
     {
+        clickSound.Play();
+
         isConfirmed = false;
 
         int instanceCount = inputInstanceList.Count;
