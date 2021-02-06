@@ -103,8 +103,8 @@ public class PrototypingSceneCore : MonoBehaviour
             //SmartObject.cardSelectionDict["environment"] = "Bridge";
 
             // input
-            //SmartObject.cardSelectionDict["input"] = "Fire";
-            SmartObject.cardSelectionDict["input"] = "Weather";
+            SmartObject.cardSelectionDict["input"] = "Fire";
+            //SmartObject.cardSelectionDict["input"] = "Weather";
 
             // output
             SmartObject.cardSelectionDict["output"] = "LightUp";
