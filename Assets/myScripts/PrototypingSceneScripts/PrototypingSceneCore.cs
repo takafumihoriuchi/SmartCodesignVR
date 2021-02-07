@@ -74,7 +74,7 @@ public class PrototypingSceneCore : MonoBehaviour
     [SerializeField] private GameObject editorEventSystem = null; // for developmental use only
     [SerializeField] private GameObject HMDEventSystem = null; // for developmental use only
 
-    private AudioSource clickSound;
+    private AudioSource[] clickSound;
 
     // for developmental use only
     private void DevelopmentPurposeSettings()
@@ -136,7 +136,8 @@ public class PrototypingSceneCore : MonoBehaviour
         outputInstanceList[0].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
         confirmationMessageField.SetText(beforeConfirmMessage);
-        clickSound = editorEventSystem.GetComponent<AudioSource>();
+        clickSound = editorEventSystem.GetComponents<AudioSource>();
+        // todo ボタンの効果音を鳴らす処理を整理された形で実装する。
 
         // button settings
         addInstanceButton.onClick.AddListener(AddInstanceToList);
@@ -203,9 +204,12 @@ public class PrototypingSceneCore : MonoBehaviour
         
     }
 
-
+    // addInstanceButton OnClick
     private void AddInstanceToList()
     {
+        //if (inputInstanceList.Count > 0) clickSound[0].Play();
+        // todo
+
         inputInstanceList.Add(GetInputInstanceByName(SmartObject.cardSelectionDict["input"]));
         outputInstanceList.Add(GetOutputInstanceByName(SmartObject.cardSelectionDict["output"]));
         ioArrowList.Add(CreateIOArrow());
@@ -232,9 +236,12 @@ public class PrototypingSceneCore : MonoBehaviour
     }
 
 
+    // removeInstanceButton OnClick
     // remove the focused IO-Instance
     private void RemoveInstanceFromList()
     {
+        //clickSound[1].Play(); // todo エラー
+
         for (int i = 0; i < inputInstanceList.Count; i++)
         {
             if (inputInstanceList[i].IsFocused)
@@ -259,7 +266,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // Statement-Field-Box OnClick
     private void StatementFieldOnClick()
     {
-        clickSound.Play();
+        //clickSound[0].Play(); // todo
         // get "instance-index" from "statement-field-button-label"
         string statementIdText = EventSystem.current.currentSelectedGameObject.
             transform.Find("IndexText").gameObject.GetComponent<TMP_Text>().text;
@@ -275,7 +282,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // Confirmation Button OnClick
     private void ConfirmSmartObject()
     {
-        clickSound.Play();
+        //clickSound[0].Play(); // todo
 
         isConfirmed = true;
 
@@ -306,7 +313,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // Finalization Button OnClick
     private void FinalizeSmartObject()
     {
-        clickSound.Play();
+        //clickSound[0].Play(); // todo
         // todo pack smart object information data and pass to next scene
         // => CardSelectionMediator class に新しいフィールドを用意する
         // Smart Object を記述するのに何が必要かを考える
@@ -320,7 +327,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // Back-To-Edit Button OnClick
     private void GoBackToEditMode()
     {
-        clickSound.Play();
+        //clickSound[1].Play(); // todo
 
         isConfirmed = false;
 
