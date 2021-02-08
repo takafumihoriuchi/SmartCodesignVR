@@ -30,7 +30,6 @@ public class WeatherCard : InputCard
     GameObject[] weatherObjGrp = new GameObject[N];
     GameObject[] weatherRay = new GameObject[N];
     bool[] isXxxCurrentFrame = new bool[N];
-    bool[] wasXxxPrevFrame = new bool[N];
     AudioSource[] weatherSound = new AudioSource[N];
 
 
@@ -62,36 +61,36 @@ public class WeatherCard : InputCard
     public bool SunnyForecast()
     {
         SetGrabbedWeatherRayAll();
-        bool tmp = wasXxxPrevFrame[SUNNY_IDX];
-        UpdateWeatherWithFalse(SUNNY_IDX);
+        bool tmp = isXxxCurrentFrame[SUNNY_IDX];
+        isXxxCurrentFrame[SUNNY_IDX] = false;
         return tmp;
     }
     public bool CloudyForecast()
     {
         SetGrabbedWeatherRayAll();
-        bool tmp = wasXxxPrevFrame[CLOUDY_IDX];
-        UpdateWeatherWithFalse(CLOUDY_IDX);
+        bool tmp = isXxxCurrentFrame[CLOUDY_IDX];
+        isXxxCurrentFrame[CLOUDY_IDX] = false;
         return tmp;
     }
     public bool RainyForecast()
     {
         SetGrabbedWeatherRayAll();
-        bool tmp = wasXxxPrevFrame[RAINY_IDX];
-        UpdateWeatherWithFalse(RAINY_IDX);
+        bool tmp = isXxxCurrentFrame[RAINY_IDX];
+        isXxxCurrentFrame[RAINY_IDX] = false;
         return tmp;
     }
     public bool StormyForecast()
     {
         SetGrabbedWeatherRayAll();
-        bool tmp = wasXxxPrevFrame[STORMY_IDX];
-        UpdateWeatherWithFalse(STORMY_IDX);
+        bool tmp = isXxxCurrentFrame[STORMY_IDX];
+        isXxxCurrentFrame[STORMY_IDX] = false;
         return tmp;
     }
     public bool SnowyForecast()
     {
         SetGrabbedWeatherRayAll();
-        bool tmp = wasXxxPrevFrame[SNOWY_IDX];
-        UpdateWeatherWithFalse(SNOWY_IDX);
+        bool tmp = isXxxCurrentFrame[SNOWY_IDX];
+        isXxxCurrentFrame[SNOWY_IDX] = false;
         return tmp;
     }
 
@@ -196,35 +195,23 @@ public class WeatherCard : InputCard
 
     void sunnyTriggerStay(Collider other) {
         if (IsEnvObj(other.transform.gameObject))
-            UpdateWeatherWithTrue(SUNNY_IDX);
+            isXxxCurrentFrame[SUNNY_IDX] = true;
     }
     void cloudyTriggerStay(Collider other) {
         if (IsEnvObj(other.transform.gameObject))
-            UpdateWeatherWithTrue(CLOUDY_IDX);
+            isXxxCurrentFrame[CLOUDY_IDX] = true;
     }
     void rainyTriggerStay(Collider other) {
         if (IsEnvObj(other.transform.gameObject))
-            UpdateWeatherWithTrue(RAINY_IDX);
+            isXxxCurrentFrame[RAINY_IDX] = true;
     }
     void stormyTriggerStay(Collider other) {
         if (IsEnvObj(other.transform.gameObject))
-            UpdateWeatherWithTrue(STORMY_IDX);
+            isXxxCurrentFrame[STORMY_IDX] = true;
     }
     void snowyTriggerStay(Collider other) {
         if (IsEnvObj(other.transform.gameObject))
-            UpdateWeatherWithTrue(SNOWY_IDX);
-    }
-
-    void UpdateWeatherWithTrue(int weatherIdx)
-    {
-        wasXxxPrevFrame[weatherIdx] = isXxxCurrentFrame[weatherIdx];
-        isXxxCurrentFrame[weatherIdx] = true;
-    }
-
-    void UpdateWeatherWithFalse(int weatherIdx)
-    {
-        wasXxxPrevFrame[weatherIdx] = isXxxCurrentFrame[weatherIdx];
-        isXxxCurrentFrame[weatherIdx] = false;
+            isXxxCurrentFrame[SNOWY_IDX] = true;
     }
 
     void SetGrabbedWeatherRayAll()
