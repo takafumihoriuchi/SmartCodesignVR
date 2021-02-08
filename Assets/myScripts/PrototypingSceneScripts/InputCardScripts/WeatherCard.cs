@@ -55,6 +55,8 @@ public class WeatherCard : InputCard
             {STORMY_STR, StormyForecast},
             {SNOWY_STR, SnowyForecast}
         };
+
+        InitBoolArray(isXxxCurrentFrame, true);
     }
 
     // constantly updates current weather with one-frame delay
@@ -239,8 +241,15 @@ public class WeatherCard : InputCard
         return (Array.IndexOf(envPartsGameObject, obj) != -1);
     }
 
-}
+    void InitBoolArray(bool[] arr, bool state)
+    {
+        for (int i = 0; i < arr.Length; i++)
+        {
+            arr[i] = state;
+        }
+    }
 
+}
 
 /* 
  * 3D models
