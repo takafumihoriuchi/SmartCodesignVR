@@ -45,6 +45,8 @@ Smart Codesign VR is a smart-object prototyping platform in virtual space. This 
 The target headset device is Oculus Quest 2. A differential feature of the Quest is its 6DOF tracking, which offers intuitive movements along with its two controllers (e.g. rotate, walk, grab, etc.). Although the Quest is yet to be widespread and accessible as the smartphone-based VR devices (i.e. 3DOF tracking devices), we believe that the 6DOF tracking feature is a crucial factor when designing a system for virtually prototyping smart-objects, which requires consistent interaction and manipulation of virtual objects.
 ### Software - Tools and Architecture
 #### Tools
+Smart Codesign VR was implemented on Unity as the game framework and C# as the programming language. For the interface between Unity and Oculus Quest, a package Oculus Integration was used, which offers a preset control of VR camera behavior, renderings, and an unified input API for controllers.
+
 #### Architecture
 The project consists of thirteen classes (among which three are abstract classes), as shown in the UML class diagram in Figure 9. Note that the attributes and the methods of the classes are simplified for improving the comprehensiveness of the diagram.
 
