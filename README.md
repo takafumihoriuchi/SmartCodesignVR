@@ -1,8 +1,10 @@
 # Smart Codesign VR
 **A Smart Object Prototyping Platform in Virtual Reality for Children with NDD**
 
+
 ## Abstract
 Virtual reality is an emerging technology that has the potential of enhancing the learning experience of children. In this project, we designed and implemented Smart Codesign VR, a virtual reality platform for prototyping and interacting with smart-objects. The application is intended to be used in sequel to *The Smart Nature Protagonists (SNaP)* board-game, where children become the protagonists of the design process and collaborate with other players to ideate a concrete concept of a smart-object. Our application functions to virtually visualize the embodiment of the ideated smart-object. While designing the platform to satisfy the needs of a wide range of children, we paid special attention to children with neurodevelopmental disorders (NDD), in response to the fact that the SNaP board-game can also be used for children with special needs as therapeutic purposes. The implemented platform brings the benefits of allowing the players to experience the prototyping process using movements of their whole body and to visually percept their ideated smart-objects.
+
 
 ## Introduction
 Smart Codesign VR is about the implementation of Virtual Reality (VR) technology in the experience of the *The Smart Nature Protagonist (SNaP)* board game. VR aims to enhance the overall experience while giving children a new level of immersion and understanding, with the ultimate goal of supporting the treatment of NDD children with the help of VR.
@@ -13,7 +15,9 @@ The research team has already developed a way to physically prototype the smart 
 
 The report is structured as follows: First, we will define the target users of the system and highlight their needs and constraints. Following that, we will investigate the state of the art around the topic of virtual reality for educational and therapeutic use, as well as the programming paradigm of visual programming enhanced by the application of virtual reality. We will then introduce our solution in designing an effective system of a smart object prototyping platform in virtual reality targeting children, especially those with neurodevelopmental disorders. We will discuss the value brought by our system, and mention the possible future work that can be done in order to put additional academic value to this project.
 
+
 ...
+
 
 ## UX Design
 The concrete user experience that was implemented in the application will be described in this section. When the user launches the application on the Quest 2, they are first shown the Title “stand-by” screen (Figure 4). The purpose of this screen is to make sure that the next scene, the card selection scene, does not start until the user is fully ready with the VR equipment. Next, the user is directed to the card selection scene, where they select their choice of environment, input, and output cards (Figure 5). This is operated through grabbing the card representational objects, and dragging it into the corresponding box. The UX here is intentionally designed to be a “grab and drag” rather than a simple “selection by click”, in order to benefit from the 3D space provided in VR. When it is detected that all the three selection boxes contain an element, the scene transits to the “Prototyping Scene” with a voice guiding the users into the world of Smart Codesign VR. In the prototyping scene, the user is to define the condition and behavior of each input and output card (Figure 6). The UX here is designed for each card specifically, in order to gain the full benefit of 6DOF tracking VR technology. One of the key function here is that multiple input and output card statement sets can be defined in parallel, enabling, for example, a combination such as “When it is sunny, light up the LED in red;  when it is rainy, light up the LED in blue, and when it is snowing, light up the LED in white.”. This was an improvement that was made during the UX development phase, where the initial development plan was to allow only one set of input and output relations (e.g. “When it is sunny, light up the LED in red”). When the user defines the input and output statements, confirms the smart object, tests the behaviors, and finalizes the object, the user is directed to the “virtual park”, where they can interact with the smart object that they had prototyped (Figure 7).
@@ -39,18 +43,20 @@ In the similar manner, the diagram on the bottom-right, labeled “Define output
   <figcaption align="center"><b>Figure 8.</b> UML Activity Diagram of the User’s Action</figcaption>
 </figure>
 
+
 ## Implementation
 Smart Codesign VR is a smart-object prototyping platform in virtual space. This requires the use of a VR headset as the hardware and a game framework for the creation of the software. To implement this system, we used Oculus Quest 2 as the operating hardware and Unity as the game framework.
+
 ### Hardware - Target Device
 The target headset device is Oculus Quest 2. A differential feature of the Quest is its 6DOF tracking, which offers intuitive movements along with its two controllers (e.g. rotate, walk, grab, etc.). Although the Quest is yet to be widespread and accessible as the smartphone-based VR devices (i.e. 3DOF tracking devices), we believe that the 6DOF tracking feature is a crucial factor when designing a system for virtually prototyping smart-objects, which requires consistent interaction and manipulation of virtual objects.
+
 ### Software - Tools and Architecture
+
 #### Tools
 Smart Codesign VR was implemented on Unity as the game framework and C# as the programming language. For the interface between Unity and Oculus Quest, a package Oculus Integration was used, which offers a preset control of VR camera behavior, renderings, and an unified input API for controllers.
 
 #### Architecture
-The project consists of thirteen classes (among which three are abstract classes), as shown in the UML class diagram in Figure 9. Note that the attributes and the methods of the classes are simplified for improving the comprehensiveness of the diagram.
-
-The project consists of four packages (referred to as “scenes” in Unity): Title Scene, Card Selection Scene, Prototyping Scene, and Interaction Scene. 
+The project consists of thirteen classes (among which three are abstract classes), as shown in the UML class diagram in Figure 9. Note that the attributes and the methods of the classes are simplified for improving the comprehensiveness of the diagram. The project consists of four packages (referred to as “scenes” in Unity): Title Scene, Card Selection Scene, Prototyping Scene, and Interaction Scene. 
 
 The Title Scene, with a class “TitleSceneCore”, shows a standby screen, where the user transits to the Card Selection Scene upon the press of a controller button.
 
