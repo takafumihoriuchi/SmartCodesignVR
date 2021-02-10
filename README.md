@@ -26,7 +26,6 @@ The concrete user experience that was implemented in the application will be des
 <figure>
   <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figures4to6.png">
 </figure>
-
 <figure>
   <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figure7.png">
 </figure>
