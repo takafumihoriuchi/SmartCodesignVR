@@ -3,10 +3,6 @@
 
 => Demo video on YouTube [here](https://www.youtube.com/watch?v=iU2oaV-T-zE) (as of February 9, 2021)
 
-<figure>
-  <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figures4to6.png">
-</figure>
-
 ## Abstract
 Virtual reality is an emerging technology that has the potential of enhancing the learning experience of children. In this project, we designed and implemented Smart Codesign VR, a virtual reality platform for prototyping and interacting with smart-objects. The application is intended to be used in sequel to *The Smart Nature Protagonists (SNaP)* board-game, where children become the protagonists of the design process and collaborate with other players to ideate a concrete concept of a smart-object. Our application functions to virtually visualize the embodiment of the ideated smart-object. While designing the platform to satisfy the needs of a wide range of children, we paid special attention to children with neurodevelopmental disorders (NDD), in response to the fact that the SNaP board-game can also be used for children with special needs as therapeutic purposes. The implemented platform brings the benefits of allowing the players to experience the prototyping process using movements of their whole body and to visually percept their ideated smart-objects.
 
