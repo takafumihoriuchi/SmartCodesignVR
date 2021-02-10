@@ -21,13 +21,13 @@ The concrete user experience that was implemented in the application will be des
 <!-- ![Figures 4 to 6](https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figures4to6.png) -->
 
 <figure>
-  <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figures4to6.png">
+  <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figures4to6.png" width="500">
 </figure>
 
 <!-- ![Figure 7](https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figure7.png) -->
 
 <figure>
-  <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figure7.png">
+  <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figure7.png" width="400">
 </figure>
 
 The flow of activity that the user follows in the system is shown in the UML Activity Diagram in Figure 8. Here, the “Overall Activity” diagram on the top (in lateral page orientation) shows the overview of the actions that the user follows, and the diagrams on the bottom shows the user’s actions for specific card selection.
@@ -43,7 +43,7 @@ In the similar manner, the diagram on the bottom-right, labeled “Define output
 
 <figure>
   <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figure8.png" style="width:100%">
-  <figcaption><b>Figure 8.</b> UML Activity Diagram of the User’s Action</figcaption>
+  <figcaption align="center"><b>Figure 8.</b> UML Activity Diagram of the User’s Action</figcaption>
 </figure>
 
 ## Implementation
@@ -72,7 +72,7 @@ The Interaction Scene consists of the class “InteractionSceneCore”, where it
 
 <figure>
   <img src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/figure9.png" style="width:100%">
-  <figcaption><b>Figure 9.</b> UML Class Diagram of the System of Smart Codesign VR</figcaption>
+  <figcaption align="center"><b>Figure 9.</b> UML Class Diagram of the System of Smart Codesign VR</figcaption>
 </figure>
 
 ## Value Proposition
