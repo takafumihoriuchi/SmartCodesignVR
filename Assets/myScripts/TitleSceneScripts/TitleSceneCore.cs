@@ -27,8 +27,9 @@ public class TitleSceneCore : MonoBehaviour
         if (OVRInput.GetDown(OVRInput.RawButton.A)
             || Input.GetKeyDown(KeyCode.A)) {
 			clickSound.Play();
-			screenFade.fadeColor = Color.white;
-			screenFade.FadeOut();
+            //screenFade.fadeColor = Color.white;
+            screenFade.fadeColor = Color.black;
+            screenFade.FadeOut();
 			SceneManager.LoadScene(1, LoadSceneMode.Single);
 		}
     }

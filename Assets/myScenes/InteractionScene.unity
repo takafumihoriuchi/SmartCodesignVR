@@ -1304,7 +1304,7 @@ Transform:
   - {fileID: 399131508}
   - {fileID: 1696365844}
   m_Father: {fileID: 1998245585}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &391015628
 GameObject:
@@ -2606,7 +2606,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &832096166
 Transform:
   m_ObjectHideFlags: 0
@@ -2883,6 +2883,96 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1088735606}
   m_Mesh: {fileID: -6168006245735646749, guid: 0463b43294b9241b4ac73a72b2b1e8c2, type: 3}
+--- !u!1001 &1155355413
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1998245585}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_Name
+      value: OliviaPark (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 0463b43294b9241b4ac73a72b2b1e8c2, type: 3}
+--- !u!4 &1155355414 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+    type: 3}
+  m_PrefabInstance: {fileID: 1155355413}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1172046140
 GameObject:
   m_ObjectHideFlags: 0
@@ -3276,7 +3366,7 @@ Transform:
   - {fileID: 416893558}
   - {fileID: 2037938273}
   m_Father: {fileID: 1998245585}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1361301671
 GameObject:
@@ -3569,7 +3659,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 61fb4f83720e44a3387e690c4fc0e565, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4285,7 +4375,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
         type: 3}
@@ -4621,6 +4711,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: OliviaPark
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1001846259736871269, guid: 0463b43294b9241b4ac73a72b2b1e8c2,
         type: 3}
@@ -5082,7 +5177,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1998245585}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1973840965
 GameObject:
@@ -5173,6 +5268,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 570506184}
+  - {fileID: 1155355414}
   - {fileID: 1887990377}
   - {fileID: 1310017198}
   - {fileID: 386314804}
@@ -9021,7 +9117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeTime: 2
-  fadeColor: {r: 1, g: 1, b: 1, a: 1}
+  fadeColor: {r: 0, g: 0, b: 0, a: 1}
   fadeOnStart: 1
   renderQueue: 5000
 --- !u!114 &5689733995984974076
