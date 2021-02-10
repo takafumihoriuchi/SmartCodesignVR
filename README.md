@@ -4,8 +4,8 @@
 => Demo video on YouTube [here](https://www.youtube.com/watch?v=iU2oaV-T-zE) (as of February 9, 2021)
 
 <figure class="half" style="display:flex">
-    <img style="width:100px" src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/demoscreeshot1.png">
-    <img style="width:100px" src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/demoscreeshot2.png">
+    <img style="width:50px" src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/demoscreeshot1.png">
+    <img style="width:50px" src="https://github.com/takafumihoriuchi/SmartCodesignVR/raw/develop/README_images/demoscreeshot2.png">
     <figcaption>(screenshot of play scene)</figcaption>
 </figure>
 
