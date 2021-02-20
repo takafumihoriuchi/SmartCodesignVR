@@ -15,12 +15,13 @@ public class TitleSceneManager : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(AsyncLoadMainScene());
+        asyncLoad = SceneManager.LoadSceneAsync(1, LoadSceneMode.Single);
+        asyncLoad.allowSceneActivation = false;
 
         transitionSound = GetComponent<AudioSource>();
         buttonHighlightColor = buttonHighlightRenderer.color;
         buttonHighlightColor.a = 0f;
-        StartCoroutine(BlinkContollerImage());
+        StartCoroutine(BlinkSpriteHighlight());
     }
     
     void Update()
@@ -43,14 +44,7 @@ public class TitleSceneManager : MonoBehaviour
         asyncLoad.allowSceneActivation = true;
     }
 
-    IEnumerator AsyncLoadMainScene()
-    {
-        asyncLoad = SceneManager.LoadSceneAsync(1);
-        asyncLoad.allowSceneActivation = false;
-        while (!asyncLoad.isDone) yield return null;
-    }
-
-    IEnumerator BlinkContollerImage()
+    IEnumerator BlinkSpriteHighlight()
     {
         while (true)
         {
