@@ -8,7 +8,7 @@ public class CardSelectionSceneCore : MonoBehaviour
     // default value of type:bool is 'false'
     private bool playedDiveVoice;
 
-    // initializing with 'null' to avoid comile warnings
+    // initializing with 'null' to avoid compile warnings
     [SerializeField] private GameObject OVRCamera = null;
     [SerializeField] private AudioSource introVoice = null;
     [SerializeField] private AudioSource diveVoice = null;
