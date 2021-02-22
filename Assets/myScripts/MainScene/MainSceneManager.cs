@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
@@ -112,9 +113,6 @@ public class MainSceneManager : MonoBehaviour
             = new CardSelectionDetector(inBoxObj, inObjArr);
         OutSelectionDetector
             = new CardSelectionDetector(outBoxObj, outObjArr);
-
-
-
     }
 
 
@@ -144,17 +142,17 @@ public class MainSceneManager : MonoBehaviour
         if (InSelectionDetector.TriggerFlag)
         {
             inputSelection = InSelectionDetector.SelectedCardObj;
-            if (inputSelection == null)
-            {
-                Destroy(inputProp);
-            }
-            else
+            if (inputSelection != null)
             {
                 inputProp = InstantiateInputPropByName(inputSelection.name);
                 inputProp.SetActive(true);
                 AddInputCardInstanceToList();
             }
-            // do card statement setup here
+            else
+            {
+                Destroy(inputProp);
+                // todo ここにinputCardInstanceList を消滅させる処理を挿入
+            }
         }
 
         //if (OutSelectionDetector.TriggerFlag)
@@ -182,64 +180,44 @@ public class MainSceneManager : MonoBehaviour
     {
         inputCardInstanceList.Add(GetInputCardInstanceByName(inputSelection.name));
         int idx = inputCardInstanceList.Count - 1; // get tail of updated list; call after adding new instance
-        int minInstanceID = AvailableMinInstanceID();
+        int minInstanceID = AvailableMinInstanceID(inputCardInstanceList);
         inputCardInstanceList[idx].CardStatementSetup(
             minInstanceID, ref smartObj, ref inputProp, ref inputStatementFieldGroup);
         ShiftFocusToTargetInstance(inputCardInstanceList, idx);
         ShiftStatementFieldPositions(inputCardInstanceList);
         inputCardInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(
-            () => { StatementFieldOnClick(inputCardInstanceList); });
-
-        ioArrowList.Add(CreateIOArrow());
-        ShiftFocusToTargetIOArrow(idx);
+            GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
 
         // check for allawability of adding and removing instances
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = !(inputCardInstanceList.Count <= 1);
+
+        ioArrowList.Add(CreateIOArrow());
+        ShiftFocusToTargetIOArrow(idx);
     }
 
-    //private void ShiftFocusToTargetInstance<Type>(List<Type> cardInstanceList, int idx)
-    //    where Type : Card
 
-    private void StatementFieldOnClick<Type>(List<Type> cardInstanceList)
-        where Type : Card
+    //private void AddCardInstanceToList()
+    //{
+    //    if (inputSelection != null)
+    //    {
+    //        inputCardInstanceList.Add(GetInputCardInstanceByName(inputSelection.name));
+    //    }
+    //    // 両方に追加する場合
+
+    //    // inputの方だけに追加する場合
+    //}
+
+
+    private void StatementFieldOnClick()
     {
         int instanceIdx = GetCurrentSelectedCardInstanceIndex();
-        ShiftFocusToTargetInstance(cardInstanceList, instanceIdx);
-        System.Type cardInstanceType = cardInstanceList.GetType();
-        if (cardInstanceType == typeof(InputCard))
-        {
-            // TODO ここから；下の二つの関数を一つの関数に統合する
-        }
-        else
-        {
-
-        }
-
-        if (ioArrowList.Count > 0) ShiftFocusToTargetIOArrow(instanceIdx);
-    }
-
-    private void InputStatementFieldOnClick()
-    {
-        int instanceIdx = GetCurrentSelectedCardInstanceIndex();
-        ShiftFocusToTargetInstance(inputCardInstanceList, instanceIdx);
-        ShiftFocusToTargetIOArrow(instanceIdx);
-
-        // manage output statement instance
-        int outputCnt = outputCardInstanceList.Count;
-        if (outputCnt > 0) // この場合は、IOで数が揃っていることが前提
-            ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
-    }
-
-    private void OutputStatementFieldOnClick()
-    {
-        int instanceIdx = GetCurrentSelectedCardInstanceIndex();
-        ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
-
-        int inputCnt = inputCardInstanceList.Count;
-        if (inputCnt > 0)
+        if (inputCardInstanceList.Count > 0)
             ShiftFocusToTargetInstance(inputCardInstanceList, instanceIdx);
+        if (outputCardInstanceList.Count > 0)
+            ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
+        if (ioArrowList.Count > 0)
+            ShiftFocusToTargetIOArrow(instanceIdx);
     }
 
 
@@ -408,14 +386,16 @@ public class MainSceneManager : MonoBehaviour
         return newArrow;
     }
 
-    private int AvailableMinInstanceID()
+    private int AvailableMinInstanceID<Type>(List<Type> cardInstanceList)
+        where Type : Card
     {
+        int cnt = cardInstanceList.Count;
         int idCandidate = 0;
-        for (int i = 0; i < inputCardInstanceList.Count; i++)
+        for (int i = 0; i < cnt; i++)
         {
-            if (inputCardInstanceList[i].InstanceID == -1)
+            if (cardInstanceList[i].InstanceID == -1)
                 continue; // skip itself (set to initial value)
-            if (idCandidate == inputCardInstanceList[i].InstanceID)
+            if (cardInstanceList[i].InstanceID == idCandidate)
                 idCandidate++;
         }
         return idCandidate;

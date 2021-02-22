@@ -66,7 +66,8 @@ public abstract class Card
     // only necessary for the first card instance
     public void CardDescriptionSetup(
         ref TextMeshProUGUI cardNameField,
-        ref TextMeshProUGUI descriptionField) {
+        ref TextMeshProUGUI descriptionField)
+    {
         this.cardNameField = cardNameField;
         this.descriptionField = descriptionField;
         cardNameField.SetText(cardName);

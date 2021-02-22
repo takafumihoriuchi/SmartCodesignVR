@@ -135,7 +135,6 @@ public class PrototypingSceneCore : MonoBehaviour
             ref inputCardNameField, ref inputDescriptionField);
         outputInstanceList[0].CardDescriptionSetup(
             ref outputCardNameField, ref outputDescriptionField);
-        confirmationMessageField.SetText(beforeConfirmMessage);
         clickSound = editorEventSystem.GetComponents<AudioSource>();
         // todo ボタンの効果音を鳴らす処理を整理された形で実装する。
 
@@ -172,7 +171,12 @@ public class PrototypingSceneCore : MonoBehaviour
 
             // check if all instances has been set a value
             bool isConfirmable = CheckConfirmability();
-            if (isConfirmable) confirmationButton.interactable = true;
+            if (isConfirmable)
+            {
+                confirmationButton.interactable = true;
+                confirmationMessageField.SetText(beforeConfirmMessage);
+                // ここでメッセージを出すように変更；インタラクティブに随時更新するようにする
+            }
             else confirmationButton.interactable = false;
         }
         else // during testing
