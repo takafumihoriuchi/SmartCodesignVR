@@ -79,7 +79,8 @@ public abstract class Card
         int instanceID) {
         this.instanceID = instanceID; // assign before setting indexText
         this.environmentObject = environmentObject;
-        this.environmentObject.SetActive(true);
+        // todo envObjはここじゃなくて、カードが選択されたときにinstantiateして、あとはレファレンスで共有する
+        //this.environmentObject.SetActive(true);
         this.propObjects = propObjects;
         InitPropFields();
         this.propObjects.SetActive(true);

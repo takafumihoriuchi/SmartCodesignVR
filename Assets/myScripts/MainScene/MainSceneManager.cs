@@ -68,7 +68,7 @@ public class MainSceneManager : MonoBehaviour
     readonly string afterConfirmMessage = "Do you want to keep editing or finalize?";
     // todo change behavior after preview mode ("confirm")
 
-    private GameObject environmentObject;
+    private SmartObject smartObj;
     private GameObject inputProps;
     private GameObject outputProps;
 
@@ -102,13 +102,11 @@ public class MainSceneManager : MonoBehaviour
         SetActiveStateByTag("DeactivateOnLoad", false);
         SetActiveStateByTag("ActivateOnLoad", true);
 
-        // todo continue refactoring from here
-        // change to "dynamically reading what was selected"
-        /*
-        environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
-        inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
-        outputProps = GetOutPropsByName(SmartObject.cardSelectionDict["output"]);
-        */
+
+        
+        //environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
+        //inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
+        //outputProps = GetOutPropsByName(SmartObject.cardSelectionDict["output"]);
 
 
         EnvSelectionDetector
@@ -122,25 +120,99 @@ public class MainSceneManager : MonoBehaviour
 
     void Update()
     {
-        if (EnvSelectionDetector.TriggerFlag)
-        {
-            // triggered once when box content is changed
-            // use "EnvSelectionDetector.SelectedCardObj" to get selected card obj
-        }
-        if (InSelectionDetector.TriggerFlag)
-        {
-
-        }
-        if (OutSelectionDetector.TriggerFlag)
-        {
-
-        }
-
         EnvSelectionDetector.CenterGravityMotion();
         InSelectionDetector.CenterGravityMotion();
         OutSelectionDetector.CenterGravityMotion();
+
+        // triggered once when box content is changed
+        if (EnvSelectionDetector.TriggerFlag)
+        {
+            GameObject envSelected = EnvSelectionDetector.SelectedCardObj;
+
+            if (envSelected == null)
+            {
+                smartObj = null;
+                // nullになったら、今まで出現していたインスタンスを殺す
+            }
+
+            else
+            {
+                GameObject envObj = InstantiateEnvObjByName(envSelected.name);
+                smartObj = envObj.AddComponent<SmartObject>();
+            }
+        }
+
+
+
+        //if (InSelectionDetector.TriggerFlag)
+        //{
+        //    GameObject inSelected = InSelectionDetector.SelectedCardObj;
+        //    if (inSelected == null)
+        //    {
+        //        inputProps = null;
+        //    }
+        //    else
+        //    {
+        //        inputProps = GetInPropsByName(inSelected.name);
+        //    }
+        //}
+
+        //if (OutSelectionDetector.TriggerFlag)
+        //{
+        //    GameObject outSelected = OutSelectionDetector.SelectedCardObj;
+        //    if (outSelected == null)
+        //    {
+        //        outputProps = null;
+        //    }
+        //    else
+        //    {
+        //        outputProps = GetOutPropsByName(outSelected.name);
+        //    }
+        //}
+
     }
 
+
+    private GameObject InstantiateEnvObjByName(string cardName)
+    {
+        switch (cardName)
+        {
+            case "TrashBin": return Instantiate(envObjTrashBin);
+            case "Tree": return Instantiate(envObjTree);
+            case "StreetLight": return Instantiate(envObjStreetLight);
+            case "StreetSign": return Instantiate(envObjStreetSign);
+            case "Bridge": return Instantiate(envObjBridge);
+            default: return null;
+        }
+    }
+
+
+    //private GameObject GetInPropsByName(string cardName)
+    //{
+    //    switch (cardName)
+    //    {
+    //        case "Button": return inPropsButton;
+    //        case "Sound": return inPropsSound;
+    //        case "Fire": return inPropsFire;
+    //        case "Speed": return inPropsSpeed;
+    //        case "Weather": return inPropsWeather;
+    //        default: return null;
+    //    }
+    //}
+
+
+    //private GameObject GetOutPropsByName(string cardName)
+    //{
+    //    switch (cardName)
+    //    {
+    //        case "LightUp": return outPropsLightUp;
+    //        case "MakeSound": return outPropsMakeSound;
+    //        case "Vibrate": return outPropsVibrate;
+    //        case "Move": return outPropsMove;
+    //        case "Send": return outPropsSend;
+    //        default: return null;
+    //    }
+    //}
 
 
     private void SetActiveStateByTag(string tag, bool state)

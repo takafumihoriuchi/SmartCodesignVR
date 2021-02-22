@@ -55,6 +55,7 @@ public class LightUpCard : OutputCard
         envPartsComponent = environmentObject.GetComponentsInChildren<MeshRenderer>(true);
         envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
         originalEnvObjMaterial = GetMaterialArray(envPartsGameObject);
+        // todo defaultMaterialをSmartObjectコンポーネントからとってくる
         edittedEnvObjMaterial = GetMaterialArray(envPartsGameObject);
 
         eventBridgeHandler = paintBrush.RequestEventHandlers(); // unique for each instance
@@ -167,34 +168,37 @@ public class LightUpCard : OutputCard
     }
 
 
-    // objArr.Length and matArr.Length should be the same
-    void ApplyMaterial(ref GameObject[] objArr, Material[] matArr)
-    {
-        int nParts = objArr.Length;
-        for (int i = 0; i < nParts; i++)
-        {
-            objArr[i].GetComponent<Renderer>().material = matArr[i];
-        }
-    }
+    // todo envObjではなく、smartObjのrefを受け取るようにして、そのメンバメソッドにアクセスする
+    // Cardクラスで対応する
+
+    //// objArr.Length and matArr.Length should be the same
+    //void ApplyMaterial(ref GameObject[] objArr, Material[] matArr)
+    //{
+    //    int nParts = objArr.Length;
+    //    for (int i = 0; i < nParts; i++)
+    //    {
+    //        objArr[i].GetComponent<Renderer>().material = matArr[i];
+    //    }
+    //}
 
 
-    GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
-    {
-        GameObject[] objArr = new GameObject[compArr.Length];
-        int len = compArr.Length;
-        for (int i = 0; i < len; i++)
-            objArr[i] = compArr[i].gameObject;
-        return objArr;
-    }
+    //GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
+    //{
+    //    GameObject[] objArr = new GameObject[compArr.Length];
+    //    int len = compArr.Length;
+    //    for (int i = 0; i < len; i++)
+    //        objArr[i] = compArr[i].gameObject;
+    //    return objArr;
+    //}
 
 
-    Material[] GetMaterialArray(GameObject[] objArr)
-    {
-        Material[] matArr = new Material[objArr.Length];
-        int len = objArr.Length;
-        for (int i = 0; i < len; i++)
-            matArr[i] = objArr[i].GetComponent<Renderer>().material;
-        return matArr;
-    }
+    //Material[] GetMaterialArray(GameObject[] objArr)
+    //{
+    //    Material[] matArr = new Material[objArr.Length];
+    //    int len = objArr.Length;
+    //    for (int i = 0; i < len; i++)
+    //        matArr[i] = objArr[i].GetComponent<Renderer>().material;
+    //    return matArr;
+    //}
 
 }
