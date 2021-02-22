@@ -240,7 +240,7 @@ public class PrototypingSceneCore : MonoBehaviour
     // remove the focused IO-Instance
     private void RemoveInstanceFromList()
     {
-        //clickSound[1].Play(); // todo エラー
+        //clickSound[1].Play(); // エラー
 
         for (int i = 0; i < inputInstanceList.Count; i++)
         {

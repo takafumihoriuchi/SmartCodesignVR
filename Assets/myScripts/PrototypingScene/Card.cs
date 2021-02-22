@@ -6,8 +6,9 @@ using TMPro;
 
 public abstract class Card
 {
-    protected GameObject environmentObject;
-    protected GameObject propObjects;
+    protected SmartObject smartObj;
+
+    protected GameObject propObj;
     protected GameObject statementFieldGroup;
     public GameObject StatementFieldGroup {
         set { } get { return statementFieldGroup; }}
@@ -73,17 +74,16 @@ public abstract class Card
     }
 
     public void CardStatementSetup(
-        ref GameObject environmentObject,
-        ref GameObject propObjects,
-        ref GameObject statementFieldGroup,
-        int instanceID) {
+        int instanceID,
+        ref SmartObject smartObj,
+        ref GameObject propObj,
+        ref GameObject statementFieldGroup)
+    {
         this.instanceID = instanceID; // assign before setting indexText
-        this.environmentObject = environmentObject;
-        // todo envObjはここじゃなくて、カードが選択されたときにinstantiateして、あとはレファレンスで共有する
-        //this.environmentObject.SetActive(true);
-        this.propObjects = propObjects;
+        this.smartObj = smartObj; // todo change each related codes
+        this.propObj = propObj;
         InitPropFields();
-        this.propObjects.SetActive(true);
+        this.propObj.SetActive(true);
         this.statementFieldGroup = Object.Instantiate(
             statementFieldGroup, statementFieldGroup.transform.parent);
         indexTextTMP = this.statementFieldGroup.transform.

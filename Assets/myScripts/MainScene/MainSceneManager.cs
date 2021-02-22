@@ -35,17 +35,17 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] private GameObject envObjStreetSign = null;                // put tag "DeactivateOnLoad"
     [SerializeField] private GameObject envObjBridge = null;                    // put tag "DeactivateOnLoad"
 
-    [SerializeField] private GameObject inPropsButton = null;                   // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject inPropsSound = null;                    // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject inPropsFire = null;                     // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject inPropsSpeed = null;                    // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject inPropsWeather = null;                  // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropButton = null;                   // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropSound = null;                    // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropFire = null;                     // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropSpeed = null;                    // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropWeather = null;                  // put tag "DeactivateOnLoad"
 
-    [SerializeField] private GameObject outPropsLightUp = null;                 // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject outPropsMakeSound = null;               // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject outPropsVibrate = null;                 // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject outPropsMove = null;                    // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject outPropsSend = null;                    // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropLightUp = null;                 // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropMakeSound = null;               // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropVibrate = null;                 // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropMove = null;                    // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropSend = null;                    // put tag "DeactivateOnLoad"
 
     [SerializeField] private TextMeshProUGUI inputCardNameField = null;
     [SerializeField] private TextMeshProUGUI inputDescriptionField = null;
@@ -68,14 +68,18 @@ public class MainSceneManager : MonoBehaviour
     readonly string afterConfirmMessage = "Do you want to keep editing or finalize?";
     // todo change behavior after preview mode ("confirm")
 
+    private GameObject inputSelection;
+    private GameObject outputSelection;
+
+    private GameObject envObj;
     private SmartObject smartObj;
-    private GameObject inputProps;
-    private GameObject outputProps;
+    private GameObject inputProp;
+    private GameObject outputProp;
 
     // IO-Instance list: mapping between index and vertical positioning is in descending order
     // Arrow list: mapping between index and vertical positioning is in ascending order
-    private List<InputCard> inputInstanceList = new List<InputCard>();
-    private List<OutputCard> outputInstanceList = new List<OutputCard>();
+    private List<InputCard> inputCardInstanceList = new List<InputCard>();
+    private List<OutputCard> outputCardInstanceList = new List<OutputCard>();
     private List<GameObject> ioArrowList = new List<GameObject>();
 
     bool previewMode = false;
@@ -102,60 +106,56 @@ public class MainSceneManager : MonoBehaviour
         SetActiveStateByTag("DeactivateOnLoad", false);
         SetActiveStateByTag("ActivateOnLoad", true);
 
-
-        
-        //environmentObject = GetEnvObjByName(SmartObject.cardSelectionDict["environment"]);
-        //inputProps = GetInPropsByName(SmartObject.cardSelectionDict["input"]);
-        //outputProps = GetOutPropsByName(SmartObject.cardSelectionDict["output"]);
-
-
         EnvSelectionDetector
             = new CardSelectionDetector(envBoxObj, envObjArr);
         InSelectionDetector
             = new CardSelectionDetector(inBoxObj, inObjArr);
         OutSelectionDetector
             = new CardSelectionDetector(outBoxObj, outObjArr);
+
+
+
     }
 
 
     void Update()
     {
-        EnvSelectionDetector.CenterGravityMotion();
-        InSelectionDetector.CenterGravityMotion();
-        OutSelectionDetector.CenterGravityMotion();
+        EnvSelectionDetector.CenterDragMotion();
+        InSelectionDetector.CenterDragMotion();
+        OutSelectionDetector.CenterDragMotion();
 
         // triggered once when box content is changed
         if (EnvSelectionDetector.TriggerFlag)
         {
-            GameObject envSelected = EnvSelectionDetector.SelectedCardObj;
-
-            if (envSelected == null)
+            GameObject envSelection = EnvSelectionDetector.SelectedCardObj;
+            if (envSelection == null)
             {
-                smartObj = null;
-                // nullになったら、今まで出現していたインスタンスを殺す
+                Destroy(envObj);
             }
-
             else
             {
-                GameObject envObj = InstantiateEnvObjByName(envSelected.name);
+                envObj = InstantiateEnvObjByName(envSelection.name);
+                envObj.SetActive(true);
                 smartObj = envObj.AddComponent<SmartObject>();
             }
         }
 
 
-
-        //if (InSelectionDetector.TriggerFlag)
-        //{
-        //    GameObject inSelected = InSelectionDetector.SelectedCardObj;
-        //    if (inSelected == null)
-        //    {
-        //        inputProps = null;
-        //    }
-        //    else
-        //    {
-        //        inputProps = GetInPropsByName(inSelected.name);
-        //    }
-        //}
+        if (InSelectionDetector.TriggerFlag)
+        {
+            inputSelection = InSelectionDetector.SelectedCardObj;
+            if (inputSelection == null)
+            {
+                Destroy(inputProp);
+            }
+            else
+            {
+                inputProp = InstantiateInputPropByName(inputSelection.name);
+                inputProp.SetActive(true);
+                AddInputCardInstanceToList();
+            }
+            // do card statement setup here
+        }
 
         //if (OutSelectionDetector.TriggerFlag)
         //{
@@ -169,7 +169,114 @@ public class MainSceneManager : MonoBehaviour
         //        outputProps = GetOutPropsByName(outSelected.name);
         //    }
         //}
+        // todo outputのstatementFieldGroupに関しては、outputSelectionBoxに何かが後から
+        // 入れられた時に、その時点でinputStatementFieldGroupが複数 設定されていたら、
+        // 一気にその数だけ出現するようにする必要がある
+        // また、初めにoutputがboxに入れられた場合には、statementFieldをひとつだけ出現させる
 
+    }
+
+    private void AddInputCardInstanceToList()
+    {
+        // focusに関しては、inputが主体で、outputはこれに追従する
+        inputCardInstanceList.Add(GetInputCardInstanceByName(inputSelection.name));
+        ioArrowList.Add(CreateIOArrow());
+        int idx = inputCardInstanceList.Count - 1; // get tail of updated list; call after adding new instance
+        int minInstanceID = AvailableMinInstanceID();
+        inputCardInstanceList[idx].CardStatementSetup(
+            minInstanceID, ref smartObj, ref inputProp, ref inputStatementFieldGroup);
+        ShiftFocusToTargetInstance(inputCardInstanceList, idx);
+        ShiftStatementFieldPositions(inputCardInstanceList);
+        ShiftFocusToTargetIOArrow(idx);
+        inputCardInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
+
+        // check for allawability of adding and removing instances
+        addInstanceButton.interactable = CheckInstanceListCapacity();
+        removeInstanceButton.interactable = !(inputCardInstanceList.Count <= 1);
+    }
+
+    private bool CheckInstanceListCapacity()
+    {
+        return inputCardInstanceList.Count < inputCardInstanceList[0].MaxInstanceNum;
+    }
+
+    // Statement-Field-Box OnClick
+    private void StatementFieldOnClick()
+    {
+        // get "instance-index" from "statement-field-button-label"
+        string statementIdText = EventSystem.current.currentSelectedGameObject.
+            transform.Find("IndexText").gameObject.GetComponent<TMP_Text>().text; // todo modify to method without "find()"
+        string extrudedIdText = Regex.Replace(statementIdText, @"[^0-9]", "");
+        int extrudedId = int.Parse(extrudedIdText);
+        int instanceID = extrudedId - 1;
+        int instanceIdx = GetInstanceListIndexFromInstanceID(instanceID);
+        ShiftFocusToTargetInstance(inputCardInstanceList, instanceIdx);
+        ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
+        ShiftFocusToTargetIOArrow(instanceIdx);
+    }
+
+    // returns index in Instance List 
+    // returns -1 when not found in Instance List
+    private int GetInstanceListIndexFromInstanceID(int id)
+    {
+        int cnt = inputCardInstanceList.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            if (inputCardInstanceList[i].InstanceID == id) return i;
+        }
+        return -1;
+    }
+
+    private void ShiftFocusToTargetInstance<Type>(List<Type> cardInstanceList, int idx)
+        where Type : Card
+    {
+        int cnt = cardInstanceList.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            if (i == idx)
+            {
+                cardInstanceList[idx].IsFocused = true;
+                cardInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color = BEIGE;
+            }
+            else
+            {
+                cardInstanceList[idx].IsFocused = false;
+                cardInstanceList[idx].StatementFieldGroup.GetComponent<Image>().color = LIGHT_BEIGE;
+            }
+        }
+    }
+
+    private void ShiftStatementFieldPositions<Type>(List<Type> cardInstanceList)
+        where Type : Card
+    {
+        int cnt = cardInstanceList.Count;
+        int tail = cnt - 1;
+        Vector3 basePosition = cardInstanceList[tail].StatementFieldGroup.transform.localPosition;
+        for (int i = 0; i < cnt; i++)
+        {
+            Vector3 verticalShiftAmount = new Vector3(0, VSHAMT * (cnt - 1 - i), 0);
+            cardInstanceList[i].StatementFieldGroup.transform.localPosition = basePosition + verticalShiftAmount;
+        }
+    }
+
+    // parameter int:idx is passed assuming the use with IOInstance index order
+    // set optional parameter to 'true' if calling with real index
+    // todo make the IOArrow order match with IOStatements
+    private void ShiftFocusToTargetIOArrow(int idx, bool realIndex = false)
+    {
+        if (!realIndex)
+            idx = RevIdx(idx);
+        for (int i = 0; i < ioArrowList.Count; i++)
+        {
+            if (i == idx) ioArrowList[i].GetComponent<Image>().color = WHITE;
+            else ioArrowList[i].GetComponent<Image>().color = LIGHT_WHITE;
+        }
+    }
+
+    private int RevIdx(int idx)
+    {
+        return ioArrowList.Count - 1 - idx;
     }
 
 
@@ -187,18 +294,31 @@ public class MainSceneManager : MonoBehaviour
     }
 
 
-    //private GameObject GetInPropsByName(string cardName)
-    //{
-    //    switch (cardName)
-    //    {
-    //        case "Button": return inPropsButton;
-    //        case "Sound": return inPropsSound;
-    //        case "Fire": return inPropsFire;
-    //        case "Speed": return inPropsSpeed;
-    //        case "Weather": return inPropsWeather;
-    //        default: return null;
-    //    }
-    //}
+    private GameObject InstantiateInputPropByName(string cardName)
+    {
+        switch (cardName)
+        {
+            case "Button": return Instantiate(inPropButton);
+            case "Sound": return Instantiate(inPropSound);
+            case "Fire": return Instantiate(inPropFire);
+            case "Speed": return Instantiate(inPropSpeed);
+            case "Weather": return Instantiate(inPropWeather);
+            default: return null;
+        }
+    }
+
+    private InputCard GetInputCardInstanceByName(string cardName)
+    {
+        switch (cardName)
+        {
+            case "Button": return new ButtonCard();
+            case "Sound": return new SoundCard();
+            case "Fire": return new FireCard();
+            case "Speed": return new SpeedCard();
+            case "Weather": return new WeatherCard();
+            default: return null;
+        }
+    }
 
 
     //private GameObject GetOutPropsByName(string cardName)
@@ -213,6 +333,41 @@ public class MainSceneManager : MonoBehaviour
     //        default: return null;
     //    }
     //}
+
+    //private OutputCard GetOutputInstanceByName(string cardName)
+    //{
+    //    switch (cardName)
+    //    {
+    //        case "LightUp": return new LightUpCard();
+    //        case "MakeSound": return new MakeSoundCard();
+    //        case "Vibrate": return new VibrateCard();
+    //        case "Move": return new MoveCard();
+    //        case "Send": return new SendCard();
+    //        default: return null;
+    //    }
+    //}
+
+    // returns position adjusted io-arrow gameObject
+    private GameObject CreateIOArrow()
+    {
+        GameObject newArrow = Instantiate(ioArrowObject, ioArrowObject.transform.parent);
+        newArrow.transform.localPosition += new Vector3(0, VSHAMT * (ioArrowList.Count), 0);
+        newArrow.SetActive(true);
+        return newArrow;
+    }
+
+    private int AvailableMinInstanceID()
+    {
+        int idCandidate = 0;
+        for (int i = 0; i < inputCardInstanceList.Count; i++)
+        {
+            if (inputCardInstanceList[i].InstanceID == -1)
+                continue; // skip itself (set to initial value)
+            if (idCandidate == inputCardInstanceList[i].InstanceID)
+                idCandidate++;
+        }
+        return idCandidate;
+    }
 
 
     private void SetActiveStateByTag(string tag, bool state)

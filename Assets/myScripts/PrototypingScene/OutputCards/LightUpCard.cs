@@ -43,12 +43,12 @@ public class LightUpCard : OutputCard
 
     protected override void InitPropFields()
     {
-        paintBrush = propObjects.transform.Find("PaintBrush").gameObject;
+        paintBrush = propObj.transform.Find("PaintBrush").gameObject;
         brushTip = paintBrush.transform.Find("brushTip").gameObject;
         brushTipRend = brushTip.GetComponent<Renderer>();
         originalBrushMaterial = brushTipRend.material;
 
-        waterObject = propObjects.transform.Find("WaterBucket/water").gameObject;
+        waterObject = propObj.transform.Find("WaterBucket/water").gameObject;
         waterRend = waterObject.GetComponent<Renderer>();
         waterMaterial = waterRend.material;
 
@@ -85,7 +85,7 @@ public class LightUpCard : OutputCard
     {
         if (isFocused)
         {
-            propObjects.SetActive(false);
+            propObj.SetActive(false);
         }
     }
 
@@ -93,7 +93,7 @@ public class LightUpCard : OutputCard
     {
         if (isFocused)
         {
-            propObjects.SetActive(true);
+            propObj.SetActive(true);
             ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
         }
     }

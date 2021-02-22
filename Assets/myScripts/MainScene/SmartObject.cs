@@ -15,6 +15,7 @@ public class SmartObject : MonoBehaviour
         partComponents = GetComponentsInChildren<MeshRenderer>(true);
         partGameObjects = ConvertComponentArrayToGameObjectArray(partComponents);
         defaultMaterials = GetMaterialArray(partGameObjects);
+
     }
 
     private void Update()

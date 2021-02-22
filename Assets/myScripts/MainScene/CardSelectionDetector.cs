@@ -88,7 +88,7 @@ public class CardSelectionDetector
         return false;
     }
 
-    public void CenterGravityMotion()
+    public void CenterDragMotion()
     {
         if (selectedCardObj == null) return;
         if (!selectedCardObj.transform.GetComponent<OVRGrabbable>().isGrabbed)
