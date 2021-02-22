@@ -176,33 +176,87 @@ public class MainSceneManager : MonoBehaviour
 
     }
 
+    // todo addInstanceButton OnClick での処理を考える
+
     private void AddInputCardInstanceToList()
     {
-        // focusに関しては、inputが主体で、outputはこれに追従する
         inputCardInstanceList.Add(GetInputCardInstanceByName(inputSelection.name));
-        ioArrowList.Add(CreateIOArrow());
         int idx = inputCardInstanceList.Count - 1; // get tail of updated list; call after adding new instance
         int minInstanceID = AvailableMinInstanceID();
         inputCardInstanceList[idx].CardStatementSetup(
             minInstanceID, ref smartObj, ref inputProp, ref inputStatementFieldGroup);
         ShiftFocusToTargetInstance(inputCardInstanceList, idx);
         ShiftStatementFieldPositions(inputCardInstanceList);
-        ShiftFocusToTargetIOArrow(idx);
         inputCardInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
+            GetComponent<Button>().onClick.AddListener(
+            () => { StatementFieldOnClick(inputCardInstanceList); });
+
+        ioArrowList.Add(CreateIOArrow());
+        ShiftFocusToTargetIOArrow(idx);
 
         // check for allawability of adding and removing instances
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = !(inputCardInstanceList.Count <= 1);
     }
 
+    //private void ShiftFocusToTargetInstance<Type>(List<Type> cardInstanceList, int idx)
+    //    where Type : Card
+
+    private void StatementFieldOnClick<Type>(List<Type> cardInstanceList)
+        where Type : Card
+    {
+        int instanceIdx = GetCurrentSelectedCardInstanceIndex();
+        ShiftFocusToTargetInstance(cardInstanceList, instanceIdx);
+        System.Type cardInstanceType = cardInstanceList.GetType();
+        if (cardInstanceType == typeof(InputCard))
+        {
+            // TODO ここから；下の二つの関数を一つの関数に統合する
+        }
+        else
+        {
+
+        }
+
+        if (ioArrowList.Count > 0) ShiftFocusToTargetIOArrow(instanceIdx);
+    }
+
+    private void InputStatementFieldOnClick()
+    {
+        int instanceIdx = GetCurrentSelectedCardInstanceIndex();
+        ShiftFocusToTargetInstance(inputCardInstanceList, instanceIdx);
+        ShiftFocusToTargetIOArrow(instanceIdx);
+
+        // manage output statement instance
+        int outputCnt = outputCardInstanceList.Count;
+        if (outputCnt > 0) // この場合は、IOで数が揃っていることが前提
+            ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
+    }
+
+    private void OutputStatementFieldOnClick()
+    {
+        int instanceIdx = GetCurrentSelectedCardInstanceIndex();
+        ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
+
+        int inputCnt = inputCardInstanceList.Count;
+        if (inputCnt > 0)
+            ShiftFocusToTargetInstance(inputCardInstanceList, instanceIdx);
+    }
+
+
+
+
+
+
+    /// <summary>
+    /// helper methods
+    /// </summary>
+
     private bool CheckInstanceListCapacity()
     {
         return inputCardInstanceList.Count < inputCardInstanceList[0].MaxInstanceNum;
     }
 
-    // Statement-Field-Box OnClick
-    private void StatementFieldOnClick()
+    private int GetCurrentSelectedCardInstanceIndex()
     {
         // get "instance-index" from "statement-field-button-label"
         string statementIdText = EventSystem.current.currentSelectedGameObject.
@@ -211,9 +265,7 @@ public class MainSceneManager : MonoBehaviour
         int extrudedId = int.Parse(extrudedIdText);
         int instanceID = extrudedId - 1;
         int instanceIdx = GetInstanceListIndexFromInstanceID(instanceID);
-        ShiftFocusToTargetInstance(inputCardInstanceList, instanceIdx);
-        ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
-        ShiftFocusToTargetIOArrow(instanceIdx);
+        return instanceIdx;
     }
 
     // returns index in Instance List 
