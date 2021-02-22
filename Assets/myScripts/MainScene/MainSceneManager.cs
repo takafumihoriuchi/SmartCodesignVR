@@ -106,6 +106,7 @@ public class MainSceneManager : MonoBehaviour
         DevConfigSetting();
         SetActiveStateByTag("DeactivateOnLoad", false);
         SetActiveStateByTag("ActivateOnLoad", true);
+        ClearCardDescriptionTextFields();
 
         EnvSelectionDetector
             = new CardSelectionDetector(envBoxObj, envObjArr);
@@ -146,35 +147,58 @@ public class MainSceneManager : MonoBehaviour
             {
                 inputProp = InstantiateInputPropByName(inputSelection.name);
                 inputProp.SetActive(true);
-                AddInputCardInstanceToList();
+                AddInputCardInstanceToList(); // todo これをin/out共通にできないか；inputCardInstanceListの情報を渡す、など
+                inputCardInstanceList[0].CardDescriptionSetup(ref inputCardNameField, ref inputDescriptionField);
             }
             else
             {
                 Destroy(inputProp);
-                // todo ここにinputCardInstanceList を消滅させる処理を挿入
+                foreach (InputCard inputCardInstance in inputCardInstanceList)
+                    Destroy(inputCardInstance.StatementFieldGroup);
+                inputCardInstanceList.Clear();
             }
         }
 
-        //if (OutSelectionDetector.TriggerFlag)
-        //{
-        //    GameObject outSelected = OutSelectionDetector.SelectedCardObj;
-        //    if (outSelected == null)
-        //    {
-        //        outputProps = null;
-        //    }
-        //    else
-        //    {
-        //        outputProps = GetOutPropsByName(outSelected.name);
-        //    }
-        //}
-        // todo outputのstatementFieldGroupに関しては、outputSelectionBoxに何かが後から
-        // 入れられた時に、その時点でinputStatementFieldGroupが複数 設定されていたら、
-        // 一気にその数だけ出現するようにする必要がある
-        // また、初めにoutputがboxに入れられた場合には、statementFieldをひとつだけ出現させる
+        if (OutSelectionDetector.TriggerFlag)
+        {
+            outputSelection = OutSelectionDetector.SelectedCardObj;
+            if (outputSelection != null)
+            {
+                outputProp = InstantiateOutputPropByName(outputSelection.name);
+                outputProp.SetActive(true);
+                AddOutputCardInstanceToList();
+                outputCardInstanceList[0].CardDescriptionSetup(ref outputCardNameField, ref outputDescriptionField);
+            }
+            else
+            {
+                Destroy(outputProp);
+                foreach (OutputCard outputCardInstance in outputCardInstanceList)
+                    Destroy(outputCardInstance.StatementFieldGroup);
+                outputCardInstanceList.Clear();
+            }
+        }
 
     }
 
-    // todo addInstanceButton OnClick での処理を考える
+    // todo inとoutで、インタフェース部分は別れていてもいいけど、内部の共通部分は括り出す
+    private void AddOutputCardInstanceToList()
+    {
+        do {
+            outputCardInstanceList.Add(GetOutputCardInstanceByName(outputSelection.name));
+            int idx = inputCardInstanceList.Count - 1;
+            int minInstanceID = AvailableMinInstanceID(outputCardInstanceList);
+            outputCardInstanceList[idx].CardStatementSetup(
+                minInstanceID, ref smartObj, ref outputProp, ref outputStatementFieldGroup);
+            ShiftFocusToTargetInstance(inputCardInstanceList, idx);
+            ShiftStatementFieldPositions(outputCardInstanceList);
+            outputCardInstanceList[idx].StatementFieldGroup.
+                GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
+        } while (outputCardInstanceList.Count < inputCardInstanceList.Count);
+    }
+
+    
+    // todo addInstanceButton OnClick での処理を考える;
+    // この処理では、input側は確実にある；output側はあったら増やすけど、未選択の状態なら無視する
 
     private void AddInputCardInstanceToList()
     {
@@ -351,31 +375,31 @@ public class MainSceneManager : MonoBehaviour
     }
 
 
-    //private GameObject GetOutPropsByName(string cardName)
-    //{
-    //    switch (cardName)
-    //    {
-    //        case "LightUp": return outPropsLightUp;
-    //        case "MakeSound": return outPropsMakeSound;
-    //        case "Vibrate": return outPropsVibrate;
-    //        case "Move": return outPropsMove;
-    //        case "Send": return outPropsSend;
-    //        default: return null;
-    //    }
-    //}
+    private GameObject InstantiateOutputPropByName(string cardName)
+    {
+        switch (cardName)
+        {
+            case "LightUp": return Instantiate(outPropLightUp);
+            case "MakeSound": return Instantiate(outPropMakeSound);
+            case "Vibrate": return Instantiate(outPropVibrate);
+            case "Move": return Instantiate(outPropMove);
+            case "Send": return Instantiate(outPropSend);
+            default: return null;
+        }
+    }
 
-    //private OutputCard GetOutputInstanceByName(string cardName)
-    //{
-    //    switch (cardName)
-    //    {
-    //        case "LightUp": return new LightUpCard();
-    //        case "MakeSound": return new MakeSoundCard();
-    //        case "Vibrate": return new VibrateCard();
-    //        case "Move": return new MoveCard();
-    //        case "Send": return new SendCard();
-    //        default: return null;
-    //    }
-    //}
+    private OutputCard GetOutputCardInstanceByName(string cardName)
+    {
+        switch (cardName)
+        {
+            case "LightUp": return new LightUpCard();
+            case "MakeSound": return new MakeSoundCard();
+            case "Vibrate": return new VibrateCard();
+            case "Move": return new MoveCard();
+            case "Send": return new SendCard();
+            default: return null;
+        }
+    }
 
     // returns position adjusted io-arrow gameObject
     private GameObject CreateIOArrow()
@@ -399,6 +423,14 @@ public class MainSceneManager : MonoBehaviour
                 idCandidate++;
         }
         return idCandidate;
+    }
+
+    private void ClearCardDescriptionTextFields()
+    {
+        inputCardNameField.SetText(string.Empty);
+        outputCardNameField.SetText(string.Empty);
+        inputDescriptionField.SetText(string.Empty);
+        outputDescriptionField.SetText(string.Empty);
     }
 
 
