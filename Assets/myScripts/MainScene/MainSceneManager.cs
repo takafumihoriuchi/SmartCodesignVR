@@ -111,53 +111,93 @@ public class MainSceneManager : MonoBehaviour
         UIButtonSetting();        
     }
 
+    // 次の TODO: 下の修正に加え、smartObjとして受け渡す処理
     void Update()
     {
         CardSelectionBoxCenterDragMotionUpdate();
         CardSelectionDetectionUpdate();
 
+        // TODO inputSelectionもしくはoutputSelectionがnullの場合の対処をスマートに解決する
+
         if (!isBuilt) // prototyping phase
         {
-            int focusedIdx = GetFocusedInstanceIndex();
-            inputInstanceList[focusedIdx].BehaviourDuringPrototyping();
-            outputInstanceList[focusedIdx].BehaviourDuringPrototyping();
+            int focusedIdx = GetFocusedCardInstanceIndex(); // これもinputSelectionがnullのときにエラーになってしまう
+            if (inputSelection != null) inputCardInstanceList[focusedIdx].BehaviourDuringPrototyping();
+            if (outputSelection != null) outputCardInstanceList[focusedIdx].BehaviourDuringPrototyping();
 
             // Check if the selected keywords have no overlaps
             // todo ideally call from properties (set/get)
             if (!ConditionKeywordIsUnique(focusedIdx))
-                inputInstanceList[focusedIdx].ConditionKeyword
-                    = inputInstanceList[focusedIdx].ALREADY_EXISTS;
+                inputCardInstanceList[focusedIdx].ConditionKeyword
+                    = inputCardInstanceList[focusedIdx].ALREADY_EXISTS;
 
             // check if all instances has been set a value
-            bool isConfirmable = CheckConfirmability();
+            bool isConfirmable = CheckBuildability();
             if (isConfirmable)
             {
-                confirmationButton.interactable = true;
+                buildButton.interactable = true;
                 confirmationMessageField.SetText(beforeConfirmMessage);
                 // ここでメッセージを出すように変更；インタラクティブに随時更新するようにする
             }
-            else confirmationButton.interactable = false;
+            else buildButton.interactable = false;
         }
         else // during preview phase
         {
-            for (int i = 0; i < inputInstanceList.Count; i++)
-                inputInstanceList[i].UpdateInputCondition();
+            int cnt = inputCardInstanceList.Count;
+            for (int i = 0; i < cnt; i++)
+                inputCardInstanceList[i].UpdateInputCondition();
             // reactions when input conditions are triggered (fired for one frame)
-            for (int i = 0; i < inputInstanceList.Count; i++)
-                if (inputInstanceList[i].NegativeTriggerFlag)
+            for (int i = 0; i < cnt; i++)
+                if (inputCardInstanceList[i].NegativeTriggerFlag)
                 {
-                    outputInstanceList[i].OutputBehaviourOnNegative();
-                    SetIOStatementFieldColor(i, BEIGE);
+                    outputCardInstanceList[i].OutputBehaviourOnNegative();
+                    SetCardStatementFieldColor(i, BEIGE);
                 }
             // all positive triggers are called after all negative triggers
-            for (int i = 0; i < inputInstanceList.Count; i++)
-                if (inputInstanceList[i].PositiveTriggerFlag)
+            for (int i = 0; i < cnt; i++)
+                if (inputCardInstanceList[i].PositiveTriggerFlag)
                 {
-                    outputInstanceList[i].OutputBehaviourOnPositive();
-                    SetIOStatementFieldColor(i, POP_BEIGE);
+                    outputCardInstanceList[i].OutputBehaviourOnPositive();
+                    SetCardStatementFieldColor(i, POP_BEIGE);
                 }
         }
 
+    }
+
+    private bool CheckBuildability()
+    {
+        bool bflag = true;
+        int cnt = inputCardInstanceList.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            bflag &= inputCardInstanceList[i].CanBeConfirmed;
+            bflag &= outputCardInstanceList[i].CanBeConfirmed;
+        }
+        return bflag;
+    }
+
+    private bool ConditionKeywordIsUnique(int focusedIdx)
+    {
+        if (string.IsNullOrEmpty(inputCardInstanceList[focusedIdx].ConditionKeyword))
+            return true;
+        for (int i = 0; i < inputCardInstanceList.Count; i++)
+        {
+            if (i == focusedIdx) continue; // skip itself
+            if (inputCardInstanceList[i].ConditionKeyword
+                == inputCardInstanceList[focusedIdx].ConditionKeyword)
+                return false;
+        }
+        return true;
+    }
+
+    private int GetFocusedCardInstanceIndex()
+    {
+        int cnt = inputCardInstanceList.Count;
+        for (int i = 0; i < cnt; i++)
+        {
+            if (inputCardInstanceList[i].IsFocused) return i;
+        }
+        return -1;
     }
 
     private void CardSelectionDetectionUpdate()
