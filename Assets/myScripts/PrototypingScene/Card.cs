@@ -84,7 +84,7 @@ public abstract class Card
         this.smartObj = smartObj; // todo change each related codes
         this.propObj = propObj;
         InitPropFields();
-        this.propObj.SetActive(true);
+        //this.propObj.SetActive(true); // これはSceneManagerの方で行うようにしている
         this.statementFieldGroup = Object.Instantiate(
             statementFieldGroup, statementFieldGroup.transform.parent);
         indexTextTMP = this.statementFieldGroup.transform.
