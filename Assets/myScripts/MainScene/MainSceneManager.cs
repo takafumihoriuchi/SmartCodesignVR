@@ -14,15 +14,15 @@ public class MainSceneManager : MonoBehaviour
     /// card selection related fields
     /// </summary>
 
-    CardSelectionDetector EnvSelectionDetector;
+    CardSelectionDetector envSelectionDetector;
     [SerializeField] private GameObject envBoxObj = null;
     [SerializeField] private GameObject[] envObjArr = null;
 
-    CardSelectionDetector InSelectionDetector;
+    CardSelectionDetector inSelectionDetector;
     [SerializeField] private GameObject inBoxObj = null;
     [SerializeField] private GameObject[] inObjArr = null;
 
-    CardSelectionDetector OutSelectionDetector;
+    CardSelectionDetector outSelectionDetector;
     [SerializeField] private GameObject outBoxObj = null;
     [SerializeField] private GameObject[] outObjArr = null;
 
@@ -36,17 +36,17 @@ public class MainSceneManager : MonoBehaviour
     [SerializeField] private GameObject envObjStreetSign = null;                // put tag "DeactivateOnLoad"
     [SerializeField] private GameObject envObjBridge = null;                    // put tag "DeactivateOnLoad"
 
-    [SerializeField] private GameObject inPropButton = null;                   // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject inPropSound = null;                    // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject inPropFire = null;                     // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject inPropSpeed = null;                    // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject inPropWeather = null;                  // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropButton = null;                    // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropSound = null;                     // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropFire = null;                      // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropSpeed = null;                     // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject inPropWeather = null;                   // put tag "DeactivateOnLoad"
 
-    [SerializeField] private GameObject outPropLightUp = null;                 // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject outPropMakeSound = null;               // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject outPropVibrate = null;                 // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject outPropMove = null;                    // put tag "DeactivateOnLoad"
-    [SerializeField] private GameObject outPropSend = null;                    // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropLightUp = null;                  // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropMakeSound = null;                // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropVibrate = null;                  // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropMove = null;                     // put tag "DeactivateOnLoad"
+    [SerializeField] private GameObject outPropSend = null;                     // put tag "DeactivateOnLoad"
 
     [SerializeField] private TextMeshProUGUI inputCardNameField = null;
     [SerializeField] private TextMeshProUGUI inputDescriptionField = null;
@@ -203,9 +203,9 @@ public class MainSceneManager : MonoBehaviour
     private void CardSelectionDetectionUpdate()
     {
         // triggered once when box content is changed
-        if (EnvSelectionDetector.TriggerFlag)
+        if (envSelectionDetector.TriggerFlag)
         {
-            GameObject envSelection = EnvSelectionDetector.SelectedCardObj;
+            GameObject envSelection = envSelectionDetector.SelectedCardObj;
             if (envSelection != null)
             {
                 envObj = InstantiateEnvObjByName(envSelection.name);
@@ -220,9 +220,9 @@ public class MainSceneManager : MonoBehaviour
         }
 
 
-        if (InSelectionDetector.TriggerFlag)
+        if (inSelectionDetector.TriggerFlag)
         {
-            inputSelection = InSelectionDetector.SelectedCardObj;
+            inputSelection = inSelectionDetector.SelectedCardObj;
             if (inputSelection != null) // identical to Start() for each selection
             {
                 inputProp = InstantiateInputPropByName(inputSelection.name);
@@ -240,9 +240,9 @@ public class MainSceneManager : MonoBehaviour
         }
 
         // todo 関数かしたい；inputとの重複が多い
-        if (OutSelectionDetector.TriggerFlag)
+        if (outSelectionDetector.TriggerFlag)
         {
-            outputSelection = OutSelectionDetector.SelectedCardObj;
+            outputSelection = outSelectionDetector.SelectedCardObj;
             if (outputSelection != null)
             {
                 outputProp = InstantiateOutputPropByName(outputSelection.name);
@@ -262,9 +262,9 @@ public class MainSceneManager : MonoBehaviour
 
     private void CardSelectionBoxCenterDragMotionUpdate()
     {
-        EnvSelectionDetector.CenterDragMotion();
-        InSelectionDetector.CenterDragMotion();
-        OutSelectionDetector.CenterDragMotion();
+        envSelectionDetector.CenterDragMotion();
+        inSelectionDetector.CenterDragMotion();
+        outSelectionDetector.CenterDragMotion();
     }
 
     // todo buildButtonがどう言う時に押せるようになるのかの処理は、これからUpdate()の中に書く
@@ -700,11 +700,11 @@ public class MainSceneManager : MonoBehaviour
 
     private void CardSelectionBoxRegistration()
     {
-        EnvSelectionDetector
+        envSelectionDetector
             = new CardSelectionDetector(envBoxObj, envObjArr);
-        InSelectionDetector
+        inSelectionDetector
             = new CardSelectionDetector(inBoxObj, inObjArr);
-        OutSelectionDetector
+        outSelectionDetector
             = new CardSelectionDetector(outBoxObj, outObjArr);
     }
 
