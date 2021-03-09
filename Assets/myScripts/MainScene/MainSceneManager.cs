@@ -111,28 +111,38 @@ public class MainSceneManager : MonoBehaviour
         UIButtonSetting();        
     }
 
-    // 次の TODO: 下の修正に加え、smartObjとして受け渡す処理
+    // TODO 下の修正に加え、smartObjとして受け渡す処理
+    // => 次は smartobjectと各カードの処理の修正
     void Update()
     {
         CardSelectionBoxCenterDragMotionUpdate();
         CardSelectionDetectionUpdate();
+        if (!isBuilt) PrototypingBehaviourUpdate();
+        else ConditionBehaviourPreviewUpdate();
+    }
 
-        // TODO inputSelectionもしくはoutputSelectionがnullの場合の対処をスマートに解決する
+    private void PrototypingBehaviourUpdate()
+    {
+        int focusedIdx;
 
-        if (!isBuilt) // prototyping phase
+        if (inputSelection != null)
         {
-            int focusedIdx = GetFocusedCardInstanceIndex(); // これもinputSelectionがnullのときにエラーになってしまう
-            if (inputSelection != null) inputCardInstanceList[focusedIdx].BehaviourDuringPrototyping();
-            if (outputSelection != null) outputCardInstanceList[focusedIdx].BehaviourDuringPrototyping();
-
+            focusedIdx = GetFocusedCardInstanceIndex(inputCardInstanceList);
+            inputCardInstanceList[focusedIdx].BehaviourDuringPrototyping();
             // Check if the selected keywords have no overlaps
             // todo ideally call from properties (set/get)
             if (!ConditionKeywordIsUnique(focusedIdx))
                 inputCardInstanceList[focusedIdx].ConditionKeyword
                     = inputCardInstanceList[focusedIdx].ALREADY_EXISTS;
-
-            // check if all instances has been set a value
-            bool isConfirmable = CheckBuildability();
+        }
+        if (outputSelection != null)
+        {
+            focusedIdx = GetFocusedCardInstanceIndex(outputCardInstanceList);
+            outputCardInstanceList[focusedIdx].BehaviourDuringPrototyping();
+        }
+        if (inputSelection != null && outputSelection != null)
+        {
+            bool isConfirmable = CheckBuildability(); // check if all instances has been set a value
             if (isConfirmable)
             {
                 buildButton.interactable = true;
@@ -141,28 +151,86 @@ public class MainSceneManager : MonoBehaviour
             }
             else buildButton.interactable = false;
         }
-        else // during preview phase
+    }
+
+    private void ConditionBehaviourPreviewUpdate()
+    {
+        int cnt = inputCardInstanceList.Count;
+        for (int i = 0; i < cnt; i++)
+            inputCardInstanceList[i].UpdateInputCondition();
+        // reactions when input conditions are triggered (fired for one frame)
+        for (int i = 0; i < cnt; i++)
+            if (inputCardInstanceList[i].NegativeTriggerFlag)
+            {
+                outputCardInstanceList[i].OutputBehaviourOnNegative();
+                SetCardStatementFieldColor(i, BEIGE);
+            }
+        // all positive triggers are called after all negative triggers
+        for (int i = 0; i < cnt; i++)
+            if (inputCardInstanceList[i].PositiveTriggerFlag)
+            {
+                outputCardInstanceList[i].OutputBehaviourOnPositive();
+                SetCardStatementFieldColor(i, POP_BEIGE);
+            }
+    }
+
+    private void CardSelectionDetectionUpdate()
+    {
+        // triggered once when box content is changed
+        if (envSelectionDetector.TriggerFlag)
         {
-            int cnt = inputCardInstanceList.Count;
-            for (int i = 0; i < cnt; i++)
-                inputCardInstanceList[i].UpdateInputCondition();
-            // reactions when input conditions are triggered (fired for one frame)
-            for (int i = 0; i < cnt; i++)
-                if (inputCardInstanceList[i].NegativeTriggerFlag)
-                {
-                    outputCardInstanceList[i].OutputBehaviourOnNegative();
-                    SetCardStatementFieldColor(i, BEIGE);
-                }
-            // all positive triggers are called after all negative triggers
-            for (int i = 0; i < cnt; i++)
-                if (inputCardInstanceList[i].PositiveTriggerFlag)
-                {
-                    outputCardInstanceList[i].OutputBehaviourOnPositive();
-                    SetCardStatementFieldColor(i, POP_BEIGE);
-                }
+            GameObject envSelection = envSelectionDetector.SelectedCardObj;
+            if (envSelection != null)
+            {
+                envObj = InstantiateEnvObjByName(envSelection.name);
+                envObj.SetActive(true);
+                smartObj = envObj.AddComponent<SmartObject>();
+            }
+            else
+            {
+                Destroy(envObj);
+            }
         }
 
+        if (inSelectionDetector.TriggerFlag)
+        {
+            inputSelection = inSelectionDetector.SelectedCardObj;
+            if (inputSelection != null) // identical to Start() for each selection
+            {
+                inputProp = InstantiateInputPropByName(inputSelection.name);
+                inputProp.SetActive(true);
+                AddInputCardInstanceToList();
+                inputCardInstanceList[0].CardDescriptionSetup(ref inputCardNameField, ref inputDescriptionField);
+            }
+            else
+            {
+                Destroy(inputProp);
+                foreach (InputCard inputCardInstance in inputCardInstanceList)
+                    Destroy(inputCardInstance.StatementFieldGroup);
+                inputCardInstanceList.Clear();
+            }
+        }
+
+        if (outSelectionDetector.TriggerFlag)
+        {
+            outputSelection = outSelectionDetector.SelectedCardObj;
+            if (outputSelection != null)
+            {
+                outputProp = InstantiateOutputPropByName(outputSelection.name);
+                outputProp.SetActive(true);
+                AddOutputCardInstanceToList();
+                outputCardInstanceList[0].CardDescriptionSetup(ref outputCardNameField, ref outputDescriptionField);
+            }
+            else
+            {
+                Destroy(outputProp);
+                foreach (OutputCard outputCardInstance in outputCardInstanceList)
+                    Destroy(outputCardInstance.StatementFieldGroup);
+                outputCardInstanceList.Clear();
+            }
+        }
     }
+
 
     private bool CheckBuildability()
     {
@@ -190,87 +258,23 @@ public class MainSceneManager : MonoBehaviour
         return true;
     }
 
-    private int GetFocusedCardInstanceIndex()
+    // returns the index number of focused instance
+    // returns -1 if no focused instance is found (c.f. when list is empty)
+    private int GetFocusedCardInstanceIndex<Type>(List<Type> cardInstanceList) where Type : Card
     {
-        int cnt = inputCardInstanceList.Count;
+        int cnt = cardInstanceList.Count;
         for (int i = 0; i < cnt; i++)
         {
-            if (inputCardInstanceList[i].IsFocused) return i;
+            if (cardInstanceList[i].IsFocused) return i;
         }
         return -1;
     }
-
-    private void CardSelectionDetectionUpdate()
-    {
-        // triggered once when box content is changed
-        if (envSelectionDetector.TriggerFlag)
-        {
-            GameObject envSelection = envSelectionDetector.SelectedCardObj;
-            if (envSelection != null)
-            {
-                envObj = InstantiateEnvObjByName(envSelection.name);
-                envObj.SetActive(true);
-                smartObj = envObj.AddComponent<SmartObject>();
-                // todo 他の処理たちについて、smartObjで受け渡すようにコードを改変する
-            }
-            else
-            {
-                Destroy(envObj);
-            }
-        }
-
-
-        if (inSelectionDetector.TriggerFlag)
-        {
-            inputSelection = inSelectionDetector.SelectedCardObj;
-            if (inputSelection != null) // identical to Start() for each selection
-            {
-                inputProp = InstantiateInputPropByName(inputSelection.name);
-                inputProp.SetActive(true);
-                AddInputCardInstanceToList();
-                inputCardInstanceList[0].CardDescriptionSetup(ref inputCardNameField, ref inputDescriptionField);
-            }
-            else
-            {
-                Destroy(inputProp);
-                foreach (InputCard inputCardInstance in inputCardInstanceList)
-                    Destroy(inputCardInstance.StatementFieldGroup);
-                inputCardInstanceList.Clear();
-            }
-        }
-
-        // todo 関数かしたい；inputとの重複が多い
-        if (outSelectionDetector.TriggerFlag)
-        {
-            outputSelection = outSelectionDetector.SelectedCardObj;
-            if (outputSelection != null)
-            {
-                outputProp = InstantiateOutputPropByName(outputSelection.name);
-                outputProp.SetActive(true);
-                AddOutputCardInstanceToList();
-                outputCardInstanceList[0].CardDescriptionSetup(ref outputCardNameField, ref outputDescriptionField);
-            }
-            else
-            {
-                Destroy(outputProp);
-                foreach (OutputCard outputCardInstance in outputCardInstanceList)
-                    Destroy(outputCardInstance.StatementFieldGroup);
-                outputCardInstanceList.Clear();
-            }
-        }
-    }
-
-    private void CardSelectionBoxCenterDragMotionUpdate()
-    {
-        envSelectionDetector.CenterDragMotion();
-        inSelectionDetector.CenterDragMotion();
-        outSelectionDetector.CenterDragMotion();
-    }
+        
 
     // todo buildButtonがどう言う時に押せるようになるのかの処理は、これからUpdate()の中に書く
     // todo その時には、inputとoutputがともに選択されていることなどを確認する処理が必要だと思われる
 
-    // buildButton OnClick
+        // buildButton OnClick
     private void BuildSmartObject()
     {
         isBuilt = true;
@@ -318,8 +322,7 @@ public class MainSceneManager : MonoBehaviour
         reEditButton.gameObject.SetActive(false);
         confirmationMessageField.SetText(beforeConfirmMessage);
 
-        addInstanceButton.interactable = CheckInstanceListCapacity();
-        removeInstanceButton.interactable = !(inputCardInstanceList.Count <= 1);
+        SetAddRemoveButtonInteractability();
 
         SetCardStatementFieldInteractability(true);
         SetUnfocusedCardStatementFieldColors(LIGHT_BEIGE);
@@ -373,7 +376,25 @@ public class MainSceneManager : MonoBehaviour
         }
     }
 
-    // todo inとoutで、インタフェース部分は別れていてもいいけど、内部の共通部分は統合したい（共通部分だけ抜き出すば十分）
+
+    private void AddInputCardInstanceToList()
+    {
+        inputCardInstanceList.Add(GetInputCardInstanceByName(inputSelection.name));
+        int idx = inputCardInstanceList.Count - 1; // get tail of updated list; call after adding new instance
+        int minInstanceID = AvailableMinInstanceID(inputCardInstanceList);
+        inputCardInstanceList[idx].CardStatementSetup(
+            minInstanceID, ref smartObj, ref inputProp, ref inputStatementFieldGroup);
+        ShiftFocusToTargetInstance(inputCardInstanceList, idx);
+        ShiftStatementFieldPositions(inputCardInstanceList);
+        inputCardInstanceList[idx].StatementFieldGroup.
+            GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
+
+        ioArrowList.Add(CreateIOArrow());
+        ShiftFocusToTargetIOArrow(idx);
+
+        SetAddRemoveButtonInteractability();
+    }
+   
     private void AddOutputCardInstanceToList()
     {
         if (inputCardInstanceList.Count == 0)
@@ -388,17 +409,15 @@ public class MainSceneManager : MonoBehaviour
             outputCardInstanceList[idx].StatementFieldGroup.
                 GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
         }
-        else
+        else if (inputCardInstanceList.Count > 0)
         {
             while (outputCardInstanceList.Count < inputCardInstanceList.Count)
             {
                 outputCardInstanceList.Add(GetOutputCardInstanceByName(outputSelection.name));
                 int idx = outputCardInstanceList.Count - 1;
-                //int minInstanceID = AvailableMinInstanceID(outputCardInstanceList);
                 int minInstanceID = inputCardInstanceList[idx].InstanceID;
                 outputCardInstanceList[idx].CardStatementSetup(
                     minInstanceID, ref smartObj, ref outputProp, ref outputStatementFieldGroup);
-                //ShiftFocusToTargetInstance(outputCardInstanceList, idx);
                 if (inputCardInstanceList[idx].IsFocused)
                     ShiftFocusToTargetInstance(outputCardInstanceList, idx);
                 ShiftStatementFieldPositions(outputCardInstanceList);
@@ -408,38 +427,20 @@ public class MainSceneManager : MonoBehaviour
         }
     }
 
-
-    private void AddInputCardInstanceToList()
+    private void SetAddRemoveButtonInteractability()
     {
-        inputCardInstanceList.Add(GetInputCardInstanceByName(inputSelection.name));
-        int idx = inputCardInstanceList.Count - 1; // get tail of updated list; call after adding new instance
-        int minInstanceID = AvailableMinInstanceID(inputCardInstanceList);
-        inputCardInstanceList[idx].CardStatementSetup(
-            minInstanceID, ref smartObj, ref inputProp, ref inputStatementFieldGroup);
-        ShiftFocusToTargetInstance(inputCardInstanceList, idx);
-        ShiftStatementFieldPositions(inputCardInstanceList);
-        inputCardInstanceList[idx].StatementFieldGroup.
-            GetComponent<Button>().onClick.AddListener(StatementFieldOnClick);
-
-        // check for allowability of adding and removing instances
         addInstanceButton.interactable = CheckInstanceListCapacity();
         removeInstanceButton.interactable = !(inputCardInstanceList.Count <= 1);
-        // todo こいつはAddCardInstanceToList()の方での処理にしたいけど、InstanceListCapacityが1のinputCardがあったら問題が生じる
-
-        ioArrowList.Add(CreateIOArrow());
-        ShiftFocusToTargetIOArrow(idx);
     }
 
-    // addInstanceButton OnClick
-    private void AddCardInstanceToList()
+    private void AddInstanceButtonOnClick()
     {
         AddInputCardInstanceToList();
         if (outputSelection != null)
             AddOutputCardInstanceToList(); // must be called after AddInputCardInstanceToList()
     }
 
-    // removeInstanceButton OnClick
-    private void RemoveCardInstanceFromList()
+    private void RemoveInstanceButtonOnClick()
     {
         for (int i = 0; i < inputCardInstanceList.Count; i++)
         {
@@ -465,8 +466,7 @@ public class MainSceneManager : MonoBehaviour
         ReduceIOArrow();
         ShiftFocusToTargetIOArrow(0, true);
 
-        addInstanceButton.interactable = CheckInstanceListCapacity();
-        removeInstanceButton.interactable = !(inputCardInstanceList.Count <= 1);
+        SetAddRemoveButtonInteractability();
     }
 
     private void GrantFocusToTargetCardInstances(int targetIdx)
@@ -486,15 +486,9 @@ public class MainSceneManager : MonoBehaviour
     private void StatementFieldOnClick()
     {
         int instanceIdx = GetCurrentSelectedCardInstanceIndex();
-        if (inputCardInstanceList.Count > 0)
-        {
-            ShiftFocusToTargetInstance(inputCardInstanceList, instanceIdx);
-            ShiftFocusToTargetIOArrow(instanceIdx);
-        }
-        if (outputCardInstanceList.Count > 0)
-        {
-            ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
-        }   
+        ShiftFocusToTargetInstance(inputCardInstanceList, instanceIdx);
+        ShiftFocusToTargetInstance(outputCardInstanceList, instanceIdx);
+        ShiftFocusToTargetIOArrow(instanceIdx);
     }
 
     // remove the top-most arrow
@@ -545,6 +539,7 @@ public class MainSceneManager : MonoBehaviour
         where Type : Card
     {
         int cnt = cardInstanceList.Count;
+        if (cnt == 0) return;
         for (int i = 0; i < cnt; i++)
         {
             if (i == idx)
@@ -686,9 +681,9 @@ public class MainSceneManager : MonoBehaviour
 
     private void UIButtonSetting()
     {
-        addInstanceButton.onClick.AddListener(AddCardInstanceToList);
+        addInstanceButton.onClick.AddListener(AddInstanceButtonOnClick);
         addInstanceButton.interactable = false;
-        removeInstanceButton.onClick.AddListener(RemoveCardInstanceFromList);
+        removeInstanceButton.onClick.AddListener(RemoveInstanceButtonOnClick);
         removeInstanceButton.interactable = false;
         buildButton.onClick.AddListener(BuildSmartObject);
         buildButton.interactable = false;
@@ -706,6 +701,13 @@ public class MainSceneManager : MonoBehaviour
             = new CardSelectionDetector(inBoxObj, inObjArr);
         outSelectionDetector
             = new CardSelectionDetector(outBoxObj, outObjArr);
+    }
+
+    private void CardSelectionBoxCenterDragMotionUpdate()
+    {
+        envSelectionDetector.CenterDragMotion();
+        inSelectionDetector.CenterDragMotion();
+        outSelectionDetector.CenterDragMotion();
     }
 
     private void ClearCardDescriptionTextFields()
@@ -726,9 +728,7 @@ public class MainSceneManager : MonoBehaviour
     // decide between button-clicks (editor use) or laser-pointer (HMD use)
     private void DevConfigSetting()
     {
-        bool isQuest2 =
-            OVRManager.systemHeadsetType
-            == OVRManager.SystemHeadsetType.Oculus_Quest_2;
+        bool isQuest2 = OVRManager.systemHeadsetType == OVRManager.SystemHeadsetType.Oculus_Quest_2;
         HMDEventSystem.SetActive(isQuest2);
         editorEventSystem.SetActive(!isQuest2);
         GameObject[] objectsWithRaycaster = GameObject.FindGameObjectsWithTag("ObjectWithRaycaster");
@@ -743,7 +743,7 @@ public class MainSceneManager : MonoBehaviour
 
 /*
 
-まずは、選択された側から即座に対象がPrototypingエリアに反映されるようにする
+まずは、選択されたそばから即座に対象がPrototypingエリアに反映されるようにする
 その選択が箱から解除された時には、その設定だけがリセットされるようにする
  
  */
