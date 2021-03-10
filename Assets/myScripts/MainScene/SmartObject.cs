@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
+// こいつが"Smart Object"な訳だから、
+// 他のクラスから受動的に変えられるより、能動的にこいつがセンシングして欲しい。そういう実装にする。
 public class SmartObject : MonoBehaviour
 {
-    Component[] partComponents;
-    GameObject[] partGameObjects;
-    Material[] defaultMaterials;
+    Component[] rigidBodyComponents;
+    public GameObject[] rigidBodyGameObjects;
+
+    Component[] meshRendComponents;
+    public GameObject[] meshRendGameObjects;
+    public Material[] defaultMaterials;
 
 
     private void Start()
     {
-        partComponents = GetComponentsInChildren<MeshRenderer>(true);
-        partGameObjects = ConvertComponentArrayToGameObjectArray(partComponents);
-        defaultMaterials = GetMaterialArray(partGameObjects);
+        rigidBodyComponents = GetComponentsInChildren<Rigidbody>(true);
+        rigidBodyGameObjects = ConvertComponentArrayToGameObjectArray(rigidBodyComponents);
 
+        meshRendComponents = GetComponentsInChildren<MeshRenderer>(true);
+        meshRendGameObjects = ConvertComponentArrayToGameObjectArray(meshRendComponents);
+        defaultMaterials = GetMaterialArray(meshRendGameObjects);
     }
 
     private void Update()
@@ -23,16 +29,14 @@ public class SmartObject : MonoBehaviour
         
     }
 
+    /// <summary>
+    /// common methods
+    /// </summary>
+    
 
-    // todo use this in LightUpCard class
-    // => smartObject.ApplyMaterial(matArr);
-    public void ApplyMaterial(Material[] matArr)
-    {
-        int nParts = partGameObjects.Length;
-        for (int i = 0; i < nParts; i++)
-            partGameObjects[i].GetComponent<Renderer>().material = matArr[i];
-    }
-
+    /// <summary>
+    /// LightUp-related methods
+    /// </summary>
 
     private GameObject[] ConvertComponentArrayToGameObjectArray(Component[] cmpArr)
     {
@@ -43,7 +47,6 @@ public class SmartObject : MonoBehaviour
         return objArr;
     }
 
-
     private Material[] GetMaterialArray(GameObject[] objArr)
     {
         int len = objArr.Length;
@@ -53,6 +56,11 @@ public class SmartObject : MonoBehaviour
         return matArr;
     }
 
-    // このクラスに、ApplyMaterial() などのメソッドも集約する；このクラスにアクセスさせる
+    public void ApplyMaterials(Material[] matArr)
+    {
+        int nParts = meshRendGameObjects.Length;
+        for (int i = 0; i < nParts; i++)
+            meshRendGameObjects[i].GetComponent<Renderer>().material = matArr[i];
+    }
 
 }

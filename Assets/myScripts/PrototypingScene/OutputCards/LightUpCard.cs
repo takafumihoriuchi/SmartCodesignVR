@@ -12,16 +12,13 @@ public class LightUpCard : OutputCard
     GameObject paintBrush;
     GameObject brushTip;
     Renderer brushTipRend;
-    Material originalBrushMaterial;
+    Material defaultBrushTipMaterial;
 
     GameObject waterObject;
     Renderer waterRend;
     Material waterMaterial;
 
-    Component[] envPartsComponent;
-    GameObject[] envPartsGameObject;
-    Material[] originalEnvObjMaterial;
-    Material[] edittedEnvObjMaterial;
+    Material[] edittedMaterials;
 
 
     public LightUpCard()
@@ -46,17 +43,13 @@ public class LightUpCard : OutputCard
         paintBrush = propObj.transform.Find("PaintBrush").gameObject;
         brushTip = paintBrush.transform.Find("brushTip").gameObject;
         brushTipRend = brushTip.GetComponent<Renderer>();
-        originalBrushMaterial = brushTipRend.material;
+        defaultBrushTipMaterial = brushTipRend.material;
 
         waterObject = propObj.transform.Find("WaterBucket/water").gameObject;
         waterRend = waterObject.GetComponent<Renderer>();
         waterMaterial = waterRend.material;
 
-        envPartsComponent = environmentObject.GetComponentsInChildren<MeshRenderer>(true);
-        envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
-        originalEnvObjMaterial = GetMaterialArray(envPartsGameObject);
-        // todo defaultMaterialをSmartObjectコンポーネントからとってくる
-        edittedEnvObjMaterial = GetMaterialArray(envPartsGameObject);
+        edittedMaterials = smartObj.defaultMaterials;
 
         eventBridgeHandler = paintBrush.RequestEventHandlers(); // unique for each instance
     }
@@ -66,19 +59,19 @@ public class LightUpCard : OutputCard
     /// during testing
     /// </summary>
 
+    // negative trigger for all instances is called before all positive triggers
     public override void OutputBehaviourOnNegative()
     {
-        ApplyMaterial(ref envPartsGameObject, originalEnvObjMaterial);
+        smartObj.ApplyMaterials(smartObj.defaultMaterials);
     }
-    // negative trigger for all instances is called before all positive triggers
+
     public override void OutputBehaviourOnPositive()
     {
-        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+        smartObj.ApplyMaterials(edittedMaterials);
     }
 
-
     /// <summary>
-    /// transition between prototyping and testing
+    /// transition between prototyping and preview
     /// </summary>
 
     protected override void OnConfirm()
@@ -86,6 +79,7 @@ public class LightUpCard : OutputCard
         if (isFocused)
         {
             propObj.SetActive(false);
+            smartObj.ApplyMaterials(smartObj.defaultMaterials);
         }
     }
 
@@ -94,7 +88,7 @@ public class LightUpCard : OutputCard
         if (isFocused)
         {
             propObj.SetActive(true);
-            ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+            smartObj.ApplyMaterials(edittedMaterials);
         }
     }
 
@@ -104,22 +98,22 @@ public class LightUpCard : OutputCard
     /// </summary>
 
     // called every frame
+    // todo => SmartObject class の Update() で同じことができるのでは。他のクラスでは実態がある。
     public override void BehaviourDuringPrototyping() { }
 
     protected override void OnFocusGranted() {
         eventBridgeHandler.TriggerEnter += OnTriggerEnterBrushTip;
         eventBridgeHandler.CollisionEnter += OnCollisionEnterBrushTip;
-        ApplyMaterial(ref envPartsGameObject, edittedEnvObjMaterial);
+        smartObj.ApplyMaterials(edittedMaterials);
     }
+
     protected override void OnFocusDeprived() {
         eventBridgeHandler.TriggerEnter -= OnTriggerEnterBrushTip;
         eventBridgeHandler.CollisionEnter -= OnCollisionEnterBrushTip;
     }
 
-
     // when brush is dipped in the buckets
-    // independent from other instances
-    // c.f. "eventBridgeHandler" is instance independent
+    // independent from other instances (c.f. "eventBridgeHandler" is instance independent)
     void OnTriggerEnterBrushTip(Collider other)
     {
         string colliderName = other.transform.gameObject.name;
@@ -127,30 +121,28 @@ public class LightUpCard : OutputCard
             brushTipRend.material = other.GetComponent<Renderer>().material;
     }
 
-
-    // when brush is rubbed on envObj
-    // independent from other instances
-    // c.f. "eventBridgeHandler" is instance independent
+    // when brush is rubbed on smartObj
+    // independent from other instances (c.f. "eventBridgeHandler" is instance independent)
     void OnCollisionEnterBrushTip(Collision other)
     {
         // reject if no paint/water is on the brush
-        if (brushTipRend.material == originalBrushMaterial) return;
+        if (brushTipRend.material == defaultBrushTipMaterial) return;
 
         // reject if the collided object is not a part of envObj
-        int partIdx = Array.IndexOf(envPartsGameObject, other.gameObject);
+        int partIdx = Array.IndexOf(smartObj.meshRendGameObjects, other.gameObject);
         if (partIdx == -1) return; // not found
         Renderer envPartRend = other.gameObject.GetComponent<Renderer>();
 
-        if (brushTipRend.sharedMaterial.name.Contains(waterMaterial.name))
+        if (brushTipRend.sharedMaterial.name.Contains(waterMaterial.name)) // is water
         {
-            envPartRend.material = originalEnvObjMaterial[partIdx];
-            edittedEnvObjMaterial[partIdx] = originalEnvObjMaterial[partIdx];
-            brushTipRend.material = originalBrushMaterial;
+            envPartRend.material = smartObj.defaultMaterials[partIdx];
+            edittedMaterials[partIdx] = smartObj.defaultMaterials[partIdx];
+            brushTipRend.material = defaultBrushTipMaterial;
         }
-        else // paint
+        else // is paint
         {
             envPartRend.material = brushTipRend.material;
-            edittedEnvObjMaterial[partIdx] = brushTipRend.material;
+            edittedMaterials[partIdx] = brushTipRend.material;
         }
 
         if (ObjectHasPaintedParts()) ConditionKeyword = "painted";
@@ -160,45 +152,12 @@ public class LightUpCard : OutputCard
 
     private bool ObjectHasPaintedParts()
     {
-        int n = originalEnvObjMaterial.Length;
+        int n = smartObj.defaultMaterials.Length;
         for (int i = 0; i < n; i++)
-            if (edittedEnvObjMaterial[i] != originalEnvObjMaterial[i])
+            if (edittedMaterials[i] != smartObj.defaultMaterials[i])
                 return true;
         return false;
     }
 
-
-    // todo envObjではなく、smartObjのrefを受け取るようにして、そのメンバメソッドにアクセスする
-    // Cardクラスで対応する
-
-    //// objArr.Length and matArr.Length should be the same
-    //void ApplyMaterial(ref GameObject[] objArr, Material[] matArr)
-    //{
-    //    int nParts = objArr.Length;
-    //    for (int i = 0; i < nParts; i++)
-    //    {
-    //        objArr[i].GetComponent<Renderer>().material = matArr[i];
-    //    }
-    //}
-
-
-    //GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
-    //{
-    //    GameObject[] objArr = new GameObject[compArr.Length];
-    //    int len = compArr.Length;
-    //    for (int i = 0; i < len; i++)
-    //        objArr[i] = compArr[i].gameObject;
-    //    return objArr;
-    //}
-
-
-    //Material[] GetMaterialArray(GameObject[] objArr)
-    //{
-    //    Material[] matArr = new Material[objArr.Length];
-    //    int len = objArr.Length;
-    //    for (int i = 0; i < len; i++)
-    //        matArr[i] = objArr[i].GetComponent<Renderer>().material;
-    //    return matArr;
-    //}
 
 }

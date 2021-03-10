@@ -4,14 +4,9 @@ using UnityEngine;
 using EventBridge;
 using System;
 
-// task in each input-cards:
-// - define inputEvalDeleDict
-// - assign ConditionKeyword (e.g. ConditionKeyword = RAINY;)
+
 public class WeatherCard : InputCard
 {
-    Component[] envPartsComponent;
-    GameObject[] envPartsGameObject;
-
     const int N = 5;
 
     const int SUNNY_IDX = 0;
@@ -56,7 +51,7 @@ public class WeatherCard : InputCard
             {SNOWY_STR, SnowyForecast}
         };
 
-        InitBoolArray(isXxxCurrentFrame, true);
+        InitBoolArray(isXxxCurrentFrame, false);
     }
 
     // constantly updates current weather with one-frame delay
@@ -99,16 +94,13 @@ public class WeatherCard : InputCard
 
     protected override void InitPropFields()
     {
-        envPartsComponent = environmentObject.GetComponentsInChildren<Rigidbody>(true);
-        envPartsGameObject = ConvertComponentArrayToGameObjectArray(envPartsComponent);
-
         string[] objGrpPath = new string[N] { "sunny", "cloudy", "rainy", "stormy", "snowy" };
         string[] rayPath = new string[N] { "sunny/ray", "cloudy/ray", "rainy/ray", "stormy/ray", "snowy/ray" };
 
         for (int i = 0; i < N; i++)
         {
-            weatherObjGrp[i] = propObjects.transform.Find(objGrpPath[i]).gameObject;
-            weatherRay[i] = propObjects.transform.Find(rayPath[i]).gameObject;
+            weatherObjGrp[i] = propObj.transform.Find(objGrpPath[i]).gameObject;
+            weatherRay[i] = propObj.transform.Find(rayPath[i]).gameObject;
             weatherEventHandler[i] = weatherRay[i].RequestEventHandlers();
             weatherSound[i] = weatherObjGrp[i].GetComponent<AudioSource>();
             weatherRay[i].SetActive(false);
@@ -227,18 +219,9 @@ public class WeatherCard : InputCard
         }
     }
 
-    GameObject[] ConvertComponentArrayToGameObjectArray(Component[] compArr)
-    {
-        GameObject[] objArr = new GameObject[compArr.Length];
-        int len = compArr.Length;
-        for (int i = 0; i < len; i++)
-            objArr[i] = compArr[i].gameObject;
-        return objArr;
-    }
-
     bool IsEnvObj(GameObject obj)
     {
-        return (Array.IndexOf(envPartsGameObject, obj) != -1);
+        return (Array.IndexOf(smartObj.rigidBodyGameObjects, obj) != -1);
     }
 
     void InitBoolArray(bool[] arr, bool state)

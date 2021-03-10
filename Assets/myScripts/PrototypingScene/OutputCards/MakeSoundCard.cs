@@ -37,7 +37,7 @@ public class MakeSoundCard : OutputCard
 
     protected override void InitPropFields()
     {
-        micPropModel = propObjects.transform.Find("microphone").gameObject;
+        micPropModel = propObj.transform.Find("microphone").gameObject;
         originalScale = micPropModel.transform.localScale;
         targetScale = Vector3.Scale(originalScale, expansionScale);
     }
@@ -46,9 +46,9 @@ public class MakeSoundCard : OutputCard
     protected override void OnFocusGranted() { return; }
     protected override void OnFocusDeprived() { return; }
     protected override void OnConfirm() {
-        if (isFocused) propObjects.SetActive(false); }
+        if (isFocused) propObj.SetActive(false); }
     protected override void OnBackToEdit() {
-        if (isFocused) propObjects.SetActive(true); }
+        if (isFocused) propObj.SetActive(true); }
 
     public override void OutputBehaviourOnPositive() {
         soundRecorder.Play();
@@ -83,7 +83,8 @@ public class MakeSoundCard : OutputCard
 
     private void StartRecording()
     {
-        soundRecorder = environmentObject.AddComponent<AudioSource>();
+        //soundRecorder = environmentObject.AddComponent<AudioSource>();
+        soundRecorder = smartObj.gameObject.AddComponent<AudioSource>();
         soundRecorder.clip = Microphone.Start("", false, 60, 16000);
         ConditionKeyword = "recording";
         isRecording = true;

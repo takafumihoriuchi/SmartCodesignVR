@@ -6,12 +6,12 @@ using UnityEngine;
 public class FireCard : InputCard
 {
     private GameObject markerObj;
+    private AudioSource fireSound;
 
     private SpriteRenderer spriteInnerCore;
     private SpriteRenderer spriteOuterCore;
     private SpriteRenderer spriteMantle;
     private SpriteRenderer spriteCrust;
-    private AudioSource fireSound;
 
     private float markerDistance;
     private bool markerIsGrabbed = false;
@@ -83,11 +83,13 @@ public class FireCard : InputCard
     }
 
     private void UpdateMarkerDistance() {
-        markerDistance = Vector3.Distance(environmentObject.transform.position, markerObj.transform.position);
+        markerDistance = Vector3.Distance(smartObj.gameObject.transform.position, markerObj.transform.position);
     }
+
     private void UpdateGrabStatus() {
         markerIsGrabbed = markerObj.transform.GetComponent<OVRGrabbable>().isGrabbed;
     }
+
     private void PlaySoundIfGrabbed() {
         if (markerIsGrabbed && !fireSound.isPlaying) fireSound.Play();
         else if (!markerIsGrabbed && fireSound.isPlaying) fireSound.Stop();
@@ -96,13 +98,13 @@ public class FireCard : InputCard
 
     protected override void InitPropFields()
     {
-        markerObj = propObjects.transform.Find("marker").gameObject;
+        markerObj = propObj.transform.Find("marker").gameObject;
         fireSound = markerObj.GetComponent<AudioSource>();
 
-        spriteInnerCore = propObjects.transform.Find("floorCanvas/distanceInnerCore").gameObject.GetComponent<SpriteRenderer>();
-        spriteOuterCore = propObjects.transform.Find("floorCanvas/distanceOuterCore").gameObject.GetComponent<SpriteRenderer>();
-        spriteMantle = propObjects.transform.Find("floorCanvas/distanceMantle").gameObject.GetComponent<SpriteRenderer>();
-        spriteCrust = propObjects.transform.Find("floorCanvas/distanceCrust").gameObject.GetComponent<SpriteRenderer>();
+        spriteInnerCore = propObj.transform.Find("floorCanvas/distanceInnerCore").gameObject.GetComponent<SpriteRenderer>();
+        spriteOuterCore = propObj.transform.Find("floorCanvas/distanceOuterCore").gameObject.GetComponent<SpriteRenderer>();
+        spriteMantle = propObj.transform.Find("floorCanvas/distanceMantle").gameObject.GetComponent<SpriteRenderer>();
+        spriteCrust = propObj.transform.Find("floorCanvas/distanceCrust").gameObject.GetComponent<SpriteRenderer>();
 
         SetStrataOpacity(ALPHA_LOW, ALPHA_LOW, ALPHA_LOW, ALPHA_LOW);
     }

@@ -111,14 +111,13 @@ public class MainSceneManager : MonoBehaviour
         UIButtonSetting();        
     }
 
-    // TODO 下の修正に加え、smartObjとして受け渡す処理
-    // => 次は smartobjectと各カードの処理の修正
+    
     void Update()
     {
         CardSelectionBoxCenterDragMotionUpdate();
         CardSelectionDetectionUpdate();
-        if (!isBuilt) PrototypingBehaviourUpdate();
-        else ConditionBehaviourPreviewUpdate();
+        if (!isBuilt) PrototypingBehaviourUpdate(); // TODO => 一部はSmartObjectクラスが担ってもよい（能動的なsmart-object）
+        else ConditionBehaviourPreviewUpdate(); // TODO => 一部はSmartObjectクラスが担ってもよい（能動的なsmart-object）
     }
 
     private void PrototypingBehaviourUpdate()
