@@ -21889,12 +21889,57 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c941375a46c044fc2ac5e6acce60c40a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  envBoxObj: {fileID: 0}
-  inBoxObj: {fileID: 0}
-  outBoxObj: {fileID: 0}
-  envObjArr: []
-  inObjArr: []
-  outObjArr: []
+  envBoxObj: {fileID: 1395667467}
+  envObjArr:
+  - {fileID: 1937465272}
+  - {fileID: 176117094}
+  - {fileID: 382240513}
+  - {fileID: 1388874355}
+  - {fileID: 106185591}
+  inBoxObj: {fileID: 180971326}
+  inObjArr:
+  - {fileID: 1632445848}
+  - {fileID: 638529062}
+  - {fileID: 719796233}
+  - {fileID: 1654332312}
+  - {fileID: 618189767}
+  outBoxObj: {fileID: 1544681122}
+  outObjArr:
+  - {fileID: 2054161794}
+  - {fileID: 1833151148}
+  - {fileID: 1871422143}
+  - {fileID: 727536319}
+  - {fileID: 1641209663}
+  envObjTrashBin: {fileID: 40647453}
+  envObjTree: {fileID: 1653872251}
+  envObjStreetLight: {fileID: 1811188813}
+  envObjStreetSign: {fileID: 1704509802}
+  envObjBridge: {fileID: 1140107286}
+  inPropButton: {fileID: 213463406}
+  inPropSound: {fileID: 1394747488}
+  inPropFire: {fileID: 1143137882}
+  inPropSpeed: {fileID: 1870319074}
+  inPropWeather: {fileID: 1843024353}
+  outPropLightUp: {fileID: 829284447}
+  outPropMakeSound: {fileID: 340919484}
+  outPropVibrate: {fileID: 166044821}
+  outPropMove: {fileID: 1806923552}
+  outPropSend: {fileID: 1434103959}
+  inputCardNameField: {fileID: 1192696858}
+  inputDescriptionField: {fileID: 1972718556}
+  inputStatementFieldGroup: {fileID: 294999235}
+  outputCardNameField: {fileID: 1145503517}
+  outputDescriptionField: {fileID: 476155037}
+  outputStatementFieldGroup: {fileID: 1631062093}
+  addInstanceButton: {fileID: 374602959}
+  removeInstanceButton: {fileID: 1364490141}
+  ioArrowObject: {fileID: 1850066897}
+  confirmationMessageField: {fileID: 2077198710}
+  buildButton: {fileID: 1472350129}
+  exportButton: {fileID: 1568402810}
+  reEditButton: {fileID: 302504376}
+  editorEventSystem: {fileID: 666881230}
+  HMDEventSystem: {fileID: 736510089}
 --- !u!4 &607554431
 Transform:
   m_ObjectHideFlags: 0
@@ -21907,7 +21952,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &608285157
 PrefabInstance:
@@ -26313,6 +26358,12 @@ GameObject:
 --- !u!1 &736510088 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1525749097544336, guid: a9d2de84afb308a4796cc671d3432b4d,
+    type: 3}
+  m_PrefabInstance: {fileID: 736510086}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &736510089 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1732808951507650, guid: a9d2de84afb308a4796cc671d3432b4d,
     type: 3}
   m_PrefabInstance: {fileID: 736510086}
   m_PrefabAsset: {fileID: 0}
@@ -33638,7 +33689,7 @@ Transform:
   - {fileID: 140386111}
   - {fileID: 312230212}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1 &1027726843
 GameObject:
@@ -38718,7 +38769,7 @@ Transform:
   m_Children:
   - {fileID: 1601091697}
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1286384640
 GameObject:
@@ -40495,7 +40546,7 @@ Transform:
   m_Children:
   - {fileID: 916857732}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -20, y: 90, z: 0}
 --- !u!1 &1343770277
 GameObject:
@@ -49650,7 +49701,7 @@ Transform:
   - {fileID: 529208238}
   - {fileID: 381096503}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1622767217
 GameObject:
@@ -49683,7 +49734,7 @@ Transform:
   - {fileID: 1825248732}
   - {fileID: 1572016149}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1631062093
 GameObject:
