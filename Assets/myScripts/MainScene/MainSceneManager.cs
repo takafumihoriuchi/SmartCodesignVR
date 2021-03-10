@@ -108,7 +108,7 @@ public class MainSceneManager : MonoBehaviour
         SetActiveStateByTag("ActivateOnLoad", true);
         ClearCardDescriptionTextFields();
         CardSelectionBoxRegistration();
-        UIButtonSetting();        
+        UIButtonSetting();
     }
 
     

@@ -49013,7 +49013,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: DogModel
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: -7511558181221131132, guid: 92cfebc63014c4261952d97459b260c6, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 92cfebc63014c4261952d97459b260c6, type: 3}
 --- !u!4 &1601091697 stripped
 Transform:
